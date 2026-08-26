@@ -475,20 +475,41 @@ Confermata anche la codifica ACTION: opcode a `+0`/`+1`, **routine ID big-endian
 
 ---
 
+### ✅ RISOLTE il 26/08/2026 (sera) — Q6, Q7 + l'ABI completa dello stack
+
+**Q6 — l'ordine di pop coincide con l'ordine di dichiarazione? RISOLTO: SÌ, staticamente.**
+La prova è il ramo `pow` dell'handler matematico (routine 75, non commutativa): il **primo** float poppato (`[ebp-0xC]`, nel preambolo comune) è quello che l'handler passa alla CRT `pow()` come **base**, cioè `fValue`, il **primo** parametro dichiarato; il secondo pop (`[ebp-0x10]`, dentro il ramo) diventa l'esponente. Conferma incrociata dal lato compilatore: nel bytecode gli argomenti sono pushati in ordine **inverso** (l'ultimo dichiarato per primo), quindi il primo dichiarato è in cima allo stack al momento della ACTION. La conferma end-to-end in gioco è la routine di test 878 (checksum sensibile all'ordine), installata e in attesa della prossima sessione di gioco.
+
+**Q7 — argomenti di default omessi? RISOLTO: il compilatore li materializza LUI.**
+`GetIsInCombat()` (2 parametri, entrambi default) emette `argc=2`, e il bytecode contiene `CONSTO OBJECT_SELF` + `CONSTI 0` generati dal compilatore. Vale anche per l'header esteso: `K2SE_Q7Probe(int nA, int nB = 7)` chiamata come `K2SE_Q7Probe(1)` emette `argc=2` con un `CONSTI 7` visibile nel bytecode. **Conseguenza: le routine K2SE possono dichiarare default liberamente; l'handler vede sempre l'argc pieno dichiarato.** Un argc diverso da quello dichiarato = script compilato contro un header sbagliato → K2SE rifiuta con `-2001` senza toccare lo stack. Test: `tools/q7_default_args_test.py`.
+
+**ABI stack completa (int/float/object/vector), letta dagli handler vanilla:**
+
+| Accessor | VA | Firma (`__thiscall`, ECX=VM da `[0x00A1B4A8]`, EAX≠0 = successo) |
+|---|---|---|
+| StackPopInteger | `0x006FD9A0` | `(vm, int* out)` ret 4 |
+| StackPushInteger | `0x006FD9C0` | `(vm, int value)` ret 4 |
+| StackPopFloat | `0x006FD9E0` | `(vm, float* out)` ret 4 — dal preambolo del math handler |
+| StackPushFloat | `0x006FDA00` | `(vm, float value)` ret 4 — dall'epilogo comune del math handler |
+| StackPopVector ⚠️ | `0x006FDA20` | `(vm, float out[3])` ret 4 — **solo forma, nessun handler letto** |
+| StackPushVector ⚠️ | `0x006FDA40` | `(vm, float x, float y, float z)` ret 0xC — **solo forma** |
+| StackPopObject | `0x006FDAF0` | `(vm, uint32* out)` ret 4 — da GetArea (id 24) |
+| StackPushObject | `0x006FDB10` | `(vm, uint32 objId)` ret 4 — da GetFirstPC (id 548) |
+
+Bonus dagli stessi handler: **`OBJECT_INVALID = 0x7F000000`** (valore di default/fallimento in GetFirstPC); `[0x00A1B4A4]` è un secondo singleton (app/server) da cui gli handler raggiungono gli oggetti di gioco; la trigonometria NWScript **converte i gradi in radianti internamente** (`fmul` per π/180 prima della CRT).
+
+**AurPostString VERIFICATA:** `void __cdecl AurPostString(const char* text, int x, int y, float fLife)` a `0x00474C00` — `ret` liscio (cdecl), quattro argomenti, float per valore; alloca un oggetto testo da 0x434 byte e lo costruisce via `0x004744D0`. Il call site engine `0x0040820A` passa un `char*` grezzo verso `.rdata` (`">"`, 5.0f) ⇒ è una C string, **non** una CExoString. Il banner K2SE usa un buffer statico perché non è provato se l'engine copi la stringa o tenga il puntatore.
+
+Tutti e cinque i nuovi indirizzi hanno probe nel fingerprint (rel32 dei call site verificati, non i primi byte del callee): 15/15 OK a runtime sull'exe LAA-patchato.
+
 ### Domande ancora aperte
 
 | # | Domanda | Esperimento | Costo | Blocca |
 |---|---|---|---|---|
-| **Q1** | `nwnnsscomp` accetta un `nwscript.nss` esteso oltre 876 ed emette `05 00 03 6D <argc>`? | Appendi un prototipo, compila due righe, hex dump del `.ncs` | **10 min** | **M4 — fallo per PRIMO, prima di qualsiasi codice** |
-| **Q2** | Il compilatore salta in silenzio la routine 767 malformata, rinumerando 768–876? | Compila una chiamata a `GetItemComponent()`: l'ACTION deve essere `05 00 03 03 00` (771) | **10 min** | M4 e l'intero header esteso |
-| **Q3** | **Cosa fa la VM con `-2002`? Dove sta il chiamante `ExecuteCode`?** | `.ncs` fatto a mano con solo `05 00 03 6D 00`, installato come OnHeartbeat; breakpoint a `0x00668FE0`, **step out** e registra l'indirizzo di ritorno — *quello* è il caso ACTION | **30 min** | **M4 e tutto il design della degradazione** |
-| **Q4** | Lo slot di vtable è l'unico percorso di dispatch? | HW write-BP su `0x009940D8` + contatore su `0x00668FD0` per una sessione | 20 min | M2 |
-| **Q5** | Contratto esatto di `StackPop*`/`StackPush*` (convenzione EAX, out-pointer, rifiuto per type tag) | Breakpoint dentro un handler vanilla noto; forza un mismatch di tipo e guarda EAX | 20 min | M3 |
-| **Q6** | L'ordine di pop coincide con l'ordine di dichiarazione? | Routine a 3 argomenti, chiama `f(1,2,3)`, logga la sequenza | 15 min | ogni routine multi-argomento |
-| **Q7** | Il compilatore emette gli argomenti di default omessi, o un argc corto? | Compila `GetIsInCombat(OBJECT_SELF)` (2 parametri dichiarati) e leggi il byte argc | 10 min | ogni routine con default |
-| **Q8** | Steam "Verifica integrità" lascia stare una `version.dll` aggiunta e ripristina `binkw32.dll`? | Esegui la verifica col proxy installato | 15 min | scelta dello slot + policy LAA |
+| **Q8** | Steam "Verifica integrità" lascia stare una `version.dll` aggiunta e ripristina `binkw32.dll`? ⚠️ *la verifica ripristina anche l'exe LAA-patchato: farla solo con `Patch-KOTOR2-LAA.ps1` alla mano* | Esegui la verifica col proxy installato | 15 min | scelta dello slot + policy LAA |
 | **Q9** | Qualcosa nell'ecosistema KOTOR 2 occupa già `version.dll`? | Chiedi su Deadly Stream / Discord prima di bloccare lo slot | 1 giorno | scelta dello slot |
 | **Q10** | Il depot Aspyr riceve ancora aggiornamenti? | Storico depot su SteamDB per l'app 208580 | 5 min | rischio dello slot binkw32 |
+| **Q11** | ABI di CExoString (chi possiede/libera il buffer di StackPopString/PushString?) e degli engine structure (location/effect/talent) | Leggi un handler che consuma stringhe (es. `PrintString`) e uno che consuma location | 45 min | routine con parametri stringa/location |
 
 ---
 
@@ -527,4 +548,9 @@ Errori documentati emersi durante la ricerca; sono qui perché ricompaiono facil
 
 ## 10. Prossimo passo
 
-**Fai Q1, Q2 e Q3, in quest'ordine, prima di scrivere una riga di codice.** Costano insieme meno di un'ora e decidono se l'architettura del piano A regge. Se Q3 dice che l'ID 877 arriva al dispatcher, il resto è ingegneria ordinaria su fondamenta già verificate.
+*(aggiornato 26/08/2026 sera — Q1–Q7 tutte risolte, M1–M4 chiuse, ABI int/float/object completa)*
+
+1. **Sessione di gioco di verifica** (2 minuti): carica il save, la batteria di test nel wrapper heartbeat scrive `TEST 1..6` in `k2se.log` e il banner `AurPostString` compare a schermo. Chiude M3 (sentinella `abs()`) e la conferma end-to-end di Q6.
+2. **M5 — nebbia/atmosfera a runtime** (§5): ora ha tutti i prerequisiti. Primo sottopasso: rilevare 3C-FD e disassemblare il percorso `glProgramStringARB`/IAT `glFogf`.
+3. **Q11** (stringhe/engine structure) quando una feature le richiede — non prima.
+4. Prima della prima release pubblica: riordinare l'header esteso (le routine di self-test 878/879 dopo le API vere), contattare LaneDibello, pubblicare il registro degli ID.

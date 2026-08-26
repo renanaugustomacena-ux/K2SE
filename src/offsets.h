@@ -75,8 +75,13 @@ constexpr uint32_t kHandlerRandom = 0x0068F5D0;       // cmds[0]
 constexpr uint32_t kHandlerRebuildParty = 0x0069C460; // cmds[876]
 
 // --- engine helpers ---------------------------------------------------------
-// AurPostString(text, x, y, seconds) -- on-screen debug text. Used to make a
-// refused install visible instead of silently inert.
+// void __cdecl AurPostString(const char* text, int x, int y, float fLife)
+// On-screen debug text. VERIFIED by disassembly: plain `ret` (cdecl), four
+// stack args with the float passed by value; allocates a 0x434-byte text
+// object and constructs it via 0x004744D0. Engine call site 0x0040820A passes
+// a raw .rdata char* literal (">") and 5.0f -- so `text` is a C string, not a
+// CExoString. Used for the K2SE banner and to make a refused install visible
+// instead of silently inert.
 constexpr uint32_t kAurPostString = 0x00474C00;
 
 // The CVirtualMachine singleton. RESOLVED (DESIGN.md Q5): engine routine
@@ -88,14 +93,50 @@ constexpr uint32_t kAurPostString = 0x00474C00;
 // level deeper, INSIDE the accessor (`mov ecx,[ecx+1Ch]`), not by the caller.
 constexpr uint32_t kVirtualMachineGlobal = 0x00A1B4A8;
 
-// VM stack accessors -- VERIFIED by disassembly (DESIGN.md Q5).
-//   int __thiscall StackPopInteger (void* vm, int* out);    ret 4
-//   int __thiscall StackPushInteger(void* vm, int  value);  ret 4
-// Both take the VM in ECX, one stack argument, and return EAX != 0 on success.
-// Each forwards to *(vm + 0x1C) internally.
+// VM stack accessors -- VERIFIED by disassembly (DESIGN.md Q5 + session of
+// 2026-08-26: float pair read out of the shared math handler 0x0068C4A0,
+// object pair read out of GetArea 0x0067A070 / GetFirstPC 0x006875E0).
+//   int __thiscall StackPopInteger (void* vm, int*   out);   ret 4
+//   int __thiscall StackPushInteger(void* vm, int    value); ret 4
+//   int __thiscall StackPopFloat   (void* vm, float* out);   ret 4
+//   int __thiscall StackPushFloat  (void* vm, float  value); ret 4
+//   int __thiscall StackPopObject  (void* vm, uint32_t* out);   ret 4
+//   int __thiscall StackPushObject (void* vm, uint32_t objId);  ret 4
+// All take the VM in ECX and return EAX != 0 on success; each forwards to
+// *(vm + 0x1C) internally. Arguments pop in DECLARATION order (Q6, settled by
+// the pow branch: the first pop feeds CRT pow() as the base, i.e. fValue).
 constexpr uint32_t kStackPopInteger = 0x006FD9A0;
 constexpr uint32_t kStackPushInteger = 0x006FD9C0;
 constexpr uint32_t kStackPopFloat = 0x006FD9E0;
+constexpr uint32_t kStackPushFloat = 0x006FDA00;
+constexpr uint32_t kStackPopObject = 0x006FDAF0;
+constexpr uint32_t kStackPushObject = 0x006FDB10;
+
+// Shape-verified only (thin wrappers around *(vm+0x1C) methods; no consuming
+// handler has been read yet). Do NOT wrap these until a ground-truth handler
+// confirms them:
+//   0x006FDA20  StackPopVector? (void* vm, float out[3])          ret 4
+//   0x006FDA40  StackPushVector?(void* vm, float x, float y, float z) ret 0xC
+
+// The engine's own object-id sentinel, seen as the default/failure value in
+// GetFirstPC (mov [ebp-4], 0x7F000000) -- matches community OBJECT_INVALID.
+constexpr uint32_t kObjectInvalid = 0x7F000000;
+
+// --- accessor call-site probe values ----------------------------------------
+// Each is the rel32 of a verified E8 call to the accessor, read from a handler
+// that provably uses it. Checking the call site (not the callee's first bytes)
+// also re-derives the accessor address at fingerprint time.
+constexpr uint32_t kSitePopFloatCall = 0x0068C514;   // dword == 0x000714C8
+constexpr uint32_t kSitePopFloatRel = 0x000714C8;    // -> 0x006FD9E0 (math handler)
+constexpr uint32_t kSitePushFloatCall = 0x0068C774;  // dword == 0x00071288
+constexpr uint32_t kSitePushFloatRel = 0x00071288;   // -> 0x006FDA00 (math handler)
+constexpr uint32_t kSitePopObjectCall = 0x0067A0BA;  // dword == 0x00083A32
+constexpr uint32_t kSitePopObjectRel = 0x00083A32;   // -> 0x006FDAF0 (GetArea)
+constexpr uint32_t kSitePushObjectCall = 0x00687692; // dword == 0x0007647A
+constexpr uint32_t kSitePushObjectRel = 0x0007647A;  // -> 0x006FDB10 (GetFirstPC)
+// AurPostString prologue: 55 8B EC 6A (push ebp; mov ebp,esp; push -1 ...)
+constexpr uint32_t kSiteAurPostString = 0x00474C00;  // dword == 0x6AEC8B55
+constexpr uint32_t kAurPostStringPrologue = 0x6AEC8B55;
 
 // --- dispatcher / handler return codes --------------------------------------
 // Read straight out of the engine's own error paths:

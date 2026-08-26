@@ -116,6 +116,11 @@ Verdict Check() {
     ok &= ProbeByte("m_pCommands (init)", off::kSiteCmdOffInit, off::kCommandsFieldOffset);
     ok &= ProbeByte("m_pCommands (dispatch)", off::kSiteCmdOffDispatch, off::kCommandsFieldOffset);
     ok &= ProbeByte("m_pInternal", off::kSiteVmInternal, off::kVmInternalOffset);
+    ok &= ProbeDword("PopFloat call site", off::kSitePopFloatCall, off::kSitePopFloatRel);
+    ok &= ProbeDword("PushFloat call site", off::kSitePushFloatCall, off::kSitePushFloatRel);
+    ok &= ProbeDword("PopObject call site", off::kSitePopObjectCall, off::kSitePopObjectRel);
+    ok &= ProbeDword("PushObject call site", off::kSitePushObjectCall, off::kSitePushObjectRel);
+    ok &= ProbeDword("AurPostString prologue", off::kSiteAurPostString, off::kAurPostStringPrologue);
 
     if (!ok) return Verdict::kWrongBuild;
 

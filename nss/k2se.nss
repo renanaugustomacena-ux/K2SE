@@ -41,6 +41,17 @@ int K2SE_IsPresent()
 // Present so the round trip through a genuinely new routine ID can be tested.
 int K2SE_GetVersion();
 
+// Routines 878/879 -- DEVELOPMENT ONLY self-test plumbing. These exercise the
+// multi-argument stack ABI end to end and may be renumbered before the first
+// public release; do not build mods against them.
+//
+// K2SE_SelfTest returns an order-sensitive checksum:
+//   nFirst*1000000 + FloatToInt(fSecond*10.0)*10000 + nThird
+// K2SE_ReportTest compares and writes one PASS/FAIL line per nTestId into
+// k2se.log; returns TRUE on match.
+int K2SE_SelfTest(int nFirst, float fSecond, int nThird);
+int K2SE_ReportTest(int nTestId, int nExpected, int nActual);
+
 // -----------------------------------------------------------------------------
 // Usage pattern -- copy this shape:
 //

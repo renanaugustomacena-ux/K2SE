@@ -51,14 +51,38 @@ ORIGINAL_COPY = "k2se_orig_hb"      # <= 16 chars: ResRef limit
 OLD_WRAPPER = "k_def_spawn01"
 OLD_ORIGINAL = "k2se_orig_sp"
 
-TEST_SOURCE = """// K2SE M4 test -- wraps the vanilla spawn script, then calls a routine that
-// does not exist in the stock engine.
+# The extended routines, in ID order. MUST match kExtended[] in
+# src/routines.cpp -- nwnnsscomp assigns IDs positionally, so list order here
+# IS the ID assignment.
+EXTENDED_ROUTINES = [
+    "int K2SE_GetVersion();",
+    "int K2SE_SelfTest(int nFirst, float fSecond, int nThird);",
+    "int K2SE_ReportTest(int nTestId, int nExpected, int nActual);",
+]
+
+TEST_SOURCE = """// K2SE in-game test battery -- wraps the vanilla creature heartbeat, then
+// exercises every verified piece of the extended ABI. Results land in
+// k2se.log via K2SE_ReportTest; the C++ side logs each test id once.
 void main()
 {
     ExecuteScript("%s", OBJECT_SELF);
 
+    // 877 -- plain extended round trip
     int nVer = K2SE_GetVersion();
-    AurPostString("K2SE alive - routine 877 returned " + IntToString(nVer), 5, 5, 8.0);
+    K2SE_ReportTest(1, 100, nVer);
+
+    // M3 -- the abs() presence sentinel on a VANILLA routine id,
+    // plus proof the reimplementation stayed faithful
+    K2SE_ReportTest(2, 100, abs(-1234567890));
+    K2SE_ReportTest(3, 5, abs(-5));
+    K2SE_ReportTest(4, 7, abs(7));
+    K2SE_ReportTest(5, 0, abs(0));
+
+    // Q6 end-to-end -- the checksum is order-sensitive, so any pop order
+    // other than declaration order fails test 6 loudly
+    K2SE_ReportTest(6, 111250333, K2SE_SelfTest(111, 2.5, 333));
+
+    AurPostString("K2SE tests ran - ver " + IntToString(nVer), 5, 25, 6.0);
 }
 """ % ORIGINAL_COPY
 
@@ -67,15 +91,17 @@ def build_extended_header():
     vanilla = open(VANILLA_HEADER, encoding="utf-8", errors="replace").read()
     protos = parse_routines(vanilla)
     next_id = len(protos)
-    text = (vanilla.rstrip()
-            + "\n\n"
-            + "// ============================================================\n"
-            + "// K2SE extended routines. Appended past the last vanilla entry\n"
-            + "// (%s = id %d). nwnnsscomp assigns ids positionally, so order\n" % (protos[-1][0], next_id - 1)
-            + "// here IS the id -- never insert, only append.\n"
-            + "// ============================================================\n"
-            + "// %d: K2SE_GetVersion\n" % next_id
-            + "int K2SE_GetVersion();\n")
+    lines = [
+        "// ============================================================",
+        "// K2SE extended routines. Appended past the last vanilla entry",
+        "// (%s = id %d). nwnnsscomp assigns ids positionally, so order" % (protos[-1][0], next_id - 1),
+        "// here IS the id -- never insert, only append.",
+        "// ============================================================",
+    ]
+    for i, proto in enumerate(EXTENDED_ROUTINES):
+        lines.append("// %d:" % (next_id + i))
+        lines.append(proto)
+    text = vanilla.rstrip() + "\n\n" + "\n".join(lines) + "\n"
     os.makedirs(os.path.dirname(EXTENDED_HEADER), exist_ok=True)
     with open(EXTENDED_HEADER, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(text)
@@ -136,14 +162,23 @@ def main():
 
     acts = find_actions(ncs)
     print("ACTIONs emitted: %s" % ["id=%d argc=%d" % (a[1], a[2]) for a in acts])
-    hit = [a for a in acts if a[1] == next_id]
-    if not hit:
-        raise SystemExit("the compiled script does not call routine %d" % next_id)
-    off = hit[0][0]
-    print("routine %d call bytes: %s" % (next_id, ncs[off:off + 5].hex(" ")))
-    expected = bytes([0x05, 0x00]) + struct.pack(">H", next_id) + bytes([hit[0][2]])
-    print("expected            : %s  -> %s"
-          % (expected.hex(" "), "MATCH" if ncs[off:off + 5] == expected else "DIFFERENT"))
+
+    # every extended routine the test calls must appear, with the declared argc
+    declared_argc = {}
+    for i, proto in enumerate(EXTENDED_ROUTINES):
+        args = proto.split("(", 1)[1].rsplit(")", 1)[0]
+        declared_argc[next_id + i] = len([a for a in args.split(",") if a.strip()])
+    for rid, argc in sorted(declared_argc.items()):
+        hits = [a for a in acts if a[1] == rid]
+        if not hits:
+            raise SystemExit("the compiled script does not call routine %d" % rid)
+        for off, _rid, got_argc in hits:
+            expected = bytes([0x05, 0x00]) + struct.pack(">H", rid) + bytes([argc])
+            raw = ncs[off:off + 5]
+            verdict = "MATCH" if raw == expected else "DIFFERENT (argc %d != %d?)" % (got_argc, argc)
+            print("routine %d: %s  expected %s  -> %s" % (rid, raw.hex(" "), expected.hex(" "), verdict))
+            if raw != expected:
+                raise SystemExit("ACTION bytes for routine %d are wrong -- not installing" % rid)
 
     out_ncs = os.path.join(OVERRIDE, WRAPPER_NAME + ".ncs")
     with open(out_ncs, "wb") as fh:

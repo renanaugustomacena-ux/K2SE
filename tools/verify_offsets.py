@@ -75,6 +75,13 @@ PROBES_DWORD = [
     ("alloc size 877*4",          0x00665F5A, 0x0DB4),
     ("init bound 877",            0x00665F87, 0x36D),
     ("dispatch bound 877",        0x00668FDC, 0x36D),
+    # rel32 of verified E8 calls to the stack accessors, read from handlers
+    # that provably use them (math handler / GetArea / GetFirstPC)
+    ("PopFloat call site",        0x0068C514, 0x000714C8),  # -> 0x006FD9E0
+    ("PushFloat call site",       0x0068C774, 0x00071288),  # -> 0x006FDA00
+    ("PopObject call site",       0x0067A0BA, 0x00083A32),  # -> 0x006FDAF0
+    ("PushObject call site",      0x00687692, 0x0007647A),  # -> 0x006FDB10
+    ("AurPostString prologue",    0x00474C00, 0x6AEC8B55),  # 55 8B EC 6A
 ]
 
 PROBES_BYTE = [

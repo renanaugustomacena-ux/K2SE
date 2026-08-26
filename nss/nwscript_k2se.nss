@@ -6329,5 +6329,9 @@ void RebuildPartyTable();
 // (RebuildPartyTable = id 876). nwnnsscomp assigns ids positionally, so order
 // here IS the id -- never insert, only append.
 // ============================================================
-// 877: K2SE_GetVersion
+// 877:
 int K2SE_GetVersion();
+// 878:
+int K2SE_SelfTest(int nFirst, float fSecond, int nThird);
+// 879:
+int K2SE_ReportTest(int nTestId, int nExpected, int nActual);
