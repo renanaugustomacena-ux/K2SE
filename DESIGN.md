@@ -330,10 +330,11 @@ hw write bp 0x009940D8        ; per una sessione intera: nessun altro scrive lo 
 **Rischio killer:** la vtable non è l'unico percorso di dispatch → **Q4**.
 **Piano B:** detour inline MinHook su `0x00668FD0`.
 
-### M3 — Segnale di presenza in gioco (sentinella `abs()`)
-- [ ] Uno script compilato con l'header **vanilla** — `abs(-1234567890)` — mostra il codice di versione con K2SE e `1234567890` senza
-- [ ] `abs(-5)==5`, `abs(5)==5`, `abs(0)==0` in entrambe le configurazioni
-- [ ] `fabs/cos/sin/tan/acos/asin/atan/log/pow/sqrt` (ID 67–76, stesso handler) **intatte**
+### M3 — Segnale di presenza in gioco (sentinella `abs()`) ✅ CHIUSA 27/08/2026
+- [x] `abs(-1234567890)` risponde il codice di versione (100) con K2SE — log: `PRESENCE PROBE answered with version 100`, `TEST 2 PASS`
+- [x] `abs(-5)==5`, `abs(7)==7`, `abs(0)==0` con la reimplementazione K2SE attiva (`TEST 3/4/5 PASS`)
+- [x] ID 67–76 (stesso handler matematico) intatti: mai intercettati (`Intercepts()` risponde solo all'ID 77) e la sessione di 32.763 dispatch è passata pulita
+- [ ] *(non ancora provato)* il ramo "senza K2SE → 1234567890" su un'installazione vanilla — banale, richiede solo una run senza la DLL
 
 **Può uccidere il progetto?** No — è indipendente da Q3 e funziona anche se gli ID estesi si rivelassero irraggiungibili.
 
@@ -478,7 +479,7 @@ Confermata anche la codifica ACTION: opcode a `+0`/`+1`, **routine ID big-endian
 ### ✅ RISOLTE il 26/08/2026 (sera) — Q6, Q7 + l'ABI completa dello stack
 
 **Q6 — l'ordine di pop coincide con l'ordine di dichiarazione? RISOLTO: SÌ, staticamente.**
-La prova è il ramo `pow` dell'handler matematico (routine 75, non commutativa): il **primo** float poppato (`[ebp-0xC]`, nel preambolo comune) è quello che l'handler passa alla CRT `pow()` come **base**, cioè `fValue`, il **primo** parametro dichiarato; il secondo pop (`[ebp-0x10]`, dentro il ramo) diventa l'esponente. Conferma incrociata dal lato compilatore: nel bytecode gli argomenti sono pushati in ordine **inverso** (l'ultimo dichiarato per primo), quindi il primo dichiarato è in cima allo stack al momento della ACTION. La conferma end-to-end in gioco è la routine di test 878 (checksum sensibile all'ordine), installata e in attesa della prossima sessione di gioco.
+La prova è il ramo `pow` dell'handler matematico (routine 75, non commutativa): il **primo** float poppato (`[ebp-0xC]`, nel preambolo comune) è quello che l'handler passa alla CRT `pow()` come **base**, cioè `fValue`, il **primo** parametro dichiarato; il secondo pop (`[ebp-0x10]`, dentro il ramo) diventa l'esponente. Conferma incrociata dal lato compilatore: nel bytecode gli argomenti sono pushati in ordine **inverso** (l'ultimo dichiarato per primo), quindi il primo dichiarato è in cima allo stack al momento della ACTION. **CONFERMATO END-TO-END IN GIOCO il 27/08/2026**: la routine di test 878 (`K2SE_SelfTest(111, 2.5, 333)`) ha poppato `111, 2.5, 333` in quest'ordine e restituito il checksum esatto `111250333` per **292 chiamate su 292**, zero errori.
 
 **Q7 — argomenti di default omessi? RISOLTO: il compilatore li materializza LUI.**
 `GetIsInCombat()` (2 parametri, entrambi default) emette `argc=2`, e il bytecode contiene `CONSTO OBJECT_SELF` + `CONSTI 0` generati dal compilatore. Vale anche per l'header esteso: `K2SE_Q7Probe(int nA, int nB = 7)` chiamata come `K2SE_Q7Probe(1)` emette `argc=2` con un `CONSTI 7` visibile nel bytecode. **Conseguenza: le routine K2SE possono dichiarare default liberamente; l'handler vede sempre l'argc pieno dichiarato.** Un argc diverso da quello dichiarato = script compilato contro un header sbagliato → K2SE rifiuta con `-2001` senza toccare lo stack. Test: `tools/q7_default_args_test.py`.
@@ -550,7 +551,7 @@ Errori documentati emersi durante la ricerca; sono qui perché ricompaiono facil
 
 *(aggiornato 26/08/2026 sera — Q1–Q7 tutte risolte, M1–M4 chiuse, ABI int/float/object completa)*
 
-1. **Sessione di gioco di verifica** (2 minuti): carica il save, la batteria di test nel wrapper heartbeat scrive `TEST 1..6` in `k2se.log` e il banner `AurPostString` compare a schermo. Chiude M3 (sentinella `abs()`) e la conferma end-to-end di Q6.
+1. ~~**Sessione di gioco di verifica**~~ ✅ **FATTA 27/08/2026 09:20 — TEST 1..6 tutti PASS**, banner a schermo, self-validation OK, 32.763 dispatch, hook rimosso pulito all'uscita. M3 chiusa, Q6 confermata end-to-end, ABI float/object viva. Il marker `K2SE_DIAGNOSTIC` è stato rimosso (log silenzioso per il gioco normale); la batteria heartbeat resta installata come proof-of-life — si toglie con `python tools/m4_deploy_test.py --clean`.
 2. **M5 — nebbia/atmosfera a runtime** (§5): ora ha tutti i prerequisiti. Primo sottopasso: rilevare 3C-FD e disassemblare il percorso `glProgramStringARB`/IAT `glFogf`.
 3. **Q11** (stringhe/engine structure) quando una feature le richiede — non prima.
 4. Prima della prima release pubblica: riordinare l'header esteso (le routine di self-test 878/879 dopo le API vere), contattare LaneDibello, pubblicare il registro degli ID.
