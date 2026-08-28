@@ -4,96 +4,35 @@
 
 #include <cstdio>
 
+#include "exostring.h"
 #include "log.h"
 #include "offsets.h"
 #include "vm.h"
-
-// ============================================================================
-// K2SE_ENABLE_STACK_ABI -- ON. Q5 is resolved.
-//
-// The ABI was not guessed; it was read out of the engine's own handlers:
-// the int pair from the abs() branch of the math handler 0x0068C4A0, the
-// float pair from its trig/pow branches, the object pair from GetArea
-// (0x0067A070) and GetFirstPC (0x006875E0). Common contract:
-//
-//     mov ecx, dword ptr [0xA1B4A8]    ; ECX = the CVirtualMachine singleton
-//     call <accessor>                  ; EAX != 0 = success
-//
-// Error codes on failure, engine's own: -2001 pop failed, -2000 push failed.
-//
-// Argument order (Q6, resolved statically): arguments pop in DECLARATION
-// order. Ground truth is the pow branch -- pow(fValue, fExponent) is
-// non-commutative, and the FIRST popped float is what the handler feeds CRT
-// pow() as the base, i.e. fValue, the first declared parameter. The compiler
-// side agrees: emitted bytecode pushes the last-declared argument first.
-// ============================================================================
-#define K2SE_ENABLE_STACK_ABI 1
+#include "vmstack.h"
 
 namespace k2se {
 namespace routines {
 namespace {
 
+// The stack accessors now live in vmstack.h, which also owns
+// K2SE_ENABLE_STACK_ABI. Track B roughly doubled their number and added the
+// CExoString lifetime rules, which is more than an anonymous namespace in the
+// routine table should be carrying.
+using vmstack::PopFloat;
+using vmstack::PopInt;
+using vmstack::PopObject;
+using vmstack::PopString;
+using vmstack::PushFloat;
+using vmstack::PushInt;
+using vmstack::PushObject;
+using vmstack::PushString;
+
 bool g_probeSeen = false;
 bool g_extendedSeen = false;
 bool g_selfTestSeen = false;
+bool g_echoSeen = false;
 bool g_bannerPosted = false;
 uint32_t g_reportSeenMask = 0;  // one-shot full logging per test id 0..31
-
-#if K2SE_ENABLE_STACK_ABI
-using StackPopIntegerFn = int(__thiscall*)(void* vm, int* out);
-using StackPushIntegerFn = int(__thiscall*)(void* vm, int value);
-using StackPopFloatFn = int(__thiscall*)(void* vm, float* out);
-using StackPushFloatFn = int(__thiscall*)(void* vm, float value);
-using StackPopObjectFn = int(__thiscall*)(void* vm, uint32_t* out);
-using StackPushObjectFn = int(__thiscall*)(void* vm, uint32_t objectId);
-
-// The VM singleton, exactly as every engine handler obtains it.
-void* VirtualMachine() {
-    return *reinterpret_cast<void**>(off::kVirtualMachineGlobal);
-}
-
-bool PopInt(int* out) {
-    void* vm = VirtualMachine();
-    if (!vm) return false;
-    auto fn = reinterpret_cast<StackPopIntegerFn>(off::kStackPopInteger);
-    return fn(vm, out) != 0;
-}
-
-bool PushInt(int value) {
-    void* vm = VirtualMachine();
-    if (!vm) return false;
-    auto fn = reinterpret_cast<StackPushIntegerFn>(off::kStackPushInteger);
-    return fn(vm, value) != 0;
-}
-
-bool PopFloat(float* out) {
-    void* vm = VirtualMachine();
-    if (!vm) return false;
-    auto fn = reinterpret_cast<StackPopFloatFn>(off::kStackPopFloat);
-    return fn(vm, out) != 0;
-}
-
-bool PushFloat(float value) {
-    void* vm = VirtualMachine();
-    if (!vm) return false;
-    auto fn = reinterpret_cast<StackPushFloatFn>(off::kStackPushFloat);
-    return fn(vm, value) != 0;
-}
-
-bool PopObject(uint32_t* out) {
-    void* vm = VirtualMachine();
-    if (!vm) return false;
-    auto fn = reinterpret_cast<StackPopObjectFn>(off::kStackPopObject);
-    return fn(vm, out) != 0;
-}
-
-bool PushObject(uint32_t objectId) {
-    void* vm = VirtualMachine();
-    if (!vm) return false;
-    auto fn = reinterpret_cast<StackPushObjectFn>(off::kStackPushObject);
-    return fn(vm, objectId) != 0;
-}
-#endif
 
 // --- on-screen banner --------------------------------------------------------
 // void __cdecl AurPostString(const char* text, int x, int y, float fLife)
@@ -187,6 +126,39 @@ int H_ReportTest(int /*nParams*/) {
     return 0;
 }
 
+// 880: string K2SE_EchoString(string sIn)
+// The string round trip, end to end: pop a script-supplied string, then push it
+// straight back. A script comparing the result against what it sent proves the
+// whole path -- compiler, bytecode, VM stack, CExoString construction, and the
+// engine's copy semantics in both directions.
+//
+// It is deliberately an identity function. Anything cleverer would make a
+// failure ambiguous between "the string ABI is wrong" and "the transformation is
+// wrong", and the string ABI is the thing under test.
+int H_EchoString(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    // Must be constructed before the engine touches it: PopString copy-assigns,
+    // which frees whatever pointer it finds in the destination first.
+    ExoString value;
+    if (!value.valid()) {
+        log::Write("EchoString: CExoString construction failed");
+        return off::kErrParam;
+    }
+    if (!PopString(&value)) return off::kErrParam;
+
+    if (!g_echoSeen) {
+        g_echoSeen = true;
+        log::Writef("*** FIRST STRING ROUND TRIP: received \"%s\" (length %u) ***",
+                    value.c_str(), value.length());
+    }
+
+    // The engine allocates its own copy here, so `value` stays ours and its
+    // destructor still runs on the way out of this scope.
+    if (!PushString(&value)) return off::kErrPushFailed;
+#endif
+    return 0;
+}
+
 struct Extended {
     int id;
     const char* name;
@@ -201,6 +173,7 @@ constexpr Extended kExtended[] = {
     {877, "K2SE_GetVersion", 0, &H_GetVersion},
     {878, "K2SE_SelfTest", 3, &H_SelfTest},
     {879, "K2SE_ReportTest", 3, &H_ReportTest},
+    {880, "K2SE_EchoString", 1, &H_EchoString},
 };
 constexpr int kExtendedCount = static_cast<int>(sizeof(kExtended) / sizeof(kExtended[0]));
 

@@ -38,6 +38,8 @@ add_library(k2se SHARED
     src/fingerprint.cpp
     src/vm.cpp
     src/routines.cpp
+    src/vmstack.cpp
+    src/exostring.cpp
     "${GENERATED_PROXY}"
 )
 

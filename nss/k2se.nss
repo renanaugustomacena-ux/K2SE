@@ -52,6 +52,16 @@ int K2SE_GetVersion();
 int K2SE_SelfTest(int nFirst, float fSecond, int nThird);
 int K2SE_ReportTest(int nTestId, int nExpected, int nActual);
 
+// Routine 880 -- DEVELOPMENT ONLY. Returns sIn unchanged.
+//
+// An identity function on purpose: it exercises the whole string path (pop,
+// CExoString construction, push, and the engine's copy semantics in both
+// directions) while keeping a failure unambiguous. If what comes back differs
+// from what went in, the string ABI is wrong -- there is nothing else it could
+// be. Strings are the first K2SE type whose lifetime the engine shares, so this
+// gets its own test rather than riding along in K2SE_SelfTest.
+string K2SE_EchoString(string sIn);
+
 // -----------------------------------------------------------------------------
 // Usage pattern -- copy this shape:
 //

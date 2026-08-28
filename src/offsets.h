@@ -130,6 +130,59 @@ constexpr uint32_t kStackPushObject = 0x006FDB10;
 constexpr uint32_t kStackPopVector = 0x006FDA20;   // (void* vm, float out[3])  ret 4
 constexpr uint32_t kStackPushVector = 0x006FDA40;  // (void* vm, float x,y,z)   ret 0xC
 
+// --- strings and engine structures (DESIGN.md Q11, resolved 2026-08-28) -----
+// Named by the imported table, then confirmed here by disassembly: both are
+// byte-identical thunks to StackPopInteger apart from the inner rel32, so they
+// share the ABI K2SE has already exercised in game.
+//   int __thiscall StackPopString (void* vm, CExoString* out);  ret 4
+//   int __thiscall StackPushString(void* vm, CExoString* in);   ret 4
+constexpr uint32_t kStackPopString = 0x006FDA70;
+constexpr uint32_t kStackPushString = 0x006FDA90;
+
+// Two arguments, not one (ret 8). Argument order read from the thunk: it pushes
+// [ebp+0Ch] then [ebp+8], so the inner call receives ([ebp+8], [ebp+0Ch]).
+//   int __thiscall StackPopEngineStructure (void* vm, int type, void** out); ret 8
+//   int __thiscall StackPushEngineStructure(void* vm, int type, void* value); ret 8
+//
+// WARNING: the *type tag* values (effect/event/location/talent) are NOT verified
+// on this binary. They come from a third-party header and are a hypothesis, not
+// a fact. No K2SE routine may expose these until a consuming vanilla handler has
+// been read. The accessors are wrapped so the plumbing exists; the tags are not
+// yet trusted.
+constexpr uint32_t kStackPopEngineStructure = 0x006FDAB0;
+constexpr uint32_t kStackPushEngineStructure = 0x006FDAD0;
+
+// --- CExoString --------------------------------------------------------------
+// Layout: { char* CStr; uint32_t Length; } -- 8 bytes.
+//
+// The size is not taken on trust from a table (the imported database's `classes`
+// table is empty for KOTOR 2). It was read out of the engine twice:
+//   * the default constructor writes exactly two dwords, at +0x00 and +0x04,
+//     and nothing else;
+//   * StackPushString's callee does `push 8; call operator new` before invoking
+//     CStrConstructor on the result.
+constexpr uint32_t kExoStringSize = 8;
+constexpr uint32_t kExoStringOffCStr = 0x00;
+constexpr uint32_t kExoStringOffLength = 0x04;
+
+//   CExoString* __thiscall CExoString::CExoString()                  -- zeroes both fields
+//   CExoString* __thiscall CExoString::CExoString(char* src)
+//   CExoString* __thiscall CExoString::CExoString(char* src, int len)
+//   CExoString* __thiscall CExoString::~CExoString()                 -- frees CStr, nulls it
+constexpr uint32_t kExoStringCtorDefault = 0x00733540;
+constexpr uint32_t kExoStringCtorCStr = 0x00733570;
+constexpr uint32_t kExoStringCtorCStrLen = 0x00733680;
+constexpr uint32_t kExoStringDtor = 0x00733780;
+
+// OWNERSHIP, settled by disassembling both callees rather than assumed:
+//   StackPushString ALLOCATES ITS OWN 8-byte CExoString and constructs it from
+//   our buffer -- it copies. We keep ownership of ours and must destroy it.
+//   StackPopString COPY-ASSIGNS into the CExoString we hand it, so that object
+//   must already be validly constructed (a zeroed one is fine, a garbage one is
+//   a free() of a wild pointer).
+// Getting this backwards in either direction is a heap corruption, which is why
+// it was read out of the engine instead of inferred from convention.
+
 // The engine's own object-id sentinel, seen as the default/failure value in
 // GetFirstPC (mov [ebp-4], 0x7F000000) -- matches community OBJECT_INVALID.
 constexpr uint32_t kObjectInvalid = 0x7F000000;

@@ -6335,3 +6335,5 @@ int K2SE_GetVersion();
 int K2SE_SelfTest(int nFirst, float fSecond, int nThird);
 // 879:
 int K2SE_ReportTest(int nTestId, int nExpected, int nActual);
+// 880:
+string K2SE_EchoString(string sIn);
