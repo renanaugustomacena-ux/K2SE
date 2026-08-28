@@ -183,6 +183,44 @@ constexpr uint32_t kExoStringDtor = 0x00733780;
 // Getting this backwards in either direction is a heap corruption, which is why
 // it was read out of the engine instead of inferred from convention.
 
+// --- resolving a script OBJECT id to a live pointer (Track C) ---------------
+// DESIGN.md 7 noted that [0x00A1B4A4] is "a second singleton (app/server)"
+// without identifying it. It is CAppManager: +0x04 is the client, +0x08 the
+// server.
+//
+//     *(void**)0x00A1B4A4          CAppManager
+//       +0x08                      CServerExoApp
+//       GetCreatureByGameObjectID  id -> CSWSCreature*, or null
+//
+// EVERY signature below was verified here by disassembly -- the epilogue's
+// `ret imm16` gives the argument size, and all ten agreed with the imported
+// table. That check is not optional: __thiscall is callee-cleaned, so calling
+// with the wrong argument count silently unbalances the stack rather than
+// failing loudly.
+constexpr uint32_t kAppManagerGlobal = 0x00A1B4A4;
+constexpr uint32_t kAppManagerOffServer = 0x08;
+
+constexpr uint32_t kGetObjectArray = 0x0051C080;               // () ret 0
+constexpr uint32_t kGetCreatureByGameObjectID = 0x0051C100;    // (uint32 id) ret 4
+constexpr uint32_t kGetPlayerCreatureId = 0x0051C8F0;          // () ret 0
+constexpr uint32_t kGameObjectArrayGetGameObject = 0x0053DFB0; // (id, void** out) ret 8
+
+// CSWSCreature -> CSWSCreatureStats. STRUCT OFFSET, not verifiable from the file:
+// it is a claim about an object's runtime layout, imported and unconfirmed. Every
+// read through it is bounds-checked and guarded, and a wrong value shows up as a
+// refused call rather than a crash.
+constexpr uint32_t kCreatureOffStats = 0x1198;
+
+// Ability bases are single bytes, two apart: STR 0xED, DEX 0xEF, CON 0xF1,
+// INT 0xF3, WIS 0xF5, CHA 0xF7 -- matching NWScript's ABILITY_* ordering.
+constexpr uint32_t kStatsOffAbilityBase = 0x00ED;
+constexpr uint32_t kStatsAbilityStride = 2;
+constexpr int kAbilityCount = 6;
+
+constexpr uint32_t kStatsGetSkillRank = 0x006B7BB0;  // (uint8 skill, void*, int) ret 12
+constexpr uint32_t kStatsHasFeat = 0x006B83F0;       // (uint16 feat) ret 4
+constexpr uint32_t kStatsHasSpell = 0x006BD9C0;      // (uint8, uint32, int) ret 12
+
 // The engine's own object-id sentinel, seen as the default/failure value in
 // GetFirstPC (mov [ebp-4], 0x7F000000) -- matches community OBJECT_INVALID.
 constexpr uint32_t kObjectInvalid = 0x7F000000;

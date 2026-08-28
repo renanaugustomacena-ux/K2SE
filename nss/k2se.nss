@@ -62,6 +62,34 @@ int K2SE_ReportTest(int nTestId, int nExpected, int nActual);
 // gets its own test rather than riding along in K2SE_SelfTest.
 string K2SE_EchoString(string sIn);
 
+// =============================================================================
+// Creature queries -- the first K2SE functions meant for real mods.
+//
+// All read-only, and all return -1 rather than failing the script when the
+// creature cannot be resolved. ALWAYS check for -1: it means "K2SE could not
+// answer", which is not the same as 0.
+//
+//     if (!K2SE_IsPresent()) return;
+//     int nStr = K2SE_GetAbilityScoreBase(oPC, ABILITY_STRENGTH);
+//     if (nStr < 0) return;    // could not resolve -- do not treat as a score
+// =============================================================================
+
+// The attribute the creature actually has, before items and effects.
+// nAbility is ABILITY_STRENGTH .. ABILITY_CHARISMA (0..5).
+int K2SE_GetAbilityScoreBase(object oCreature, int nAbility);
+
+// The skill rank the creature bought, without item or effect modifiers --
+// which vanilla GetSkillRank cannot report separately.
+int K2SE_GetSkillRankBase(object oCreature, int nSkill);
+
+// TRUE if the creature HAS the feat, as opposed to whether it can use it right
+// now. Vanilla GetHasFeat folds in daily uses and so answers a different
+// question.
+int K2SE_GetFeatAcquired(object oCreature, int nFeat);
+
+// TRUE if the creature knows the Force power, regardless of current Force points.
+int K2SE_GetSpellAcquired(object oCreature, int nSpell);
+
 // -----------------------------------------------------------------------------
 // Usage pattern -- copy this shape:
 //

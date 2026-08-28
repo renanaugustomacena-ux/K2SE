@@ -40,6 +40,7 @@ add_library(k2se SHARED
     src/routines.cpp
     src/vmstack.cpp
     src/exostring.cpp
+    src/gameobj.cpp
     "${GENERATED_PROXY}"
 )
 

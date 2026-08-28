@@ -6337,3 +6337,11 @@ int K2SE_SelfTest(int nFirst, float fSecond, int nThird);
 int K2SE_ReportTest(int nTestId, int nExpected, int nActual);
 // 880:
 string K2SE_EchoString(string sIn);
+// 881:
+int K2SE_GetAbilityScoreBase(object oCreature, int nAbility);
+// 882:
+int K2SE_GetSkillRankBase(object oCreature, int nSkill);
+// 883:
+int K2SE_GetFeatAcquired(object oCreature, int nFeat);
+// 884:
+int K2SE_GetSpellAcquired(object oCreature, int nSpell);

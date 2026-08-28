@@ -5,6 +5,7 @@
 #include <cstdio>
 
 #include "exostring.h"
+#include "gameobj.h"
 #include "log.h"
 #include "offsets.h"
 #include "vm.h"
@@ -159,6 +160,120 @@ int H_EchoString(int /*nParams*/) {
     return 0;
 }
 
+// --- the first routines meant for actual mods --------------------------------
+// 881..884. Everything before these was plumbing that only proves K2SE works.
+//
+// All four are READ-ONLY, deliberately. The struct offsets they walk are the
+// least-verified thing in the project -- imported layout claims that cannot be
+// checked against the file, only by being right. A wrong offset on a read costs
+// a wrong number; the same offset on a write corrupts a creature in the player's
+// save. Mutators (SetSkillRank, AddFeat, the attribute setters) all have verified
+// addresses and confirmed signatures, and are deliberately held back until this
+// read path has been confirmed in a live session.
+//
+// Every one returns a sentinel rather than failing the script, so a mod can test
+// the result instead of dying:
+//   -1  the creature, its stats, or the read could not be resolved
+
+constexpr int kUnknown = -1;
+
+// Shared prologue: pop an object id, resolve it to a creature's stats block.
+// Returns null and leaves *popOk false if the argument itself could not be read,
+// which is the one case where we must not push a result.
+void* PopCreatureStats(bool* popOk) {
+    *popOk = false;
+#if K2SE_ENABLE_STACK_ABI
+    // PopObject, not PopInt. The VM stack is typed -- the pop path checks the
+    // slot's type tag before handing the value over (StackPopString, for
+    // instance, tests for tag 5) -- so popping a declared `object` as an int
+    // would simply fail. An OBJECT is a uint32 handle, but the accessors are not
+    // interchangeable.
+    uint32_t objectId = 0;
+    if (!PopObject(&objectId)) return nullptr;
+    *popOk = true;
+    void* creature = gameobj::CreatureFromObjectId(objectId);
+    if (!creature) return nullptr;
+    return gameobj::CreatureStats(creature);
+#else
+    return nullptr;
+#endif
+}
+
+// 881: int K2SE_GetAbilityScoreBase(object oCreature, int nAbility)
+// The base attribute, before items and effects. Reads a byte out of the stats
+// block; makes no engine call at all, which makes it the safest of the four.
+int H_GetAbilityScoreBase(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    bool popped = false;
+    void* stats = PopCreatureStats(&popped);
+    if (!popped) return off::kErrParam;
+
+    int ability = 0;
+    if (!PopInt(&ability)) return off::kErrParam;
+
+    int value = kUnknown;
+    if (stats) gameobj::AbilityBase(stats, ability, &value);
+    if (!PushInt(value)) return off::kErrPushFailed;
+#endif
+    return 0;
+}
+
+// 882: int K2SE_GetSkillRankBase(object oCreature, int nSkill)
+// The rank the creature actually bought, without item or effect modifiers --
+// which vanilla GetSkillRank cannot report.
+int H_GetSkillRankBase(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    bool popped = false;
+    void* stats = PopCreatureStats(&popped);
+    if (!popped) return off::kErrParam;
+
+    int skill = 0;
+    if (!PopInt(&skill)) return off::kErrParam;
+
+    int value = kUnknown;
+    if (stats) gameobj::SkillRankBase(stats, skill, &value);
+    if (!PushInt(value)) return off::kErrPushFailed;
+#endif
+    return 0;
+}
+
+// 883: int K2SE_GetFeatAcquired(object oCreature, int nFeat)
+// Whether the creature HAS the feat, as opposed to whether it can use it right
+// now -- the distinction vanilla GetHasFeat blurs by folding in daily uses.
+int H_GetFeatAcquired(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    bool popped = false;
+    void* stats = PopCreatureStats(&popped);
+    if (!popped) return off::kErrParam;
+
+    int feat = 0;
+    if (!PopInt(&feat)) return off::kErrParam;
+
+    int value = kUnknown;
+    if (stats) gameobj::HasFeat(stats, feat, &value);
+    if (!PushInt(value)) return off::kErrPushFailed;
+#endif
+    return 0;
+}
+
+// 884: int K2SE_GetSpellAcquired(object oCreature, int nSpell)
+// Known, regardless of whether there are Force points to cast it.
+int H_GetSpellAcquired(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    bool popped = false;
+    void* stats = PopCreatureStats(&popped);
+    if (!popped) return off::kErrParam;
+
+    int spell = 0;
+    if (!PopInt(&spell)) return off::kErrParam;
+
+    int value = kUnknown;
+    if (stats) gameobj::HasSpell(stats, spell, &value);
+    if (!PushInt(value)) return off::kErrPushFailed;
+#endif
+    return 0;
+}
+
 struct Extended {
     int id;
     const char* name;
@@ -174,6 +289,10 @@ constexpr Extended kExtended[] = {
     {878, "K2SE_SelfTest", 3, &H_SelfTest},
     {879, "K2SE_ReportTest", 3, &H_ReportTest},
     {880, "K2SE_EchoString", 1, &H_EchoString},
+    {881, "K2SE_GetAbilityScoreBase", 2, &H_GetAbilityScoreBase},
+    {882, "K2SE_GetSkillRankBase", 2, &H_GetSkillRankBase},
+    {883, "K2SE_GetFeatAcquired", 2, &H_GetFeatAcquired},
+    {884, "K2SE_GetSpellAcquired", 2, &H_GetSpellAcquired},
 };
 constexpr int kExtendedCount = static_cast<int>(sizeof(kExtended) / sizeof(kExtended[0]));
 
