@@ -23,6 +23,18 @@ Restano **tre incognite che vanno chiuse con esperimenti prima di scrivere codic
 | Progetto | Copre K2? | Cos'è | Rilevanza |
 |---|---|---|---|
 | **Kotor Patch Manager** (LaneDibello, MIT) | **Sì** | Framework di patching runtime K1+K2. Contiene `AddressDatabases/kotor2_steam_aspyr.db` **con la chiave del binario esatto di questa macchina**, ~45 classi wrapper `GameAPI`, un proxy binkw32 (`KProxy`), script Ghidra | **Il partner naturale.** Il suo Script Extender copre però **solo K1** |
+
+> ⚠️ **Correzione 28/08/2026 — questa riga sopravvalutava il database.** Studiato
+> per intero e importato (§11). Le tabelle K2 contengono **48 funzioni, 14
+> globali, 21 offset, 0 classi** — non l'anno di lavoro in Ghidra che questo
+> documento dava per scontato. Il confronto è impietoso: il DB di KOTOR 1 ne ha
+> 9711 / 21 / 4727 / 977.
+>
+> Il valore reale è diverso, e resta alto: **conferma incrociata** (tutti e 10
+> gli indirizzi che K2SE aveva derivato a mano coincidono) più **sei nuovi entry
+> point della VM** che chiudono Q11. E il DB di **KOTOR 1** è utile come
+> *oracolo di struttura*: gli indirizzi sono K1, ma i layout Odyssey no — è lui
+> a confermare indipendentemente `m_pCommands = +0x0C`.
 | **K1SE** (`Brotaku-Vengeant`, MIT) | No — solo KOTOR 1 | Proxy `binkw32.dll` + un unico detour MinHook sul dispatcher K1 `0x0052C0D0`; **non registra ID nuovi: fa hijack di 14 ID vanilla** | Utile come *forma* del progetto (build, logging, forwarder). ⚠️ Vedi nota di cautela sotto |
 | reone / KotOR.js / xoreos | — | Reimplementazioni open source dell'engine | **Documentazione autorevole** dei formati e delle tabelle routine |
 
@@ -190,6 +202,23 @@ La tabella è un array reale e scrivibile. K2SE intercetta gli ID ≥ 877 nel th
 **Piano B: allargare le tre costanti.** Se il filtro a monte esiste ma confronta contro lo stesso 877, si allargano i tre immediati (`0x00665F59` allocazione, `0x00665F87` bound di init, `0x00668FDC` bound del dispatcher) e si aggancia anche lo slot [1] per riempire le voci nuove.
 
 **Piano C: hijack di ID vanilla** (il modello K1SE), con reimplementazione fedele della routine dirottata. Brutto semanticamente e costoso, ma il meccanismo della sentinella `abs()` (§3.5) dimostra già che funziona ed è generalizzabile a qualunque routine.
+
+**Piano D: allargare il tetto invece di sostituire il dispatcher.** *(documentato
+28/08/2026 dopo aver studiato lo Script Extender K1 di KPM, che fa esattamente
+questo.)* Tre patch di byte coordinate, senza toccare la vtable:
+
+1. la dimensione dell'allocazione (`0x00665F5A`: `0x0DB4` → N×4),
+2. il bound del dispatcher (`0x00668FDC`: `0x36D` → N),
+3. un detour sulla coda di una funzione che riempie la tabella allargata.
+
+Tutti e tre gli indirizzi sono già noti e già nel fingerprint. Il vantaggio è che
+**il dispatch vanilla resta intatto**: nessun costo per le 877 routine originali,
+perché la tabella indicizza direttamente il nostro puntatore.
+
+**Non adottato.** Lo scambio di slot di vtable è strettamente più generale — può
+intercettare routine vanilla, ed è *quello* che rende possibile la sentinella
+`abs()` — e non scrive un solo byte in `.text`. Registrato qui perché il
+compromesso sia esplicito e non venga riscoperto da capo.
 
 ### 3.4 API per i mod author
 
@@ -510,7 +539,32 @@ Tutti e cinque i nuovi indirizzi hanno probe nel fingerprint (rel32 dei call sit
 | **Q8** | Steam "Verifica integrità" lascia stare una `version.dll` aggiunta e ripristina `binkw32.dll`? ⚠️ *la verifica ripristina anche l'exe LAA-patchato: farla solo con `Patch-KOTOR2-LAA.ps1` alla mano* | Esegui la verifica col proxy installato | 15 min | scelta dello slot + policy LAA |
 | **Q9** | Qualcosa nell'ecosistema KOTOR 2 occupa già `version.dll`? | Chiedi su Deadly Stream / Discord prima di bloccare lo slot | 1 giorno | scelta dello slot |
 | **Q10** | Il depot Aspyr riceve ancora aggiornamenti? | Storico depot su SteamDB per l'app 208580 | 5 min | rischio dello slot binkw32 |
-| **Q11** | ABI di CExoString (chi possiede/libera il buffer di StackPopString/PushString?) e degli engine structure (location/effect/talent) | Leggi un handler che consuma stringhe (es. `PrintString`) e uno che consuma location | 45 min | routine con parametri stringa/location |
+| ~~**Q11**~~ | ~~ABI di CExoString e degli engine structure~~ | ✅ **RISOLTA 28/08/2026** — vedi sotto | — | — |
+
+### ✅ RISOLTA il 28/08/2026 — Q11 (stringhe), parzialmente (engine structure)
+
+Gli indirizzi sono arrivati dal database di KPM (§11), ma **la semantica è stata
+letta disassemblando i due callee**, perché sbagliarla in una delle due direzioni
+corrompe l'heap del gioco:
+
+- **`StackPushString` COPIA.** Il suo callee fa `push 8` → `operator new` →
+  `CExoString::CStrConstructor` su un blocco nuovo. Costruisce *la sua* stringa
+  dalla nostra: la nostra resta nostra e il nostro distruttore deve girare.
+- **`StackPopString` fa COPY-ASSIGN** dentro l'oggetto che gli passiamo, quindi
+  quell'oggetto **deve già essere costruito** — l'assegnazione libera per primo
+  il puntatore che ci trova dentro. Passargli un guscio non inizializzato è una
+  `free()` di spazzatura dello stack. `PopString` lo rifiuta.
+- **`sizeof(CExoString) == 8`**, confermato due volte: il costruttore di default
+  scrive esattamente due dword (+0x00 e +0x04) e nient'altro, e il callee di
+  `PushString` chiede 8 byte a `operator new`. *(Il `classes` del DB K2 è vuoto:
+  questa riga è un contributo di K2SE verso monte, §11.)*
+- Il percorso di pop controlla il **type tag 5** per le stringhe — conferma che
+  lo stack della VM è tipato e che gli accessor **non** sono intercambiabili.
+
+**Ancora aperto:** i *valori* dei tag per gli engine structure
+(effect/event/location/talent). Vengono da un header di terze parti, nessun
+handler vanilla è stato letto. Gli accessor sono avvolti (`vmstack.h`), ma
+**nessuna routine li espone** finché un tag non è stabilito.
 
 ---
 
@@ -528,6 +582,11 @@ Errori documentati emersi durante la ricerca; sono qui perché ricompaiono facil
 8. **`0x0085CE5D` non è un hook site valido** per la build Steam-Aspyr: è una copia GOG non portata di KPM, e i suoi byte non esistono in questo binario.
 9. **`nwnsc` non è il compilatore di KOTOR.**
 10. **`NWNXLib` non è una guida agli offset:** in NWN `+0x0C` è `m_pVM`, in KOTOR è l'array dei comandi.
+11. **Il database di indirizzi di KPM per K2 è piccolo, non enorme** (48 funzioni). §1 sopravvalutava. Vedi §11.
+12. **Le righe Steam di quel DB sono *auto-portate* dalla build GOG**, non derivate indipendentemente — lo dice il campo `description` del DB stesso. Per questo ogni indirizzo importato passa il test del prologo `55 8B EC` prima di essere ammesso, e il test resta nella toolchain invece di essere un controllo una tantum.
+13. **`0x0085CE5D` è il gemello GOG di `0x0046AADD` (Steam).** L'item 8 aveva ragione a rifiutarlo; ora si sa anche *cosa* era.
+14. **Un `object` NWScript non si estrae con `StackPopInteger`.** Lo stack della VM è tipato e il percorso di pop controlla il tag (5 = stringa): un `object` è un `uint32`, ma gli accessor non sono intercambiabili. Errore commesso e corretto durante il Track C.
+15. **Non fidarsi di una firma `__thiscall` presa da terzi.** È *callee-cleaned*: un conteggio di argomenti sbagliato sbilancia lo stack in silenzio invece di fallire. L'epilogo (`ret imm16`) dà la dimensione degli argomenti in un colpo d'occhio — 10 firme su 10 verificate così prima di chiamarle.
 
 ---
 
@@ -547,11 +606,63 @@ Errori documentati emersi durante la ricerca; sono qui perché ricompaiono facil
 
 ---
 
+## 11. Il porting da Kotor-Patch-Manager (28/08/2026)
+
+Spec completa: [`docs/superpowers/specs/2026-08-28-patch-manager-port-design.md`](docs/superpowers/specs/2026-08-28-patch-manager-port-design.md).
+
+**Postura di licenza: nessuna riga di codice altrui.** Sono stati importati solo
+**dati** — indirizzi e offset di struttura, cioè fatti su un binario che entrambi
+i progetti bersagliano. Tutto il C++ e tutta la toolchain sono scritti qui. La
+copia locale di quel repo non ha un `LICENSE` alla radice e non è un clone git,
+quindi non le si concede nulla sulla parola del suo README.
+
+### Verificato prima di progettare
+
+| Affermazione | Metodo | Esito |
+|---|---|---|
+| Il DB descrive *questo* binario | SHA-256 del backup pristino vs `game_version` | coincide |
+| I 48 indirizzi sono reali | prologo MSVC `55 8B EC` in `.text` | **48/48** |
+| Le righe Steam non sono copiate da GOG | diff con `kotor2_gog_aspyr.db` | tutte diverse, delta non costante |
+| I nuovi accessor condividono l'ABI provata | disassemblati tutti e 13 i thunk | identici a meno del rel32 |
+| Gli slot IAT della nebbia di §5 | risolti *per nome* dalla import directory | **5/5 corretti** |
+
+### Cos'è cambiato
+
+- **A — gli indirizzi diventano dati.** `data/k2se_addresses.csv` (102 righe, 68
+  verificate) è la fonte di verità; `src/offsets_generated.h` ne è generato.
+  `offsets.h` conserva le costanti derivate a mano **e le confronta con quelle
+  importate via `static_assert`**: due derivazioni indipendenti che divergono
+  diventano un errore di compilazione, non un mistero a runtime.
+- **B — Q11 chiusa.** `vmstack.*` (12 accessor), `exostring.*` (RAII sui
+  costruttori del motore), routine 880.
+- **C — catena oggetto → puntatore.** `[0x00A1B4A4]` finalmente identificato:
+  è `CAppManager` (§7 sapeva che era "un secondo singleton" ma non quale).
+  Routine 881–884, **sole letture**: un offset sbagliato in lettura costa un
+  numero sbagliato, in scrittura corrompe un salvataggio.
+- **D — pipeline Ghidra** e contributo verso monte (`tools/export_to_kpm.py`).
+- **E — nebbia a runtime.** Routine 885–888, **opt-in** via `k2se_fog.txt`.
+
+### Cosa NON è stato verificato
+
+Niente di tutto questo è passato per una sessione di gioco reale. Le prove
+statiche (prologhi, `ret imm16`, byte ACTION emessi, build pulita) sono
+necessarie ma **non sufficienti**, e non vanno riportate come se lo fossero.
+Servono, in ordine: routine 880 (stringhe), 881–884 (offset di struttura — i
+meno verificati del progetto), 885–888 (nebbia, thread di rendering).
+
+---
+
 ## 10. Prossimo passo
 
 *(aggiornato 26/08/2026 sera — Q1–Q7 tutte risolte, M1–M4 chiuse, ABI int/float/object completa)*
 
-1. ~~**Sessione di gioco di verifica**~~ ✅ **FATTA 27/08/2026 09:20 — TEST 1..6 tutti PASS**, banner a schermo, self-validation OK, 32.763 dispatch, hook rimosso pulito all'uscita. M3 chiusa, Q6 confermata end-to-end, ABI float/object viva. Il marker `K2SE_DIAGNOSTIC` è stato rimosso (log silenzioso per il gioco normale); la batteria heartbeat resta installata come proof-of-life — si toglie con `python tools/m4_deploy_test.py --clean`.
-2. **M5 — nebbia/atmosfera a runtime** (§5): ora ha tutti i prerequisiti. Primo sottopasso: rilevare 3C-FD e disassemblare il percorso `glProgramStringARB`/IAT `glFogf`.
-3. **Q11** (stringhe/engine structure) quando una feature le richiede — non prima.
-4. Prima della prima release pubblica: riordinare l'header esteso (le routine di self-test 878/879 dopo le API vere), contattare LaneDibello, pubblicare il registro degli ID.
+*(aggiornato 28/08/2026 — porting da KPM completato, tracce A–E, §11)*
+
+1. ~~**Sessione di gioco di verifica**~~ ✅ **FATTA 27/08/2026 09:20 — TEST 1..6 tutti PASS**, banner a schermo, self-validation OK, 32.763 dispatch, hook rimosso pulito all'uscita. M3 chiusa, Q6 confermata end-to-end, ABI float/object viva.
+2. ⚠️ **SESSIONE DI VERIFICA PER LE TRACCE A–E — è il prossimo passo, e blocca tutto il resto.** Dodici routine estese esistono ora, otto delle quali non hanno mai girato. In ordine di rischio crescente:
+   - **880** (`K2SE_EchoString`): la stringa che torna deve essere identica. Se differisce, l'ABI delle stringhe è sbagliata — non c'è altro che possa essere.
+   - **881–884**: confrontare con i valori noti di un personaggio. Camminano sugli offset di struttura, la cosa **meno verificata** del progetto (importati, non controllabili sul file).
+   - **885–888**: solo con `k2se_fog.txt` presente. Girano sul thread di rendering.
+3. **Se 881–884 danno numeri giusti**, sbloccare i *mutatori* (`SetSkillRank`, `AddFeat`, i setter degli attributi): indirizzi verificati e firme confermate, tenuti indietro apposta finché il percorso in lettura non è provato.
+4. **Q11 residua**: i valori dei tag degli engine structure, leggendo un handler vanilla che consuma una `location`.
+5. Prima della prima release pubblica: riordinare l'header esteso (le routine di self-test 878/879 dopo le API vere), **contattare LaneDibello** — c'è ora qualcosa di concreto da offrire, `out/kpm-contribution/` (§11) — e pubblicare il registro degli ID.
