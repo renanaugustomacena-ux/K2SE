@@ -42,8 +42,8 @@ constexpr uint32_t kCClientOptions_SetCameraMode = 0x007B5E50;  // prologue
 // CExoString
 constexpr uint32_t kCExoString_CStrConstructor    = 0x00733570;  // prologue
 constexpr uint32_t kCExoString_CStrLenConstructor = 0x00733680;  // prologue
-constexpr uint32_t kCExoString_DefaultConstructor = 0x00733540;  // prologue
-constexpr uint32_t kCExoString_Destructor         = 0x00733780;  // prologue
+constexpr uint32_t kCExoString_DefaultConstructor = 0x00733540;  // disasm -- zeroes CStr and Length, nothing else
+constexpr uint32_t kCExoString_Destructor         = 0x00733780;  // disasm -- frees the game-owned buffer and nulls CStr
 
 // CGameObjectArray
 constexpr uint32_t kCGameObjectArray_GetGameObject = 0x0053DFB0;  // prologue
@@ -77,6 +77,11 @@ constexpr uint32_t kCSWSCreatureStats_SetWISBase      = 0x006B6960;  // prologue
 // CSWSObject
 constexpr uint32_t kCSWSObject_AddActionToFront = 0x00540CA0;  // prologue
 
+// CSWVirtualMachineCommands
+constexpr uint32_t kCSWVirtualMachineCommands_ExecuteCommand         = 0x00668FD0;  // runtime -- vtable slot 2; the NWScript routine dispatcher. K2SE hooks this slot
+constexpr uint32_t kCSWVirtualMachineCommands_InitializeCommands     = 0x00665F50;  // runtime -- vtable slot 1; allocates 877*4 and fills the routine table with literal stores
+constexpr uint32_t kCSWVirtualMachineCommands_InitializeSWMGCommands = 0x006F5B80;  // disasm -- minigame installer; fills the remaining 103 routine slots
+
 // CServerExoApp
 constexpr uint32_t kCServerExoApp_GetCreatureByGameObjectID = 0x0051C100;  // prologue
 constexpr uint32_t kCServerExoApp_GetObjectArray            = 0x0051C080;  // prologue
@@ -85,17 +90,17 @@ constexpr uint32_t kCServerExoApp_GetPlayerCreatureId       = 0x0051C8F0;  // pr
 // CVirtualMachine
 constexpr uint32_t kCVirtualMachine_RunScript                = 0x006FD8D0;  // prologue
 constexpr uint32_t kCVirtualMachine_StackPopCommand          = 0x006FDB30;  // prologue
-constexpr uint32_t kCVirtualMachine_StackPopEngineStructure  = 0x006FDAB0;  // prologue
+constexpr uint32_t kCVirtualMachine_StackPopEngineStructure  = 0x006FDAB0;  // disasm -- ret 8: (int type, void** out). Type tag values still unverified
 constexpr uint32_t kCVirtualMachine_StackPopFloat            = 0x006FD9E0;  // runtime -- exercised in a live K2SE session
 constexpr uint32_t kCVirtualMachine_StackPopInteger          = 0x006FD9A0;  // runtime -- exercised in a live K2SE session
 constexpr uint32_t kCVirtualMachine_StackPopObject           = 0x006FDAF0;  // runtime -- exercised in a live K2SE session
-constexpr uint32_t kCVirtualMachine_StackPopString           = 0x006FDA70;  // prologue
+constexpr uint32_t kCVirtualMachine_StackPopString           = 0x006FDA70;  // disasm -- copy-assigns into the caller's CExoString, which must be constructed first
 constexpr uint32_t kCVirtualMachine_StackPopVector           = 0x006FDA20;  // prologue
-constexpr uint32_t kCVirtualMachine_StackPushEngineStructure = 0x006FDAD0;  // prologue
+constexpr uint32_t kCVirtualMachine_StackPushEngineStructure = 0x006FDAD0;  // disasm -- ret 8: (int type, void* value). Type tag values still unverified
 constexpr uint32_t kCVirtualMachine_StackPushFloat           = 0x006FDA00;  // runtime -- exercised in a live K2SE session
 constexpr uint32_t kCVirtualMachine_StackPushInteger         = 0x006FD9C0;  // runtime -- exercised in a live K2SE session
 constexpr uint32_t kCVirtualMachine_StackPushObject          = 0x006FDB10;  // runtime -- exercised in a live K2SE session
-constexpr uint32_t kCVirtualMachine_StackPushString          = 0x006FDA90;  // prologue
+constexpr uint32_t kCVirtualMachine_StackPushString          = 0x006FDA90;  // disasm -- allocates its own CExoString and copies; the caller retains ownership
 constexpr uint32_t kCVirtualMachine_StackPushVector          = 0x006FDA40;  // prologue
 
 // ConsoleFunc
@@ -105,7 +110,12 @@ constexpr uint32_t kConsoleFunc_NoParamConstructor = 0x004757D0;  // prologue
 constexpr uint32_t kConsoleFunc_StringConstructor  = 0x00475870;  // prologue
 
 // Other
-constexpr uint32_t kOther_AurPostString = 0x00474C00;  // runtime -- exercised in a live K2SE session
+constexpr uint32_t kOther_AurPostString                    = 0x00474C00;  // runtime -- exercised in a live K2SE session
+constexpr uint32_t kOther_RoutineHandler_GetArea           = 0x0067A070;  // disasm -- routine 24; source of the verified StackPopObject call site
+constexpr uint32_t kOther_RoutineHandler_GetFirstPC        = 0x006875E0;  // disasm -- routine 548; source of StackPushObject and of OBJECT_INVALID = 0x7F000000
+constexpr uint32_t kOther_RoutineHandler_Math              = 0x0068C4A0;  // runtime -- shared handler for routines 67..77 (fabs..abs); K2SE's presence probe rides on it
+constexpr uint32_t kOther_RoutineHandler_Random            = 0x0068F5D0;  // runtime -- routine 0, Random
+constexpr uint32_t kOther_RoutineHandler_RebuildPartyTable = 0x0069C460;  // runtime -- routine 876, the last vanilla routine
 
 // --- globals -----------------------------------------------------
 // pointer variables; dereference to reach the object
@@ -113,6 +123,10 @@ constexpr uint32_t kGlobal_APP_MANAGER_PTR          = 0x00A1B4A4;  // unverified
 constexpr uint32_t kGlobal_AURORA_PTR               = 0x00A1B4A0;  // unverified -- in .data; holds a runtime pointer, not statically checkable
 constexpr uint32_t kGlobal_EXO_RESOURCE_MANAGER_PTR = 0x00A1B490;  // unverified -- in .data; holds a runtime pointer, not statically checkable
 constexpr uint32_t kGlobal_GUI_MANAGER_PTR          = 0x00A1B49C;  // unverified -- in .data; holds a runtime pointer, not statically checkable
+constexpr uint32_t kGlobal_IAT_glFogf               = 0x00986394;  // disasm -- OPENGL32.dll, by import name
+constexpr uint32_t kGlobal_IAT_glFogfv              = 0x00986398;  // disasm -- OPENGL32.dll, by import name
+constexpr uint32_t kGlobal_IAT_glFogi               = 0x009863B0;  // disasm -- OPENGL32.dll, by import name
+constexpr uint32_t kGlobal_IAT_gluPerspective       = 0x00986028;  // disasm -- GLU32.dll, by import name
 constexpr uint32_t kGlobal_RENDER_AABB              = 0x00A73284;  // unverified -- in .data; holds a runtime pointer, not statically checkable
 constexpr uint32_t kGlobal_RENDER_GOB_BBS           = 0x00A73740;  // unverified -- in .data; holds a runtime pointer, not statically checkable
 constexpr uint32_t kGlobal_RENDER_GUI               = 0x00A32A30;  // unverified -- in .data; holds a runtime pointer, not statically checkable
@@ -165,6 +179,34 @@ constexpr uint32_t kOff_CSWSCreatureStats_WISBase    = 0x00F5;  // unverified --
 constexpr uint32_t kOff_CSWSObject_AreaId      = 0x0090;  // unverified -- struct layout; confirm against a consuming handler
 constexpr uint32_t kOff_CSWSObject_Orientation = 0x00A0;  // unverified -- struct layout; confirm against a consuming handler
 constexpr uint32_t kOff_CSWSObject_Position    = 0x0094;  // unverified -- struct layout; confirm against a consuming handler
+
+// CSWVirtualMachineCommands
+constexpr uint32_t kOff_CSWVirtualMachineCommands_m_pCommands = 0x000C;  // runtime -- the routine table pointer; byte read at both 0x00665F71 and 0x00668FE7
+
+// CVirtualMachine
+constexpr uint32_t kOff_CVirtualMachine_m_pInternal = 0x001C;  // disasm -- every stack accessor forwards through it (mov ecx,[ecx+1Ch] at 0x006FD9B0)
+
+// --- constants ---------------------------------------------------
+// values read out of instruction immediates
+
+// CSWVirtualMachineCommands
+constexpr uint32_t kCSWVirtualMachineCommands_RoutineTableAllocBytes = 0x00000DB4;  // runtime -- 877*4; the `push 0DB4h` at 0x00665F5A, unique in the whole 6.5MB image
+constexpr uint32_t kCSWVirtualMachineCommands_VanillaRoutineCount    = 0x0000036D;  // runtime -- 877; the dispatcher's bound at 0x00668FDC and init's at 0x00665F87
+
+// Other
+constexpr uint32_t kOther_ObjectInvalid = 0x7F000000;  // disasm -- the engine's own sentinel, from GetFirstPC's default value
+
+// --- vtables -----------------------------------------------------
+// virtual function table addresses
+
+// CSWVirtualMachineCommands
+constexpr uint32_t kVtable_CSWVirtualMachineCommands = 0x009940D0;  // runtime -- found via the MSVC RTTI string .?AVCSWVirtualMachineCommands@@ at 0x00A0F4F8
+
+// --- class sizes -------------------------------------------------
+// sizeof, where it has been established
+
+// CExoString
+constexpr uint32_t kSizeof_CExoString = 0x0008;  // disasm -- two dwords; confirmed twice -- the default ctor writes only +0x00 and +0x04, and StackPushString's callee does push 8 / operator new
 
 }  // namespace game
 }  // namespace off

@@ -62,7 +62,9 @@ def render(rows):
         ("function", "functions", "engine entry points"),
         ("global", "globals", "pointer variables; dereference to reach the object"),
         ("offset", "struct offsets", "byte displacement from `this`"),
-        ("constant", "constants", ""),
+        ("constant", "constants", "values read out of instruction immediates"),
+        ("vtable", "vtables", "virtual function table addresses"),
+        ("class", "class sizes", "sizeof, where it has been established"),
     ):
         sel = [r for r in rows if r["kind"] == kind]
         if not sel:
@@ -125,7 +127,10 @@ def main():
         counts[r["kind"]] = counts.get(r["kind"], 0) + 1
     unver = sum(1 for r in rows if r["verified_by"] == "unverified")
     print("wrote %s" % HEADER_PATH)
-    print("  %s" % ", ".join("%d %ss" % (v, k) for k, v in sorted(counts.items())))
+    plural = {"class": "classes", "vtable": "vtables", "function": "functions",
+              "global": "globals", "offset": "offsets", "constant": "constants"}
+    print("  %s" % ", ".join("%d %s" % (v, plural.get(k, k + "s"))
+                             for k, v in sorted(counts.items())))
     print("  %d verified on this binary, %d unverified" % (len(rows) - unver, unver))
     return 0
 

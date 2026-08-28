@@ -3,8 +3,8 @@ function,CClientExoApp,GetClientOptions,0x0072FB00,kpm-db,prologue,
 function,CClientOptions,SetCameraMode,0x007B5E50,kpm-db,prologue,
 function,CExoString,CStrConstructor,0x00733570,kpm-db,prologue,
 function,CExoString,CStrLenConstructor,0x00733680,kpm-db,prologue,
-function,CExoString,DefaultConstructor,0x00733540,kpm-db,prologue,
-function,CExoString,Destructor,0x00733780,kpm-db,prologue,
+function,CExoString,DefaultConstructor,0x00733540,k2se-ghidra,disasm,"zeroes CStr and Length, nothing else"
+function,CExoString,Destructor,0x00733780,k2se-ghidra,disasm,frees the game-owned buffer and nulls CStr
 function,CGameObjectArray,GetGameObject,0x0053DFB0,kpm-db,prologue,
 function,CSWInventory,GetItemInSlot,0x006D0620,kpm-db,prologue,
 function,CSWItem,GetBaseItem,0x006D6E30,kpm-db,prologue,
@@ -25,32 +25,44 @@ function,CSWSCreatureStats,SetSTRBase,0x006B67D0,kpm-db,prologue,
 function,CSWSCreatureStats,SetSkillRank,0x006B81C0,kpm-db,prologue,
 function,CSWSCreatureStats,SetWISBase,0x006B6960,kpm-db,prologue,
 function,CSWSObject,AddActionToFront,0x00540CA0,kpm-db,prologue,
+function,CSWVirtualMachineCommands,ExecuteCommand,0x00668FD0,k2se-ghidra,runtime,vtable slot 2; the NWScript routine dispatcher. K2SE hooks this slot
+function,CSWVirtualMachineCommands,InitializeCommands,0x00665F50,k2se-ghidra,runtime,vtable slot 1; allocates 877*4 and fills the routine table with literal stores
+function,CSWVirtualMachineCommands,InitializeSWMGCommands,0x006F5B80,k2se-ghidra,disasm,minigame installer; fills the remaining 103 routine slots
 function,CServerExoApp,GetCreatureByGameObjectID,0x0051C100,kpm-db,prologue,
 function,CServerExoApp,GetObjectArray,0x0051C080,kpm-db,prologue,
 function,CServerExoApp,GetPlayerCreatureId,0x0051C8F0,kpm-db,prologue,
 function,CVirtualMachine,RunScript,0x006FD8D0,kpm-db,prologue,
 function,CVirtualMachine,StackPopCommand,0x006FDB30,kpm-db,prologue,
-function,CVirtualMachine,StackPopEngineStructure,0x006FDAB0,kpm-db,prologue,
+function,CVirtualMachine,StackPopEngineStructure,0x006FDAB0,k2se-ghidra,disasm,"ret 8: (int type, void** out). Type tag values still unverified"
 function,CVirtualMachine,StackPopFloat,0x006FD9E0,kpm-db,runtime,exercised in a live K2SE session
 function,CVirtualMachine,StackPopInteger,0x006FD9A0,kpm-db,runtime,exercised in a live K2SE session
 function,CVirtualMachine,StackPopObject,0x006FDAF0,kpm-db,runtime,exercised in a live K2SE session
-function,CVirtualMachine,StackPopString,0x006FDA70,kpm-db,prologue,
+function,CVirtualMachine,StackPopString,0x006FDA70,k2se-ghidra,disasm,"copy-assigns into the caller's CExoString, which must be constructed first"
 function,CVirtualMachine,StackPopVector,0x006FDA20,kpm-db,prologue,
-function,CVirtualMachine,StackPushEngineStructure,0x006FDAD0,kpm-db,prologue,
+function,CVirtualMachine,StackPushEngineStructure,0x006FDAD0,k2se-ghidra,disasm,"ret 8: (int type, void* value). Type tag values still unverified"
 function,CVirtualMachine,StackPushFloat,0x006FDA00,kpm-db,runtime,exercised in a live K2SE session
 function,CVirtualMachine,StackPushInteger,0x006FD9C0,kpm-db,runtime,exercised in a live K2SE session
 function,CVirtualMachine,StackPushObject,0x006FDB10,kpm-db,runtime,exercised in a live K2SE session
-function,CVirtualMachine,StackPushString,0x006FDA90,kpm-db,prologue,
+function,CVirtualMachine,StackPushString,0x006FDA90,k2se-ghidra,disasm,allocates its own CExoString and copies; the caller retains ownership
 function,CVirtualMachine,StackPushVector,0x006FDA40,kpm-db,prologue,
 function,ConsoleFunc,Destructor,0x004759B0,kpm-db,prologue,
 function,ConsoleFunc,IntConstructor,0x00475910,kpm-db,prologue,
 function,ConsoleFunc,NoParamConstructor,0x004757D0,kpm-db,prologue,
 function,ConsoleFunc,StringConstructor,0x00475870,kpm-db,prologue,
 function,Other,AurPostString,0x00474C00,kpm-db,runtime,exercised in a live K2SE session
+function,Other,RoutineHandler_GetArea,0x0067A070,k2se-ghidra,disasm,routine 24; source of the verified StackPopObject call site
+function,Other,RoutineHandler_GetFirstPC,0x006875E0,k2se-ghidra,disasm,routine 548; source of StackPushObject and of OBJECT_INVALID = 0x7F000000
+function,Other,RoutineHandler_Math,0x0068C4A0,k2se-ghidra,runtime,shared handler for routines 67..77 (fabs..abs); K2SE's presence probe rides on it
+function,Other,RoutineHandler_Random,0x0068F5D0,k2se-ghidra,runtime,"routine 0, Random"
+function,Other,RoutineHandler_RebuildPartyTable,0x0069C460,k2se-ghidra,runtime,"routine 876, the last vanilla routine"
 global,,APP_MANAGER_PTR,0x00A1B4A4,kpm-db,unverified,"in .data; holds a runtime pointer, not statically checkable"
 global,,AURORA_PTR,0x00A1B4A0,kpm-db,unverified,"in .data; holds a runtime pointer, not statically checkable"
 global,,EXO_RESOURCE_MANAGER_PTR,0x00A1B490,kpm-db,unverified,"in .data; holds a runtime pointer, not statically checkable"
 global,,GUI_MANAGER_PTR,0x00A1B49C,kpm-db,unverified,"in .data; holds a runtime pointer, not statically checkable"
+global,,IAT_glFogf,0x00986394,k2se-ghidra,disasm,"OPENGL32.dll, by import name"
+global,,IAT_glFogfv,0x00986398,k2se-ghidra,disasm,"OPENGL32.dll, by import name"
+global,,IAT_glFogi,0x009863B0,k2se-ghidra,disasm,"OPENGL32.dll, by import name"
+global,,IAT_gluPerspective,0x00986028,k2se-ghidra,disasm,"GLU32.dll, by import name"
 global,,RENDER_AABB,0x00A73284,kpm-db,unverified,"in .data; holds a runtime pointer, not statically checkable"
 global,,RENDER_GOB_BBS,0x00A73740,kpm-db,unverified,"in .data; holds a runtime pointer, not statically checkable"
 global,,RENDER_GUI,0x00A32A30,kpm-db,unverified,"in .data; holds a runtime pointer, not statically checkable"
@@ -82,3 +94,10 @@ offset,CSWSCreatureStats,WISBase,0x00F5,kpm-db,unverified,struct layout; confirm
 offset,CSWSObject,AreaId,0x0090,kpm-db,unverified,struct layout; confirm against a consuming handler
 offset,CSWSObject,Orientation,0x00A0,kpm-db,unverified,struct layout; confirm against a consuming handler
 offset,CSWSObject,Position,0x0094,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CSWVirtualMachineCommands,m_pCommands,0x000C,k2se-ghidra,runtime,the routine table pointer; byte read at both 0x00665F71 and 0x00668FE7
+offset,CVirtualMachine,m_pInternal,0x001C,k2se-ghidra,disasm,"every stack accessor forwards through it (mov ecx,[ecx+1Ch] at 0x006FD9B0)"
+constant,CSWVirtualMachineCommands,RoutineTableAllocBytes,0x00000DB4,k2se-ghidra,runtime,"877*4; the `push 0DB4h` at 0x00665F5A, unique in the whole 6.5MB image"
+constant,CSWVirtualMachineCommands,VanillaRoutineCount,0x0000036D,k2se-ghidra,runtime,877; the dispatcher's bound at 0x00668FDC and init's at 0x00665F87
+constant,Other,ObjectInvalid,0x7F000000,k2se-ghidra,disasm,"the engine's own sentinel, from GetFirstPC's default value"
+vtable,CSWVirtualMachineCommands,vtable,0x009940D0,k2se-ghidra,runtime,found via the MSVC RTTI string .?AVCSWVirtualMachineCommands@@ at 0x00A0F4F8
+class,CExoString,size,0x0008,k2se-ghidra,disasm,"two dwords; confirmed twice -- the default ctor writes only +0x00 and +0x04, and StackPushString's callee does push 8 / operator new"

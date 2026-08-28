@@ -6,7 +6,9 @@ directly.
 
 Columns
 -------
-kind         function | global | offset | constant
+kind         function | global | offset | constant | vtable | class
+             vtable: name="vtable", value = the vftable's address
+             class:  name="size",   value = sizeof
 class        owning class, or "Other" for free functions
 name         member name
 value        hex, 0x-prefixed
@@ -33,7 +35,7 @@ CSV_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__
 
 FIELDS = ["kind", "class", "name", "value", "provenance", "verified_by", "notes"]
 
-KINDS = ("function", "global", "offset", "constant")
+KINDS = ("function", "global", "offset", "constant", "vtable", "class")
 VERIFIED_LEVELS = ("unverified", "prologue", "callsite", "disasm", "runtime")
 
 
@@ -94,8 +96,13 @@ def merge(existing, incoming):
 
 def cpp_identifier(row):
     """The constexpr name emitted into src/offsets_generated.h."""
-    if row["kind"] == "offset":
+    kind = row["kind"]
+    if kind == "offset":
         return "kOff_%s_%s" % (row["class"], row["name"])
-    if row["kind"] == "global":
+    if kind == "global":
         return "kGlobal_%s" % row["name"]
+    if kind == "vtable":
+        return "kVtable_%s" % row["class"]
+    if kind == "class":
+        return "kSizeof_%s" % row["class"]
     return "k%s_%s" % (row["class"], row["name"])
