@@ -80,6 +80,12 @@ bool WriteSlot(uint32_t va, void* value, void** previous) {
 }
 
 bool PatchSlot(const char* what, uint32_t va, void* replacement, void** original) {
+    // Clear first. WriteSlot only assigns *original on success, so without this
+    // a failed patch would leave the caller's variable holding the PREVIOUS
+    // slot's original -- and the caller would happily store glFogf's trampoline
+    // as, say, wglGetProcAddress's. The rollback below catches that, but a
+    // pointer that is wrong rather than null is a bad thing to have around.
+    *original = nullptr;
     if (!WriteSlot(va, replacement, original)) return false;
     if (g_patchedCount < static_cast<int>(sizeof(g_patched) / sizeof(g_patched[0]))) {
         g_patched[g_patchedCount].va = va;
@@ -148,6 +154,7 @@ bool InjectFogOption(const char* src, int len, int* outLen) {
 
 void __stdcall Hook_glProgramStringARB(uint32_t target, uint32_t format, int len,
                                        const void* str) {
+    if (!g_orig.programString) return;  // cannot forward; do nothing rather than fault
     if (target == GL_FRAGMENT_PROGRAM_ARB) {
         int newLen = 0;
         if (InjectFogOption(static_cast<const char*>(str), len, &newLen)) {
@@ -168,6 +175,7 @@ void __stdcall Hook_glProgramStringARB(uint32_t target, uint32_t format, int len
 
 // --- fog parameter interception ----------------------------------------------
 void __stdcall Hook_glFogf(uint32_t pname, float param) {
+    if (!g_orig.fogf) return;
     if (g_fog.enabled) {
         if (g_fog.haveRange && pname == GL_FOG_START) return g_orig.fogf(pname, g_fog.start);
         if (g_fog.haveRange && pname == GL_FOG_END) return g_orig.fogf(pname, g_fog.end);
@@ -176,6 +184,7 @@ void __stdcall Hook_glFogf(uint32_t pname, float param) {
 }
 
 void __stdcall Hook_glFogfv(uint32_t pname, const float* params) {
+    if (!g_orig.fogfv) return;
     if (g_fog.enabled && g_fog.haveColor && pname == GL_FOG_COLOR) {
         const float rgba[4] = {g_fog.color[0], g_fog.color[1], g_fog.color[2], 1.0f};
         return g_orig.fogfv(pname, rgba);
@@ -184,6 +193,7 @@ void __stdcall Hook_glFogfv(uint32_t pname, const float* params) {
 }
 
 void __stdcall Hook_glFogi(uint32_t pname, int param) {
+    if (!g_orig.fogi) return;
     // Fog is linear on this engine and the ARB option we inject is the linear
     // one, so never let the mode be switched out from under it while an override
     // is live.
