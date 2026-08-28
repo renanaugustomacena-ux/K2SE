@@ -54,6 +54,7 @@ PROBES_BYTE = [
 # rather than by address: a hardcoded IAT slot is a guess, an import name is a
 # fact. See DESIGN.md 5 and the fog track.
 IAT_EXPECTED = [
+    (0x0098632C, "OPENGL32.dll", "wglGetProcAddress"),
     (0x00986028, "GLU32.dll", "gluPerspective"),
     (0x00986394, "OPENGL32.dll", "glFogf"),
     (0x00986398, "OPENGL32.dll", "glFogfv"),

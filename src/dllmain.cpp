@@ -1,6 +1,7 @@
 #include <windows.h>
 
 #include "fingerprint.h"
+#include "glhook.h"
 #include "log.h"
 #include "offsets.h"
 #include "routines.h"
@@ -33,6 +34,11 @@ void OnAttach(HMODULE self) {
     k2se::log::Write("fingerprint OK");
     k2se::routines::Init();
 
+    // Opt-in and self-contained: if fog support refuses to install, the VM hook
+    // is unaffected and K2SE still loads. It is deliberately attempted after the
+    // fingerprint has passed, so it never touches an unrecognised binary.
+    k2se::glhook::Install();
+
     if (k2se::vm::InstallHook()) {
         k2se::log::Write("K2SE_LOAD_OK");
     } else {
@@ -41,6 +47,7 @@ void OnAttach(HMODULE self) {
 }
 
 void OnDetach() {
+    k2se::glhook::Remove();
     k2se::vm::RemoveHook();
     k2se::log::Shutdown();
 }

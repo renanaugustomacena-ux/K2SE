@@ -62,7 +62,7 @@ Push-Location $outDir
 
 $sources = @(
     "dllmain.cpp", "log.cpp", "fingerprint.cpp", "vm.cpp", "routines.cpp",
-    "vmstack.cpp", "exostring.cpp", "gameobj.cpp",
+    "vmstack.cpp", "exostring.cpp", "gameobj.cpp", "glhook.cpp",
     "proxy_version_generated.cpp"
 ) | ForEach-Object { Join-Path $root "src\$_" }
 

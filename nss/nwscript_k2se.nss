@@ -6345,3 +6345,11 @@ int K2SE_GetSkillRankBase(object oCreature, int nSkill);
 int K2SE_GetFeatAcquired(object oCreature, int nFeat);
 // 884:
 int K2SE_GetSpellAcquired(object oCreature, int nSpell);
+// 885:
+int K2SE_SetFogEnabled(int bEnable);
+// 886:
+int K2SE_SetFogRange(float fStart, float fEnd);
+// 887:
+int K2SE_SetFogColor(float fRed, float fGreen, float fBlue);
+// 888:
+int K2SE_GetFogStatus();

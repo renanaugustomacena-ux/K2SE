@@ -6,6 +6,7 @@
 
 #include "exostring.h"
 #include "gameobj.h"
+#include "glhook.h"
 #include "log.h"
 #include "offsets.h"
 #include "vm.h"
@@ -274,6 +275,71 @@ int H_GetSpellAcquired(int /*nParams*/) {
     return 0;
 }
 
+// --- runtime fog (M5) --------------------------------------------------------
+// 885..888. These control a GL-level override, not a per-area game property.
+//
+// DESIGN.md M5 originally sketched K2SE_SetAreaFog(oArea, ...). That shape would
+// be a lie about what actually happens: the fix works by owning the fog values
+// the engine hands to OpenGL, which is global to the frame. Naming it after
+// areas would promise per-area state that does not exist. M5 also concluded that
+// per-room fog is not a thing on this engine and that density is never read,
+// which is why neither appears here.
+//
+// All four are inert unless fog support is installed (k2se_fog.txt next to the
+// exe), so a mod that calls them on a machine without it degrades quietly.
+
+// 885: int K2SE_SetFogEnabled(int bEnable)
+int H_SetFogEnabled(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    int enable = 0;
+    if (!PopInt(&enable)) return off::kErrParam;
+    glhook::SetEnabled(enable != 0);
+    if (!PushInt(glhook::Status())) return off::kErrPushFailed;
+#endif
+    return 0;
+}
+
+// 886: int K2SE_SetFogRange(float fStart, float fEnd)
+// Distances in the engine's world units. Linear fog only -- the ARB option K2SE
+// injects is ARB_fog_linear, and this engine's fog was always linear.
+int H_SetFogRange(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    float start = 0.0f, end = 0.0f;
+    if (!PopFloat(&start)) return off::kErrParam;
+    if (!PopFloat(&end)) return off::kErrParam;
+    glhook::SetRange(start, end);
+    if (!PushInt(glhook::Status())) return off::kErrPushFailed;
+#endif
+    return 0;
+}
+
+// 887: int K2SE_SetFogColor(float fRed, float fGreen, float fBlue)
+// Components are 0.0..1.0, matching GL rather than the packed 0xRRGGBB integer
+// the M5 sketch used -- floats are what actually reaches glFogfv, and converting
+// would only lose precision.
+int H_SetFogColor(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    float r = 0.0f, g = 0.0f, b = 0.0f;
+    if (!PopFloat(&r)) return off::kErrParam;
+    if (!PopFloat(&g)) return off::kErrParam;
+    if (!PopFloat(&b)) return off::kErrParam;
+    glhook::SetColor(r, g, b);
+    if (!PushInt(glhook::Status())) return off::kErrPushFailed;
+#endif
+    return 0;
+}
+
+// 888: int K2SE_GetFogStatus()
+// Bit flags: 1 installed, 2 a fragment program was rewritten, 4 override active,
+// 8 refused. 0 means fog support is off. Lets a mod explain itself to the player
+// instead of silently doing nothing.
+int H_GetFogStatus(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    if (!PushInt(glhook::Status())) return off::kErrPushFailed;
+#endif
+    return 0;
+}
+
 struct Extended {
     int id;
     const char* name;
@@ -293,6 +359,10 @@ constexpr Extended kExtended[] = {
     {882, "K2SE_GetSkillRankBase", 2, &H_GetSkillRankBase},
     {883, "K2SE_GetFeatAcquired", 2, &H_GetFeatAcquired},
     {884, "K2SE_GetSpellAcquired", 2, &H_GetSpellAcquired},
+    {885, "K2SE_SetFogEnabled", 1, &H_SetFogEnabled},
+    {886, "K2SE_SetFogRange", 2, &H_SetFogRange},
+    {887, "K2SE_SetFogColor", 3, &H_SetFogColor},
+    {888, "K2SE_GetFogStatus", 0, &H_GetFogStatus},
 };
 constexpr int kExtendedCount = static_cast<int>(sizeof(kExtended) / sizeof(kExtended[0]));
 

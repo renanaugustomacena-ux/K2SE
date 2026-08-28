@@ -90,6 +90,48 @@ int K2SE_GetFeatAcquired(object oCreature, int nFeat);
 // TRUE if the creature knows the Force power, regardless of current Force points.
 int K2SE_GetSpellAcquired(object oCreature, int nSpell);
 
+// =============================================================================
+// Runtime fog (M5).
+//
+// OFF BY DEFAULT. Fog support only installs when a file named `k2se_fog.txt`
+// sits next to swkotor2.exe. Without it every call here is a silent no-op, so
+// ALWAYS check K2SE_GetFogStatus() and tell the player if it is 0 -- otherwise
+// your mod looks broken when it is merely switched off.
+//
+// Why the marker exists: this is the one part of K2SE that runs on the render
+// thread, and it works by rewriting fragment programs on their way to the
+// driver. It has not yet been confirmed in a live session, and it is not allowed
+// to destabilise a DLL that otherwise works.
+//
+// Why it is global rather than per-area: the fix works by owning the fog values
+// the engine hands to OpenGL, which is a per-frame, global thing. There is no
+// per-area or per-room fog state to address, and fog density is never read by
+// this engine -- only the linear start/end range is.
+//
+//     if (K2SE_GetFogStatus() == 0) return;   // fog support not installed
+//     K2SE_SetFogRange(20.0, 120.0);
+//     K2SE_SetFogColor(0.25, 0.13, 0.06);
+//     K2SE_SetFogEnabled(TRUE);
+// =============================================================================
+
+// Status bit flags, also returned by the three setters:
+//   0  fog support is off (no marker file)
+//   1  hooks installed
+//   2  at least one fragment program was made fog-aware
+//   4  a script override is active
+//   8  enabled but refused -- the GL imports did not look as expected
+int K2SE_GetFogStatus();
+
+// Turn the override on or off. With it off the engine's own fog values apply.
+int K2SE_SetFogEnabled(int bEnable);
+
+// Linear fog distances in world units. fStart is where fog begins, fEnd where
+// it reaches full opacity.
+int K2SE_SetFogRange(float fStart, float fEnd);
+
+// Colour components, each 0.0 to 1.0.
+int K2SE_SetFogColor(float fRed, float fGreen, float fBlue);
+
 // -----------------------------------------------------------------------------
 // Usage pattern -- copy this shape:
 //
