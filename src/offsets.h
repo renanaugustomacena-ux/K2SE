@@ -1,6 +1,8 @@
 #pragma once
 #include <cstdint>
 
+#include "offsets_generated.h"
+
 // =============================================================================
 // Addresses for swkotor2.exe -- Aspyr/Steam build, FileVersion 1.0.2.0,
 // TimeDateStamp 0x5603005D, ImageBase 0x00400000, RELOCS_STRIPPED (no ASLR).
@@ -8,6 +10,13 @@
 // Provenance of every value in this file: read directly out of the binary.
 // tools/verify_offsets.py re-checks all of them and must pass before any
 // hook code is trusted. See DESIGN.md section 2.
+//
+// This file holds the constants K2SE derived by hand, each with the reasoning
+// that produced it. The much larger imported table lives in the generated
+// offsets_generated.h under `off::game::`, and the two are deliberately kept
+// apart: where they overlap, the static_assert block at the bottom of this file
+// compares them, so a disagreement between two independent derivations of the
+// same address becomes a build failure rather than a runtime mystery.
 // =============================================================================
 
 namespace k2se {
@@ -112,11 +121,14 @@ constexpr uint32_t kStackPushFloat = 0x006FDA00;
 constexpr uint32_t kStackPopObject = 0x006FDAF0;
 constexpr uint32_t kStackPushObject = 0x006FDB10;
 
-// Shape-verified only (thin wrappers around *(vm+0x1C) methods; no consuming
-// handler has been read yet). Do NOT wrap these until a ground-truth handler
-// confirms them:
-//   0x006FDA20  StackPopVector? (void* vm, float out[3])          ret 4
-//   0x006FDA40  StackPushVector?(void* vm, float x, float y, float z) ret 0xC
+// Vector pair -- CONFIRMED 2026-08-28. Two things landed at once: the imported
+// table names them (CVirtualMachine::StackPopVector / StackPushVector), and
+// disassembly shows the predicted shapes exactly -- pop is the same thunk as
+// StackPopInteger with `ret 4`, push takes three floats by value with `ret 0xC`.
+// The earlier "do not wrap" warning is therefore lifted; still unexercised in
+// game, so the first routine to use them needs a self-test.
+constexpr uint32_t kStackPopVector = 0x006FDA20;   // (void* vm, float out[3])  ret 4
+constexpr uint32_t kStackPushVector = 0x006FDA40;  // (void* vm, float x,y,z)   ret 0xC
 
 // The engine's own object-id sentinel, seen as the default/failure value in
 // GetFirstPC (mov [ebp-4], 0x7F000000) -- matches community OBJECT_INVALID.
@@ -147,6 +159,43 @@ constexpr uint32_t kAurPostStringPrologue = 0x6AEC8B55;
 constexpr int kErrCommandNotFound = -2002;
 constexpr int kErrParam = -2001;
 constexpr int kErrPushFailed = -2000;
+
+// =============================================================================
+// Cross-validation: two independent derivations of the same addresses.
+//
+// The constants above were obtained by disassembling this executable by hand.
+// The `game::` ones were imported from Kotor-Patch-Manager's address database,
+// which was produced by someone else, from their own Ghidra work, without
+// reference to this project.
+//
+// Two independent sources agreeing is far stronger evidence than either alone,
+// and this is the cheapest possible place to enforce it: if a future import ever
+// contradicts a hand-derived value, the build stops. That is the correct
+// outcome -- one of the two is wrong, and silently preferring either would be
+// guessing.
+//
+// (The imported database's own description says its Steam rows were auto-ported
+// from the GOG build, which is exactly why it does not get to win an argument
+// with disassembly.)
+// =============================================================================
+#define K2SE_CROSSCHECK(ours, theirs)                                              \
+    static_assert((ours) == (theirs),                                              \
+                  "address disagreement: " #ours " (disassembled here) != " #theirs \
+                  " (imported). One of the two is wrong -- resolve it by reading "  \
+                  "the binary; do not just pick one. See DESIGN.md 2.")
+
+K2SE_CROSSCHECK(kStackPopInteger, game::kCVirtualMachine_StackPopInteger);
+K2SE_CROSSCHECK(kStackPushInteger, game::kCVirtualMachine_StackPushInteger);
+K2SE_CROSSCHECK(kStackPopFloat, game::kCVirtualMachine_StackPopFloat);
+K2SE_CROSSCHECK(kStackPushFloat, game::kCVirtualMachine_StackPushFloat);
+K2SE_CROSSCHECK(kStackPopVector, game::kCVirtualMachine_StackPopVector);
+K2SE_CROSSCHECK(kStackPushVector, game::kCVirtualMachine_StackPushVector);
+K2SE_CROSSCHECK(kStackPopObject, game::kCVirtualMachine_StackPopObject);
+K2SE_CROSSCHECK(kStackPushObject, game::kCVirtualMachine_StackPushObject);
+K2SE_CROSSCHECK(kAurPostString, game::kOther_AurPostString);
+K2SE_CROSSCHECK(kVirtualMachineGlobal, game::kGlobal_VIRTUAL_MACHINE_PTR);
+
+#undef K2SE_CROSSCHECK
 
 }  // namespace off
 }  // namespace k2se

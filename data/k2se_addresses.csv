@@ -1,0 +1,84 @@
+kind,class,name,value,provenance,verified_by,notes
+function,CClientExoApp,GetClientOptions,0x0072FB00,kpm-db,prologue,
+function,CClientOptions,SetCameraMode,0x007B5E50,kpm-db,prologue,
+function,CExoString,CStrConstructor,0x00733570,kpm-db,prologue,
+function,CExoString,CStrLenConstructor,0x00733680,kpm-db,prologue,
+function,CExoString,DefaultConstructor,0x00733540,kpm-db,prologue,
+function,CExoString,Destructor,0x00733780,kpm-db,prologue,
+function,CGameObjectArray,GetGameObject,0x0053DFB0,kpm-db,prologue,
+function,CSWInventory,GetItemInSlot,0x006D0620,kpm-db,prologue,
+function,CSWItem,GetBaseItem,0x006D6E30,kpm-db,prologue,
+function,CSWSCreature,GetClientCreature,0x0058AE90,kpm-db,prologue,
+function,CSWSCreatureStats,AddFeat,0x006F5B40,kpm-db,prologue,
+function,CSWSCreatureStats,AddKnownSpell,0x006B86A0,kpm-db,prologue,
+function,CSWSCreatureStats,GetClass,0x00844E40,kpm-db,prologue,
+function,CSWSCreatureStats,GetSkillRank,0x006B7BB0,kpm-db,prologue,
+function,CSWSCreatureStats,HasFeat,0x006B83F0,kpm-db,prologue,
+function,CSWSCreatureStats,HasSpell,0x006BD9C0,kpm-db,prologue,
+function,CSWSCreatureStats,RemoveFeat,0x006B85F0,kpm-db,prologue,
+function,CSWSCreatureStats,SetCHABase,0x006B69A0,kpm-db,prologue,
+function,CSWSCreatureStats,SetCONBase,0x006B6850,kpm-db,prologue,
+function,CSWSCreatureStats,SetDEXBase,0x006B6810,kpm-db,prologue,
+function,CSWSCreatureStats,SetINTBase,0x006B6920,kpm-db,prologue,
+function,CSWSCreatureStats,SetMovementRate,0x006BA320,kpm-db,prologue,
+function,CSWSCreatureStats,SetSTRBase,0x006B67D0,kpm-db,prologue,
+function,CSWSCreatureStats,SetSkillRank,0x006B81C0,kpm-db,prologue,
+function,CSWSCreatureStats,SetWISBase,0x006B6960,kpm-db,prologue,
+function,CSWSObject,AddActionToFront,0x00540CA0,kpm-db,prologue,
+function,CServerExoApp,GetCreatureByGameObjectID,0x0051C100,kpm-db,prologue,
+function,CServerExoApp,GetObjectArray,0x0051C080,kpm-db,prologue,
+function,CServerExoApp,GetPlayerCreatureId,0x0051C8F0,kpm-db,prologue,
+function,CVirtualMachine,RunScript,0x006FD8D0,kpm-db,prologue,
+function,CVirtualMachine,StackPopCommand,0x006FDB30,kpm-db,prologue,
+function,CVirtualMachine,StackPopEngineStructure,0x006FDAB0,kpm-db,prologue,
+function,CVirtualMachine,StackPopFloat,0x006FD9E0,kpm-db,runtime,exercised in a live K2SE session
+function,CVirtualMachine,StackPopInteger,0x006FD9A0,kpm-db,runtime,exercised in a live K2SE session
+function,CVirtualMachine,StackPopObject,0x006FDAF0,kpm-db,runtime,exercised in a live K2SE session
+function,CVirtualMachine,StackPopString,0x006FDA70,kpm-db,prologue,
+function,CVirtualMachine,StackPopVector,0x006FDA20,kpm-db,prologue,
+function,CVirtualMachine,StackPushEngineStructure,0x006FDAD0,kpm-db,prologue,
+function,CVirtualMachine,StackPushFloat,0x006FDA00,kpm-db,runtime,exercised in a live K2SE session
+function,CVirtualMachine,StackPushInteger,0x006FD9C0,kpm-db,runtime,exercised in a live K2SE session
+function,CVirtualMachine,StackPushObject,0x006FDB10,kpm-db,runtime,exercised in a live K2SE session
+function,CVirtualMachine,StackPushString,0x006FDA90,kpm-db,prologue,
+function,CVirtualMachine,StackPushVector,0x006FDA40,kpm-db,prologue,
+function,ConsoleFunc,Destructor,0x004759B0,kpm-db,prologue,
+function,ConsoleFunc,IntConstructor,0x00475910,kpm-db,prologue,
+function,ConsoleFunc,NoParamConstructor,0x004757D0,kpm-db,prologue,
+function,ConsoleFunc,StringConstructor,0x00475870,kpm-db,prologue,
+function,Other,AurPostString,0x00474C00,kpm-db,runtime,exercised in a live K2SE session
+global,,APP_MANAGER_PTR,0x00A1B4A4,kpm-db,unverified,"in .data; holds a runtime pointer, not statically checkable"
+global,,AURORA_PTR,0x00A1B4A0,kpm-db,unverified,"in .data; holds a runtime pointer, not statically checkable"
+global,,EXO_RESOURCE_MANAGER_PTR,0x00A1B490,kpm-db,unverified,"in .data; holds a runtime pointer, not statically checkable"
+global,,GUI_MANAGER_PTR,0x00A1B49C,kpm-db,unverified,"in .data; holds a runtime pointer, not statically checkable"
+global,,RENDER_AABB,0x00A73284,kpm-db,unverified,"in .data; holds a runtime pointer, not statically checkable"
+global,,RENDER_GOB_BBS,0x00A73740,kpm-db,unverified,"in .data; holds a runtime pointer, not statically checkable"
+global,,RENDER_GUI,0x00A32A30,kpm-db,unverified,"in .data; holds a runtime pointer, not statically checkable"
+global,,RENDER_PERSONAL_SPACE,0x00A2006C,kpm-db,unverified,"in .data; holds a runtime pointer, not statically checkable"
+global,,RENDER_QA_TRIGGERS,0x00A2003C,kpm-db,unverified,"in .data; holds a runtime pointer, not statically checkable"
+global,,RENDER_TRIGGERS,0x00A7E0E8,kpm-db,unverified,"in .data; holds a runtime pointer, not statically checkable"
+global,,RENDER_WIREFRAME,0x00A32A50,kpm-db,unverified,"in .data; holds a runtime pointer, not statically checkable"
+global,,RULES_PTR,0x00A1B4D0,kpm-db,unverified,"in .data; holds a runtime pointer, not statically checkable"
+global,,TLK_TABLE_PTR,0x00A1B4B0,kpm-db,unverified,"in .data; holds a runtime pointer, not statically checkable"
+global,,VIRTUAL_MACHINE_PTR,0x00A1B4A8,kpm-db,runtime,exercised in a live K2SE session
+offset,CAppManager,Client,0x0004,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CAppManager,Server,0x0008,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CExoString,CStr,0x0000,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CExoString,Length,0x0004,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CGameObject,Id,0x0004,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CGameObject,ObjectType,0x0008,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CSWBaseItem,WeaponWield,0x0008,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CSWCCreature,Running,0x03F8,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CSWSCombatRound,OnHandAttacks,0x0AE0,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CSWSCreature,CreatureStats,0x1198,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CSWSCreature,Inventory,0x1150,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CSWSCreatureStats,CHABase,0x00F7,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CSWSCreatureStats,CONBase,0x00F1,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CSWSCreatureStats,ClassCount,0x008D,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CSWSCreatureStats,DEXBase,0x00EF,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CSWSCreatureStats,INTBase,0x00F3,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CSWSCreatureStats,STRBase,0x00ED,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CSWSCreatureStats,WISBase,0x00F5,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CSWSObject,AreaId,0x0090,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CSWSObject,Orientation,0x00A0,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CSWSObject,Position,0x0094,kpm-db,unverified,struct layout; confirm against a consuming handler

@@ -7,65 +7,25 @@ Usage:
     python tools/verify_offsets.py [path-to-swkotor2.exe]
 
 Defaults to the pristine backup, falling back to the live exe.
+
+Three layers of checking, in increasing breadth:
+
+  1. the hand-derived probes -- exact dword/byte values at sites whose meaning
+     was established by disassembly. A mismatch here means the wrong build.
+  2. the imported address table (data/k2se_addresses.csv) -- every function
+     entry point must be in .text behind an MSVC prologue. This is what makes a
+     third-party address usable rather than merely plausible.
+  3. header freshness -- src/offsets_generated.h must match the CSV, so the
+     compiled constants cannot silently drift from the verified data.
 """
 
-import os
+import hashlib
 import struct
 import sys
 
-DEFAULT_GAME = r"G:\SteamLibrary\steamapps\common\Knights of the Old Republic II"
-DEFAULT_CANDIDATES = [
-    os.path.join(DEFAULT_GAME, "swkotor2.exe.pre-laa-backup"),
-    os.path.join(DEFAULT_GAME, "swkotor2.exe"),
-]
-
-EXPECTED_TIMESTAMP = 0x5603005D
-EXPECTED_IMAGEBASE = 0x00400000
-
-
-class Image(object):
-    def __init__(self, path):
-        with open(path, "rb") as fh:
-            self.data = fh.read()
-        self.path = path
-        pe = struct.unpack_from("<I", self.data, 0x3C)[0]
-        self.pe = pe
-        self.num_sections = struct.unpack_from("<H", self.data, pe + 6)[0]
-        self.timestamp = struct.unpack_from("<I", self.data, pe + 8)[0]
-        self.opt_size = struct.unpack_from("<H", self.data, pe + 20)[0]
-        self.characteristics = struct.unpack_from("<H", self.data, pe + 22)[0]
-        self.image_base = struct.unpack_from("<I", self.data, pe + 24 + 28)[0]
-
-        self.sections = []
-        sec = pe + 24 + self.opt_size
-        for i in range(self.num_sections):
-            o = sec + i * 40
-            name = self.data[o:o + 8].rstrip(b"\0").decode("ascii", "replace")
-            vsize, vaddr = struct.unpack_from("<II", self.data, o + 8)
-            rawsize, raw = struct.unpack_from("<II", self.data, o + 16)
-            self.sections.append((name, vaddr, vsize, raw, rawsize))
-
-    def off(self, va):
-        rva = va - self.image_base
-        for _n, vaddr, vsize, raw, _rs in self.sections:
-            if vaddr <= rva < vaddr + vsize:
-                return raw + (rva - vaddr)
-        return None
-
-    def dword(self, va):
-        o = self.off(va)
-        return None if o is None else struct.unpack_from("<I", self.data, o)[0]
-
-    def byte(self, va):
-        o = self.off(va)
-        return None if o is None else self.data[o]
-
-    def text_range(self):
-        for name, vaddr, vsize, _raw, _rs in self.sections:
-            if name == ".text":
-                return (self.image_base + vaddr, self.image_base + vaddr + vsize)
-        return (0, 0)
-
+import addressdb
+import peimage
+from peimage import EXPECTED_IMAGEBASE, EXPECTED_TIMESTAMP
 
 PROBES_DWORD = [
     ("vtable[0]",                 0x009940D0, 0x00536BE0),
@@ -90,23 +50,62 @@ PROBES_BYTE = [
     ("m_pInternal",            0x006FD9B0, 0x1C),
 ]
 
+# The GL imports M5 depends on. Verified by NAME against the PE import directory
+# rather than by address: a hardcoded IAT slot is a guess, an import name is a
+# fact. See DESIGN.md 5 and the fog track.
+IAT_EXPECTED = [
+    (0x00986028, "GLU32.dll", "gluPerspective"),
+    (0x00986394, "OPENGL32.dll", "glFogf"),
+    (0x00986398, "OPENGL32.dll", "glFogfv"),
+    (0x009863B0, "OPENGL32.dll", "glFogi"),
+]
+
 RTTI_STRING = b".?AVCSWVirtualMachineCommands@@"
 RTTI_VA = 0x00A0F4F8
 
 
-def main():
-    path = sys.argv[1] if len(sys.argv) > 1 else None
-    if path is None:
-        for cand in DEFAULT_CANDIDATES:
-            if os.path.exists(cand):
-                path = cand
-                break
-    if not path or not os.path.exists(path):
-        raise SystemExit("swkotor2.exe not found; pass the path as an argument")
+def read_iat(img):
+    """Map every IAT slot VA -> (dll, import name).
 
-    img = Image(path)
-    print("file        : %s" % path)
+    Data directory entry 1 is the import table: 24 bytes of PE header, then the
+    optional header, whose data directories start at +0x60; import is the second,
+    hence +0x68.
+    """
+    imp_rva = struct.unpack_from("<I", img.data, img.pe + 24 + 0x68)[0]
+    slots = {}
+    o = img.off(img.image_base + imp_rva)
+    if o is None:
+        return slots
+    while True:
+        oft, _ts, _fc, nm, ft = struct.unpack_from("<IIIII", img.data, o)
+        if nm == 0:
+            break
+        dll = img.data[img.off(img.image_base + nm):].split(b"\0")[0].decode("ascii", "replace")
+        table = oft or ft
+        to = img.off(img.image_base + table)
+        k = 0
+        while True:
+            e = struct.unpack_from("<I", img.data, to + k * 4)[0]
+            if e == 0:
+                break
+            slot = img.image_base + ft + k * 4
+            if e & 0x80000000:
+                name = "#%d" % (e & 0xFFFF)
+            else:
+                name = img.data[img.off(img.image_base + e) + 2:].split(b"\0")[0].decode(
+                    "ascii", "replace")
+            slots[slot] = (dll, name)
+            k += 1
+        o += 20
+    return slots
+
+
+def main():
+    img = peimage.open_default(sys.argv[1] if len(sys.argv) > 1 else None)
+
+    print("file        : %s" % img.path)
     print("size        : %d bytes" % len(img.data))
+    print("sha256      : %s" % hashlib.sha256(img.data).hexdigest().upper())
     print("ImageBase   : 0x%08X  (expected 0x%08X)" % (img.image_base, EXPECTED_IMAGEBASE))
     print("TimeDateStamp: 0x%08X (expected 0x%08X)" % (img.timestamp, EXPECTED_TIMESTAMP))
     laa = " [4GB/LAA patched]" if img.characteristics & 0x20 else " [pristine]"
@@ -121,6 +120,8 @@ def main():
         print("FAIL  TimeDateStamp mismatch -- this is a different build")
         failures += 1
 
+    # --- 1. hand-derived probes --------------------------------------------
+    print("--- hand-derived probes (DESIGN.md 2) ---")
     o = img.off(RTTI_VA)
     got = img.data[o:o + len(RTTI_STRING)] if o is not None else b""
     ok = got == RTTI_STRING
@@ -144,11 +145,60 @@ def main():
         print("%-4s  %-26s @0x%08X = %-12s expected 0x%02X"
               % ("OK" if ok else "FAIL", name, va, shown, expected))
 
+    # --- 2. GL imports, resolved by name -----------------------------------
+    print("\n--- GL imports (M5 fog), resolved by name from the import directory ---")
+    slots = read_iat(img)
+    for va, dll, name in IAT_EXPECTED:
+        got = slots.get(va)
+        ok = got is not None and got[1] == name
+        failures += 0 if ok else 1
+        shown = "%s!%s" % got if got else "not an IAT slot"
+        print("%-4s  %-16s @0x%08X = %-28s expected %s" %
+              ("OK" if ok else "FAIL", name, va, shown, name))
+
+    # --- 3. the imported address table -------------------------------------
+    rows = addressdb.load()
+    print("\n--- imported address table (data/k2se_addresses.csv, %d rows) ---" % len(rows))
+    fns = [r for r in rows if r["kind"] == "function"]
+    bad_fns = []
+    for r in fns:
+        if not img.has_prologue(r["value_int"]):
+            bad_fns.append(r)
+    print("%-4s  function entry points with an MSVC prologue in .text: %d / %d"
+          % ("OK" if not bad_fns else "FAIL", len(fns) - len(bad_fns), len(fns)))
+    for r in bad_fns:
+        print("      FAIL %s::%s @%s  (%s)"
+              % (r["class"], r["name"], r["value"], img.section_of(r["value_int"])))
+    failures += len(bad_fns)
+
+    globs = [r for r in rows if r["kind"] == "global"]
+    bad_globs = [r for r in globs if img.section_of(r["value_int"]) not in (".data", ".rdata")]
+    print("%-4s  globals in a data section: %d / %d"
+          % ("OK" if not bad_globs else "FAIL", len(globs) - len(bad_globs), len(globs)))
+    for r in bad_globs:
+        print("      FAIL %s @%s" % (r["name"], r["value"]))
+    failures += len(bad_globs)
+
+    unver = [r for r in rows if r["verified_by"] == "unverified"]
+    print("      %d row(s) marked unverified -- these must not be called from "
+          "shipping code" % len(unver))
+
+    # --- 4. generated header freshness --------------------------------------
+    print("\n--- generated header ---")
+    import gen_offsets
+    saved = sys.argv
+    sys.argv = ["gen_offsets.py", "--check"]
+    try:
+        failures += gen_offsets.main()
+    finally:
+        sys.argv = saved
+
     print("")
     if failures:
         print("%d PROBE(S) FAILED -- do not hook this binary." % failures)
         return 1
-    print("ALL PROBES PASSED -- the addresses in src/offsets.h match this binary.")
+    print("ALL PROBES PASSED -- the addresses in src/offsets.h, "
+          "src/offsets_generated.h and data/k2se_addresses.csv match this binary.")
     return 0
 
 
