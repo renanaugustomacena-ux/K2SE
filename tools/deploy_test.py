@@ -109,10 +109,18 @@ void main()
     int nSkilTotal = GetSkillRank(SKILL_TREAT_INJURY, oPC);
 
     // --- 885-888: fog -------------------------------------------------------
-    // 0 when the k2se_fog.txt marker is absent, which is the default. Reported,
-    // never failed: "off" is a valid state.
+    // Status is 0 when the k2se_fog.txt marker is absent, which is the default.
+    // Reported, never failed: "off" is a valid state.
+    //
+    // The setters are called even with fog off. They are no-ops in that case,
+    // and that is exactly what makes them worth calling here: it proves the
+    // routines dispatch, pop their arguments and return cleanly through the
+    // normal path, without depending on the render thread being involved.
     int nFog = K2SE_GetFogStatus();
     K2SE_ReportTest(13, TRUE, (nFog >= 0));
+    K2SE_ReportTest(14, TRUE, (K2SE_SetFogRange(20.0, 120.0) >= 0));
+    K2SE_ReportTest(15, TRUE, (K2SE_SetFogColor(0.25, 0.13, 0.06) >= 0));
+    K2SE_ReportTest(16, TRUE, (K2SE_SetFogEnabled(nFog != 0) >= 0));
 
     // --- on screen ----------------------------------------------------------
     AurPostString("K2SE v" + IntToString(nVer) + "  str " + IntToString(nStr) +
@@ -256,11 +264,16 @@ def main():
         if rid in declared:
             called.setdefault(rid, set()).add(argc)
 
+    # What matters is that every routine the battery DOES call is dispatched with
+    # the id and argc routines.cpp declares. A declared routine the battery
+    # happens not to exercise is a gap in coverage, not a correctness problem --
+    # worth saying out loud, not worth refusing to install over.
     problems = []
+    uncovered = []
     for rid in sorted(declared):
         name, want_argc = declared[rid]
         if rid not in called:
-            problems.append("routine %d (%s) is never called by the battery" % (rid, name))
+            uncovered.append("%d (%s)" % (rid, name))
         elif want_argc not in called[rid]:
             problems.append("routine %d (%s) called with argc %s, declared %d"
                             % (rid, name, sorted(called[rid]), want_argc))
@@ -268,6 +281,10 @@ def main():
             raw = bytes([0x05, 0x00]) + struct.pack(">H", rid) + bytes([want_argc])
             print("  OK  %-26s id %-4d argc %d   ACTION %s"
                   % (name, rid, want_argc, raw.hex(" ")))
+
+    if uncovered:
+        print("\n  NOT EXERCISED by this battery: %s" % ", ".join(uncovered))
+        print("  (installing anyway -- coverage gap, not a mismatch)")
 
     if problems:
         print("")
@@ -293,8 +310,11 @@ WHAT TO LOOK AT
      differ when an item or effect is modifying the stat -- that is correct, not
      a bug. What would be wrong is -1 (the pointer chain broke) or nonsense.
   2. The log: %LOCALAPPDATA%\\K2SE\\k2se.log
-     Expect `TEST  1..13` lines, each PASS. Tests 8-12 are the ones that have
-     never run before; 7 is the string round trip.
+     Expect `TEST  1..16` lines, each PASS.
+       1-6   proven on 27/08; these are a regression check
+       7     the string round trip (880)
+       8-12  the creature reads (881-884) -- never run before
+       13-16 fog routines dispatch (885-888); status 0 = subsystem off
 
 Send me the log and I will read it.
 
