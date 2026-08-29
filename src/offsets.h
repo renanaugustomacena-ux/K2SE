@@ -153,7 +153,7 @@ constexpr uint32_t kStackPopEngineStructure = 0x006FDAB0;
 constexpr uint32_t kStackPushEngineStructure = 0x006FDAD0;
 
 // --- CExoString --------------------------------------------------------------
-// Layout: { char* CStr; uint32_t Length; } -- 8 bytes.
+// Layout: { char* CStr; uint32_t BufferLength; } -- 8 bytes.
 //
 // The size is not taken on trust from a table (the imported database's `classes`
 // table is empty for KOTOR 2). It was read out of the engine twice:
@@ -163,7 +163,29 @@ constexpr uint32_t kStackPushEngineStructure = 0x006FDAD0;
 //     CStrConstructor on the result.
 constexpr uint32_t kExoStringSize = 8;
 constexpr uint32_t kExoStringOffCStr = 0x00;
-constexpr uint32_t kExoStringOffLength = 0x04;
+
+// The second field is a CAPACITY, not a character count -- it is the size of the
+// malloc'd buffer, INCLUDING the terminator, and 0 for an empty string. It was
+// called Length here until a live session printed "K2SE-880-abc" (twelve
+// characters) as length 13, which is this field telling the exact truth about a
+// thirteen-byte allocation.
+//
+//   ctor(char*)      @0x00733570:  call strlen; add eax,1; mov [this+4],eax;
+//                                  malloc(that); strcpy
+//   ctor(char*, int) @0x00733680:  [this+4] = len+1; malloc; memcpy; dst[len]=0
+//
+// Subtracting one is NOT a fix. operator= @0x007337C0 reuses the existing buffer
+// whenever strlen(src)+1 fits in it -- `cmp eax,[edx+4]; jbe 0x733829` jumps
+// clean past the field update -- so after assigning a short string into a shell
+// that once held a long one, this field still reports the OLD capacity. The gap
+// between capacity and length is therefore unbounded, not a constant.
+//
+// The engine settles what "length" means: NWScript GetStringLength (routine 59,
+// handler 0x00688DE0) ignores this field entirely and calls strlen on CStr
+// (0x00688E56), answering 0 when CStr is null. Anything K2SE reports as a length
+// has to match that, or a mod will watch GetStringLength and K2SE disagree about
+// one string.
+constexpr uint32_t kExoStringOffBufferLength = 0x04;
 
 //   CExoString* __thiscall CExoString::CExoString()                  -- zeroes both fields
 //   CExoString* __thiscall CExoString::CExoString(char* src)

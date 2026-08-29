@@ -150,8 +150,13 @@ int H_EchoString(int /*nParams*/) {
 
     if (!g_echoSeen) {
         g_echoSeen = true;
-        log::Writef("*** FIRST STRING ROUND TRIP: received \"%s\" (length %u) ***",
-                    value.c_str(), value.length());
+        // Both numbers, because their DIFFERENCE is the finding: the engine's
+        // second field counts the allocation, not the characters. For a fresh
+        // string they differ by exactly one; after a buffer-reusing assignment
+        // they differ by more, which is why length() scans rather than subtracts.
+        log::Writef("*** FIRST STRING ROUND TRIP: received \"%s\" "
+                    "(length %u, buffer %u) ***",
+                    value.c_str(), value.length(), value.buffer_size());
     }
 
     // The engine allocates its own copy here, so `value` stays ours and its
