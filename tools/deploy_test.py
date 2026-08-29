@@ -86,6 +86,24 @@ void main()
     string sOut = K2SE_EchoString(sIn);
     K2SE_ReportTest(7, TRUE, (sOut == sIn));
 
+    // Three lengths through the same K2SE-side shell. CExoString's second field
+    // is a buffer capacity, not a length, and a reused buffer keeps the OLD
+    // capacity -- so a length implemented as "capacity - 1" reports the long
+    // string's size for the short one, and underflows to 4294967295 on the
+    // empty one. Vanilla GetStringLength is the reference: it calls strlen.
+    K2SE_ReportTest(18, 12, GetStringLength(K2SE_EchoString("K2SE-880-abc")));
+    K2SE_ReportTest(19, 3,  GetStringLength(K2SE_EchoString("abc")));
+    K2SE_ReportTest(20, 0,  GetStringLength(K2SE_EchoString("")));
+
+    // --- is the subject even valid? -----------------------------------------
+    // Reported as its own test, because on 2026-08-29 it was not, and the five
+    // failures below were read for hours as "the creature reads are broken"
+    // when the honest reading was "we asked about nobody". A heartbeat can fire
+    // before GetFirstPC resolves; that is a fact about the trigger, not about
+    // the routines, and the log should say which one it is looking at.
+    K2SE_ReportTest(17, TRUE, (oPC != OBJECT_INVALID));
+    if (oPC == OBJECT_INVALID) oPC = OBJECT_SELF;
+
     // --- 881-884: the creature reads ----------------------------------------
     // Sanity bounds catch the two failure modes that matter: -1 means the
     // pointer chain broke, and a wild number means an offset is wrong.
@@ -310,11 +328,26 @@ WHAT TO LOOK AT
      differ when an item or effect is modifying the stat -- that is correct, not
      a bug. What would be wrong is -1 (the pointer chain broke) or nonsense.
   2. The log: %LOCALAPPDATA%\\K2SE\\k2se.log
-     Expect `TEST  1..16` lines, each PASS.
+     Expect `TEST  1..20` lines, each PASS.
        1-6   proven on 27/08; these are a regression check
        7     the string round trip (880)
-       8-12  the creature reads (881-884) -- never run before
-       13-16 fog routines dispatch (885-888); status 0 = subsystem off
+       8-12  the creature reads (881-884)
+       13-16 fog routines dispatch (885-888)
+       17    is oPC valid at all -- read this one FIRST if 8-12 fail, because
+             a FAIL here means the heartbeat beat the player into existence
+             and 8-12 are reporting on nobody
+       18-20 string lengths through a reused shell (12 / 3 / 0)
+
+     A `TEST nn ... (CHANGED at t+N ms)` line means an answer flipped later in
+     the session -- that is the log correcting itself, not a new failure.
+
+     Also expect one `gameobj: ... -> OK` line per session. More than one means
+     the chain changed state, and each line names the hop that stopped it.
+
+     With fog armed, the line that decides whether fog is real is:
+       glhook: first fragment program rewritten
+     Without it the Aspyr pipeline never reads fog state and anything you see
+     on screen is unrelated to K2SE.
 
 Send me the log and I will read it.
 
