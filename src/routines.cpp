@@ -34,7 +34,8 @@ bool g_extendedSeen = false;
 bool g_selfTestSeen = false;
 bool g_echoSeen = false;
 bool g_bannerPosted = false;
-uint32_t g_reportSeenMask = 0;  // one-shot full logging per test id 0..31
+uint32_t g_reportSeenMask = 0;  // test id 0..31 has been reported at least once
+uint32_t g_reportPassMask = 0;  // ... and its last REPORTED answer was a pass
 
 // --- on-screen banner --------------------------------------------------------
 // void __cdecl AurPostString(const char* text, int x, int y, float fLife)
@@ -113,12 +114,38 @@ int H_ReportTest(int /*nParams*/) {
     if (!PopInt(&nActual)) return off::kErrParam;
 
     const bool pass = (nExpected == nActual);
-    const bool firstTime =
-        nTestId >= 0 && nTestId < 32 && !(g_reportSeenMask & (1u << nTestId));
-    if (firstTime) {
-        g_reportSeenMask |= 1u << nTestId;
-        log::Writef("TEST %2d: expected %d, got %d  ->  %s", nTestId, nExpected, nActual,
-                    pass ? "PASS" : "FAIL");
+
+    // One line per test id was the right instinct -- the battery rides a
+    // heartbeat and re-runs every few seconds -- but reporting only the FIRST
+    // sample made that sample the session's verdict. On 2026-08-29 the first
+    // heartbeat fired before the PC could be resolved, five tests logged FAIL,
+    // and the routines then worked for the rest of the session with nothing in
+    // the log to say so. The on-screen banner disagreed with the log for two
+    // hours and only a human looking at the screen could tell.
+    //
+    // So: still one line per id in the steady state, plus a line whenever the
+    // ANSWER CHANGES. A stable session logs byte-for-byte what it logged
+    // before; an unstable one becomes self-describing.
+    const bool inRange = nTestId >= 0 && nTestId < 32;
+    const uint32_t bit = inRange ? (1u << nTestId) : 0u;
+    const bool firstTime = inRange && !(g_reportSeenMask & bit);
+    const bool changed = inRange && !firstTime && (pass != ((g_reportPassMask & bit) != 0));
+
+    if (firstTime || changed) {
+        g_reportSeenMask |= bit;
+        if (pass)
+            g_reportPassMask |= bit;
+        else
+            g_reportPassMask &= ~bit;
+
+        if (changed)
+            log::Writef("TEST %2d: expected %d, got %d  ->  %s   "
+                        "(CHANGED at t+%u ms -- it answered %s before)",
+                        nTestId, nExpected, nActual, pass ? "PASS" : "FAIL",
+                        log::MillisSinceInit(), pass ? "FAIL" : "PASS");
+        else
+            log::Writef("TEST %2d: expected %d, got %d  ->  %s", nTestId, nExpected,
+                        nActual, pass ? "PASS" : "FAIL");
     } else {
         log::Trace("test %d: expected %d, got %d -> %s", nTestId, nExpected, nActual,
                    pass ? "pass" : "FAIL");
@@ -186,7 +213,9 @@ constexpr int kUnknown = -1;
 // Shared prologue: pop an object id, resolve it to a creature's stats block.
 // Returns null and leaves *popOk false if the argument itself could not be read,
 // which is the one case where we must not push a result.
-void* PopCreatureStats(bool* popOk) {
+// `who` is the caller's name, and it is not decoration: all four routines share
+// this path, so without it the log cannot say which one was asking.
+void* PopCreatureStats(const char* who, bool* popOk) {
     *popOk = false;
 #if K2SE_ENABLE_STACK_ABI
     // PopObject, not PopInt. The VM stack is typed -- the pop path checks the
@@ -198,9 +227,11 @@ void* PopCreatureStats(bool* popOk) {
     if (!PopObject(&objectId)) return nullptr;
     *popOk = true;
     void* creature = gameobj::CreatureFromObjectId(objectId);
-    if (!creature) return nullptr;
-    return gameobj::CreatureStats(creature);
+    void* stats = creature ? gameobj::CreatureStats(creature) : nullptr;
+    gameobj::ReportWalk(who);
+    return stats;
 #else
+    (void)who;
     return nullptr;
 #endif
 }
@@ -211,7 +242,7 @@ void* PopCreatureStats(bool* popOk) {
 int H_GetAbilityScoreBase(int /*nParams*/) {
 #if K2SE_ENABLE_STACK_ABI
     bool popped = false;
-    void* stats = PopCreatureStats(&popped);
+    void* stats = PopCreatureStats("K2SE_GetAbilityScoreBase", &popped);
     if (!popped) return off::kErrParam;
 
     int ability = 0;
@@ -230,7 +261,7 @@ int H_GetAbilityScoreBase(int /*nParams*/) {
 int H_GetSkillRankBase(int /*nParams*/) {
 #if K2SE_ENABLE_STACK_ABI
     bool popped = false;
-    void* stats = PopCreatureStats(&popped);
+    void* stats = PopCreatureStats("K2SE_GetSkillRankBase", &popped);
     if (!popped) return off::kErrParam;
 
     int skill = 0;
@@ -249,7 +280,7 @@ int H_GetSkillRankBase(int /*nParams*/) {
 int H_GetFeatAcquired(int /*nParams*/) {
 #if K2SE_ENABLE_STACK_ABI
     bool popped = false;
-    void* stats = PopCreatureStats(&popped);
+    void* stats = PopCreatureStats("K2SE_GetFeatAcquired", &popped);
     if (!popped) return off::kErrParam;
 
     int feat = 0;
@@ -267,7 +298,7 @@ int H_GetFeatAcquired(int /*nParams*/) {
 int H_GetSpellAcquired(int /*nParams*/) {
 #if K2SE_ENABLE_STACK_ABI
     bool popped = false;
-    void* stats = PopCreatureStats(&popped);
+    void* stats = PopCreatureStats("K2SE_GetSpellAcquired", &popped);
     if (!popped) return off::kErrParam;
 
     int spell = 0;

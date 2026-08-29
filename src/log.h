@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdint>
 
 // Raw Win32 logging. Deliberately no CRT file I/O:
 // on process exit Windows terminates every other thread BEFORE calling
@@ -24,6 +25,12 @@ void Shutdown();
 
 void Write(const char* line);
 void Writef(const char* fmt, ...);
+
+// Milliseconds since Init(), i.e. since the DLL loaded. Only the session header
+// carries a clock, so "this failed at t+21s and worked at t+29s" -- a different
+// bug entirely from "this never worked" -- was a question the log could not be
+// asked. One DWORD makes it answerable.
+uint32_t MillisSinceInit();
 
 // Only emitted when the marker file K2SE_DIAGNOSTIC exists beside the DLL.
 void Trace(const char* fmt, ...);

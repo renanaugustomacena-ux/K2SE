@@ -46,5 +46,22 @@ bool HasSpell(void* stats, int spell, int* out);
 // a sentinel that slipped through. Cheap and catches the common failure.
 bool LooksLikePointer(const void* p);
 
+// Says out loud what the last CreatureFromObjectId/CreatureStats pair did: every
+// hop with its real value, and the name of the step that stopped it.
+//
+// This exists because of a specific failure. On 2026-08-29 five routines
+// returned -1 five times and wrote not one line explaining any of them, because
+// every refusal in this file was a bare `return nullptr`. The chain was in fact
+// healthy; nothing in the log could say so. Silence was the bug.
+//
+// It reports TRANSITIONS, not calls. The callers ride a creature heartbeat, so a
+// line per call would bury the log -- instead a line is written the first time
+// an outcome is seen and every time the outcome CHANGES, closing the previous
+// run with how long it lasted. A healthy session costs one line. The session
+// described above would have cost three, and been diagnosed from them.
+//
+// `who` names the calling routine, so the log says which of 881-884 asked.
+void ReportWalk(const char* who);
+
 }  // namespace gameobj
 }  // namespace k2se
