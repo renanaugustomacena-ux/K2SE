@@ -151,13 +151,53 @@ moment the planned string routines (split, trim, replace) use `length()` as a
 character count. Reproduced identically in all four sessions, so it is stable
 and not a one-off.
 
+## Outcome — the 2026-08-30 00:55 session, all three gates closed
+
+Twenty tests, twenty PASS, on the instrumented build with both markers armed.
+
+**G0a, strings.** `received "K2SE-880-abc" (length 12, buffer 13)`. The two
+numbers differ, which is the finding: 12 characters in a 13-byte allocation.
+Tests 18–20 pushed 12, 3 and 0 characters through the same shell and all
+matched vanilla `GetStringLength` — the reuse case that a `capacity - 1`
+implementation would have failed, and the empty string that would have
+underflowed it to 4294967295.
+
+**G0b, creature reads.** Tests 8–12 PASS, and test 17 (`oPC != OBJECT_INVALID`)
+PASS — so this time the heartbeat found a player, which is exactly the variable
+that differed on 2026-08-29. **The mutator gate's condition is met**: the reads
+are confirmed in a live session.
+
+**G0c, fog.** The go/no-go line appeared for the first time in the project's
+history:
+
+```
+glhook: first fragment program rewritten (272 -> 295 bytes, OPTION ARB_fog_linear inserted)
+```
+
+Track E is live. The ARB option is being injected into real fragment programs on
+the render thread, which is what the whole opt-in marker exists to protect.
+
+**The instrumentation earned its place.** The whole session produced exactly
+**one** `gameobj:` line —
+
+```
+gameobj: K2SE_GetAbilityScoreBase walk #1 at t+398234 ms -> OK | id=0x7FFFFFF9 app=0x04057168 srv=0x2576F6F8 cre=0x2F9E2150 sts=0x2F884980
+```
+
+— because the chain never changed state. That is the design working: a healthy
+session costs one line, and any second line would have named the hop that
+stopped. The transition logging in `ReportTest` likewise wrote 11 lines where
+per-call logging would have written tens of thousands.
+
+One thing the session did expose: with `K2SE_DIAGNOSTIC` armed the per-dispatch
+trace wrote **205,808 lines and 9 MB**, burying everything worth reading. That
+trace is now thinned to the first eight calls per routine and one in every 1024.
+
 ## Status of the Session 0 gates
 
-- **G0a — strings (880):** PASS, four sessions running, content verified. The
-  length-semantics bug above is separate and does not invalidate the round trip.
-- **G0b — creature reads (881–884):** PASS in three sessions, one contaminated
-  sample under investigation. Not the clean sheet needed to lift the mutator
-  gate on its own; the diagnostic run above is what should settle it.
-- **G0c — fog (885–888):** **never actually exercised.** Every session logged
-  `fog support: off (no k2se_fog.txt next to the game exe)`. Tests 13–16 passed
-  only because they are written to treat "off" as a valid state.
+- **G0a — strings (880):** ✅ CLOSED. Round trip verified, and the length
+  semantics corrected and re-proven across three string sizes.
+- **G0b — creature reads (881–884):** ✅ CLOSED. Twenty-for-twenty with the
+  subject explicitly validated. **The mutator gate may be lifted.**
+- **G0c — fog (885–888):** ✅ CLOSED. `first fragment program rewritten` — the
+  first time the fog path has ever actually run.

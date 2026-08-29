@@ -37,6 +37,10 @@ bool g_bannerPosted = false;
 uint32_t g_reportSeenMask = 0;  // test id 0..31 has been reported at least once
 uint32_t g_reportPassMask = 0;  // ... and its last REPORTED answer was a pass
 
+// Per-routine dispatch counts, indexed by position in kExtended (not by routine
+// id). Only the trace thinning reads them; nothing may make a decision from one.
+uint32_t g_dispatchCount[32] = {0};
+
 // --- on-screen banner --------------------------------------------------------
 // void __cdecl AurPostString(const char* text, int x, int y, float fLife)
 // Verified by disassembly (see offsets.h). The text buffer is static because
@@ -402,6 +406,12 @@ constexpr Extended kExtended[] = {
 };
 constexpr int kExtendedCount = static_cast<int>(sizeof(kExtended) / sizeof(kExtended[0]));
 
+// g_dispatchCount is indexed by position in this table. Growing the table past
+// the counter array must be a compile error, not a stray write past the end.
+static_assert(kExtendedCount <= static_cast<int>(sizeof(g_dispatchCount) /
+                                                sizeof(g_dispatchCount[0])),
+              "g_dispatchCount is too small for kExtended -- grow it");
+
 }  // namespace
 
 void Init() {
@@ -487,9 +497,21 @@ int DispatchExtended(void* /*self*/, int id, int nParams) {
                         nParams, e.argc);
             return off::kErrParam;
         }
-        log::Trace("extended routine %d (%s), nParams=%d", id, e.name, nParams);
+        // Thinned, because unthinned this was the whole log. A traced session on
+        // 2026-08-30 wrote 205,808 of these two lines and reached 9 MB, which
+        // buries the handful of lines anyone actually opens the file for. The
+        // first few calls of each routine are where the interesting information
+        // is -- that it dispatched at all, with what argc, returning what -- and
+        // after that it is the same line forever. So: the first eight in full,
+        // then one in every 1024 carrying the running count.
+        const size_t slot = static_cast<size_t>(&e - kExtended);
+        const uint32_t n = ++g_dispatchCount[slot];
+        const bool loud = (n <= 8) || ((n & 1023) == 0);
+
+        if (loud) log::Trace("extended routine %d (%s), nParams=%d [call %u]", id, e.name,
+                             nParams, n);
         const int rc = e.handler(nParams);
-        log::Trace("  -> rc=%d", rc);
+        if (loud) log::Trace("  -> rc=%d", rc);
         PostBanner(kExtendedCount);
         return rc;
     }
