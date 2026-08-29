@@ -20,7 +20,7 @@ import struct
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from verify_offsets import Image, DEFAULT_CANDIDATES  # noqa: E402
+from peimage import Image, DEFAULT_CANDIDATES  # noqa: E402
 
 INIT_COMMANDS = 0x00665F50
 INIT_MINIGAME = 0x006F5B80
