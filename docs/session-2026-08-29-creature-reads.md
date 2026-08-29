@@ -84,6 +84,39 @@ right, and it should be fixed with log-once (or rate-limited) reporting on each
 refusal path. The heartbeat cadence means unconditional logging would flood the
 file, so log-once per reason is the correct shape.
 
+## SETTLED — the on-screen banner, read live in the failing session
+
+The test script calls `AurPostString` on every heartbeat with a five-second
+life, so the banner shows the **current** values while the log had frozen the
+**first**. Read off the screen of the very session whose log says FAIL five
+times:
+
+```
+K2SE v100   str 14/14   dex 12   heal 2/4
+```
+
+That is the whole diagnosis in one line:
+
+- `str 14/14` — K2SE's base STR (routine 881) and vanilla `GetAbilityScore`
+  agree exactly, which is what must happen when nothing is modifying the stat.
+- `dex 12` — a second plausible attribute through the same routine.
+- `heal 2/4` — and this is the one that proves the routine is real rather than
+  lucky. K2SE reports base rank **2**; vanilla `GetSkillRank` reports **4**.
+  They *differ, correctly*: routine 882 returns the rank the character actually
+  bought, without item or effect modifiers, which is precisely the number
+  vanilla cannot report and the reason the routine exists. A broken chain
+  returns −1; a chain that merely echoed vanilla would have said 4.
+
+No −1 anywhere. **The creature reads work.** The five logged FAILs were the
+first heartbeat after module load, frozen into the log by the one-shot dedup
+and never corrected, while every passing heartbeat since went unrecorded.
+
+Scope of what the banner proves: routines **881 and 882 are confirmed live**.
+883 (`HasFeat`) and 884 (`HasSpell`) are not on the banner — they share the
+identical `PopCreatureStats` prologue, so the pointer chain they depend on is
+confirmed, but their own engine calls still want a session with tracing armed
+before the mutator gate is called settled.
+
 ## The experiment that settles it — no rebuild required
 
 Both marker files are now armed in the game folder:
