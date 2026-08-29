@@ -127,18 +127,33 @@ void main()
     int nSkilTotal = GetSkillRank(SKILL_TREAT_INJURY, oPC);
 
     // --- 885-888: fog -------------------------------------------------------
-    // Status is 0 when the k2se_fog.txt marker is absent, which is the default.
-    // Reported, never failed: "off" is a valid state.
+    // What is being proved here is that the routines DISPATCH: that they pop
+    // their arguments and return cleanly through the normal path. That does not
+    // require leaving fog switched on, and this battery must never do so.
     //
-    // The setters are called even with fog off. They are no-ops in that case,
-    // and that is exactly what makes them worth calling here: it proves the
-    // routines dispatch, pop their arguments and return cleanly through the
-    // normal path, without depending on the render thread being involved.
+    // It used to end with SetFogEnabled(nFog != 0), which was written while the
+    // marker file was always absent -- nFog was 0, so it meant "off", and the
+    // comment above it said so. Arming the marker on 2026-08-30 silently turned
+    // that same line into "switch it ON", and the battery then re-applied a dark
+    // brown 20-120 fog on every heartbeat, in every area, for the whole session.
+    // Onderon's western square and the swoop track went black; interiors looked
+    // fine only because everything in them sits inside the 20-unit near plane.
+    //
+    // The lesson is the one k2se_mist.nss will have to repeat to every modder:
+    // the override is GLOBAL DLL STATE. It survives area transitions and
+    // save/load, so whoever turns it on owns turning it off.
     int nFog = K2SE_GetFogStatus();
     K2SE_ReportTest(13, TRUE, (nFog >= 0));
     K2SE_ReportTest(14, TRUE, (K2SE_SetFogRange(20.0, 120.0) >= 0));
     K2SE_ReportTest(15, TRUE, (K2SE_SetFogColor(0.25, 0.13, 0.06) >= 0));
-    K2SE_ReportTest(16, TRUE, (K2SE_SetFogEnabled(nFog != 0) >= 0));
+
+    // Unconditionally off, never a function of the status.
+    K2SE_ReportTest(16, TRUE, (K2SE_SetFogEnabled(FALSE) >= 0));
+
+    // And prove it: kOverrideActive is bit 2 (value 4) in the status word. This
+    // is the regression test for the paragraph above -- if a future edit leaves
+    // fog on, this fails on the first heartbeat instead of on the player's screen.
+    K2SE_ReportTest(21, 0, (K2SE_GetFogStatus() & 4));
 
     // --- on screen ----------------------------------------------------------
     AurPostString("K2SE v" + IntToString(nVer) + "  str " + IntToString(nStr) +
@@ -337,6 +352,9 @@ WHAT TO LOOK AT
              a FAIL here means the heartbeat beat the player into existence
              and 8-12 are reporting on nobody
        18-20 string lengths through a reused shell (12 / 3 / 0)
+       21    fog override left OFF. The battery proves the fog routines
+             dispatch; it must never leave them switched on, because the
+             override is global state that outlives the area you set it in
 
      A `TEST nn ... (CHANGED at t+N ms)` line means an answer flipped later in
      the session -- that is the log correcting itself, not a new failure.
