@@ -86,15 +86,48 @@ Write-Host "`n--- generating version.dll proxy ---"
 & $python (Join-Path $root "build\generate_proxy.py")
 if ($LASTEXITCODE -ne 0) { Fail "generate_proxy.py failed" }
 
+# --- manifest tooling, or the lack of it ------------------------------------
+# CMake links MSVC targets through `cmake -E vs_link_exe`, which embeds a
+# manifest by running rc.exe. A vs_BuildTools --layout extraction carries the
+# SDK headers and libraries but NOT rc.exe/mt.exe -- those live in a separate
+# component -- and when they are missing the link dies in CMake's own compiler
+# test, before a single line of K2SE is ever compiled:
+#
+#   RC Pass 1: command "rc /fo ...manifest.res ...manifest.rc" failed
+#   ... is not able to compile a simple test program
+#
+# which reads like a broken compiler and is nothing of the kind. So: use the
+# resource compiler when the toolchain has one, and turn manifest embedding off
+# when it does not. K2SE does not want an embedded manifest either way -- it is
+# a proxy DLL that imports only KERNEL32, with nothing to declare.
+$rc = Get-ChildItem (Join-Path $Toolchain "Windows Kits\10\bin") -Recurse -Filter "rc.exe" `
+        -ErrorAction SilentlyContinue |
+      Where-Object { $_.DirectoryName -match "\\x86$" } |
+      Select-Object -First 1
+
+$linkerFlags = @()
+if ($rc) {
+    $env:PATH = "$($rc.DirectoryName);" + $env:PATH
+    Write-Host "resource cc  : $($rc.FullName)"
+} else {
+    $linkerFlags += "/MANIFEST:NO"
+    Write-Host "resource cc  : not in this toolchain -- linking with /MANIFEST:NO"
+}
+
 # --- configure + build ------------------------------------------------------
 $buildDir = Join-Path $root "out"
 if ($Clean -and (Test-Path $buildDir)) { Remove-Item $buildDir -Recurse -Force }
 
 Write-Host "`n--- configuring ---"
+# EXE flags matter as much as SHARED ones: CMake's try-compile probe builds an
+# executable, so without them configure fails before reaching this project.
+$flags = $linkerFlags -join " "
 & $CMake -S $root -B $buildDir -G "NMake Makefiles" `
     "-DCMAKE_BUILD_TYPE=$Config" `
     "-DCMAKE_C_COMPILER=$clx86" `
-    "-DCMAKE_CXX_COMPILER=$clx86"
+    "-DCMAKE_CXX_COMPILER=$clx86" `
+    "-DCMAKE_EXE_LINKER_FLAGS=$flags" `
+    "-DCMAKE_SHARED_LINKER_FLAGS=$flags"
 if ($LASTEXITCODE -ne 0) { Fail "CMake configure failed" }
 
 Write-Host "`n--- building ---"
