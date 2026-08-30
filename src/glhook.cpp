@@ -282,31 +282,45 @@ int Status() { return g_status; }
 
 void SetEnabled(bool enabled) {
     if (!(g_status & kInstalled)) return;
+    // This one matters more than the other two, because it is the switch that
+    // repaints the world: on 2026-08-30 a battery line that had always meant
+    // "off" started meaning "on" and turned Onderon dark brown for a whole
+    // session. So every transition is logged, and only the repeats are not.
+    const bool changed = (g_fog.enabled != enabled);
     g_fog.enabled = enabled;
     if (enabled)
         g_status |= kOverrideActive;
     else
         g_status &= ~kOverrideActive;
-    log::Writef("fog override %s", enabled ? "enabled" : "disabled");
+    if (changed) log::Writef("fog override %s", enabled ? "enabled" : "disabled");
 }
 
 void SetRange(float start, float end) {
     if (!(g_status & kInstalled)) return;
+    // Log the CHANGE, not the call. A script setting fog per area calls this
+    // once and wants the line; the test battery calls it on every creature
+    // heartbeat and would otherwise write thousands of identical lines. Same
+    // reasoning as the dispatch trace and the chain report.
+    const bool changed = !g_fog.haveRange || g_fog.start != start || g_fog.end != end;
     g_fog.start = start;
     g_fog.end = end;
     g_fog.haveRange = true;
-    log::Writef("fog range set: %d..%d (x1000)", static_cast<int>(start * 1000.0f),
-                static_cast<int>(end * 1000.0f));
+    if (changed)
+        log::Writef("fog range set: %d..%d (x1000)", static_cast<int>(start * 1000.0f),
+                    static_cast<int>(end * 1000.0f));
 }
 
 void SetColor(float r, float g, float b) {
     if (!(g_status & kInstalled)) return;
+    const bool changed = !g_fog.haveColor || g_fog.color[0] != r || g_fog.color[1] != g ||
+                         g_fog.color[2] != b;
     g_fog.color[0] = r;
     g_fog.color[1] = g;
     g_fog.color[2] = b;
     g_fog.haveColor = true;
-    log::Writef("fog colour set: %d,%d,%d (x255)", static_cast<int>(r * 255.0f),
-                static_cast<int>(g * 255.0f), static_cast<int>(b * 255.0f));
+    if (changed)
+        log::Writef("fog colour set: %d,%d,%d (x255)", static_cast<int>(r * 255.0f),
+                    static_cast<int>(g * 255.0f), static_cast<int>(b * 255.0f));
 }
 
 }  // namespace glhook
