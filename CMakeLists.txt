@@ -82,6 +82,6 @@ target_link_libraries(k2se PRIVATE kernel32)
 # --- post-build sanity ------------------------------------------------------
 add_custom_command(TARGET k2se POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E echo "K2SE built: $<TARGET_FILE:k2se>"
-    COMMAND ${CMAKE_COMMAND} -E echo "Verify exports match the real version.dll:"
-    COMMAND ${CMAKE_COMMAND} -E echo "    python tools/check_exports.py \"$<TARGET_FILE:k2se>\""
+    COMMAND ${CMAKE_COMMAND} -E echo "Verify the DLL before shipping it:"
+    COMMAND ${CMAKE_COMMAND} -E echo "    python tools/check_dll.py \"$<TARGET_FILE:k2se>\""
 )

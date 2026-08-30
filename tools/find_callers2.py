@@ -20,7 +20,7 @@ import struct
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from verify_offsets import Image, DEFAULT_CANDIDATES  # noqa: E402
+from peimage import Image, DEFAULT_CANDIDATES  # noqa: E402
 
 try:
     from capstone import Cs, CS_ARCH_X86, CS_MODE_32

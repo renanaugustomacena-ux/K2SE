@@ -87,6 +87,81 @@ bool SafeCallCreatureById(void* server, uint32_t objectId, void** out) {
     }
 }
 
+// --- what the last walk actually did -----------------------------------------
+// Ordered by how far the walk got, so the value doubles as a progress marker.
+enum Stage {
+    kStageOk = 0,
+    kStageIdInvalid,         // OBJECT_INVALID; the engine was never asked
+    kStageAppFault,          // the read of [kAppManagerGlobal] faulted
+    kStageAppRejected,       // ... gave a value LooksLikePointer refused
+    kStageServerFault,       // the read of [appManager + 0x08] faulted
+    kStageServerRejected,
+    kStageLookupFault,       // GetCreatureByGameObjectID faulted
+    kStageCreatureNull,      // the engine returned 0 -- no such creature
+    kStageCreatureRejected,  // it returned something implausible
+    kStageStatsFault,        // the read of [creature + kCreatureOffStats] faulted
+    kStageStatsNull,
+    kStageStatsRejected,
+    kStageCount
+};
+
+const char* const kStageName[kStageCount] = {
+    "OK",           "ID_INVALID",      "APP_FAULT",    "APP_REJECTED",
+    "SERVER_FAULT", "SERVER_REJECTED", "LOOKUP_FAULT", "CREATURE_NULL",
+    "CREATURE_REJECTED", "STATS_FAULT", "STATS_NULL",  "STATS_REJECTED",
+};
+
+struct Walk {
+    uint32_t objectId;
+    void* appManager;
+    void* server;
+    void* creature;
+    void* stats;
+    int stage;
+};
+
+// Written only by the three walk functions, read only by ReportWalk. Script
+// routines run on the game's main thread, so no lock is involved or needed.
+Walk g_walk = {0, nullptr, nullptr, nullptr, nullptr, kStageOk};
+
+uint32_t g_walkCount = 0;
+int g_lastStage = -1;      // outcome of the previous walk; -1 before the first
+uint32_t g_runLength = 0;  // consecutive walks with that outcome
+uint32_t g_runFirstMs = 0;
+uint32_t g_linesWritten = 0;
+bool g_capped = false;
+
+// A hard ceiling, because an outcome that flapped every heartbeat would still
+// flood. Transition-only logging makes a healthy session cost one line, so this
+// is generous by two orders of magnitude and cheap insurance either way.
+constexpr uint32_t kMaxReportLines = 96;
+
+bool LineBudget() {
+    if (g_capped) return false;
+    if (g_linesWritten >= kMaxReportLines) {
+        g_capped = true;
+        log::Write("gameobj: chain diagnostics capped at 96 lines -- the outcome is "
+                   "flapping; arm K2SE_DIAGNOSTIC for the full trace");
+        return false;
+    }
+    ++g_linesWritten;
+    return true;
+}
+
+unsigned Hex(const void* p) {
+    return static_cast<unsigned>(reinterpret_cast<uintptr_t>(p));
+}
+
+void ResetWalk(uint32_t objectId) {
+    ++g_walkCount;
+    g_walk.objectId = objectId;
+    g_walk.appManager = nullptr;
+    g_walk.server = nullptr;
+    g_walk.creature = nullptr;
+    g_walk.stats = nullptr;
+    g_walk.stage = kStageOk;
+}
+
 }  // namespace
 
 bool LooksLikePointer(const void* p) {
@@ -96,37 +171,117 @@ bool LooksLikePointer(const void* p) {
 
 void* ServerExoApp() {
     void* appManager = nullptr;
-    if (!SafeReadPtr(reinterpret_cast<const void*>(off::kAppManagerGlobal), &appManager))
+    if (!SafeReadPtr(reinterpret_cast<const void*>(off::kAppManagerGlobal), &appManager)) {
+        g_walk.stage = kStageAppFault;
         return nullptr;
-    if (!LooksLikePointer(appManager)) return nullptr;
+    }
+    g_walk.appManager = appManager;
+    if (!LooksLikePointer(appManager)) {
+        g_walk.stage = kStageAppRejected;
+        return nullptr;
+    }
 
     void* server = nullptr;
     if (!SafeReadPtr(static_cast<const char*>(appManager) + off::kAppManagerOffServer,
-                     &server))
+                     &server)) {
+        g_walk.stage = kStageServerFault;
         return nullptr;
-    return LooksLikePointer(server) ? server : nullptr;
+    }
+    g_walk.server = server;
+    if (!LooksLikePointer(server)) {
+        g_walk.stage = kStageServerRejected;
+        return nullptr;
+    }
+    return server;
 }
 
 void* CreatureFromObjectId(uint32_t objectId) {
-    if (objectId == off::kObjectInvalid) return nullptr;
+    // Cleared BEFORE the first hop, never after the last: an early return must
+    // not leave a previous call's pointers standing where the report would read
+    // them as this call's.
+    ResetWalk(objectId);
+
+    if (objectId == off::kObjectInvalid) {
+        g_walk.stage = kStageIdInvalid;
+        return nullptr;
+    }
 
     void* server = ServerExoApp();
-    if (!server) return nullptr;
+    if (!server) return nullptr;  // ServerExoApp has already named the stage
 
     void* creature = nullptr;
     if (!SafeCallCreatureById(server, objectId, &creature)) {
+        g_walk.stage = kStageLookupFault;
         log::Write("gameobj: GetCreatureByGameObjectID faulted");
         return nullptr;
     }
-    return LooksLikePointer(creature) ? creature : nullptr;
+    g_walk.creature = creature;
+    // Null and implausible are the same refusal to the caller and always have
+    // been. They are split here only so the log can say which one happened.
+    if (creature == nullptr) {
+        g_walk.stage = kStageCreatureNull;
+        return nullptr;
+    }
+    if (!LooksLikePointer(creature)) {
+        g_walk.stage = kStageCreatureRejected;
+        return nullptr;
+    }
+    return creature;
 }
 
 void* CreatureStats(void* creature) {
-    if (!LooksLikePointer(creature)) return nullptr;
-    void* stats = nullptr;
-    if (!SafeReadPtr(static_cast<const char*>(creature) + off::kCreatureOffStats, &stats))
+    if (!LooksLikePointer(creature)) {
+        g_walk.stage = kStageCreatureRejected;
         return nullptr;
-    return LooksLikePointer(stats) ? stats : nullptr;
+    }
+    void* stats = nullptr;
+    if (!SafeReadPtr(static_cast<const char*>(creature) + off::kCreatureOffStats, &stats)) {
+        g_walk.stage = kStageStatsFault;
+        return nullptr;
+    }
+    g_walk.stats = stats;
+    if (stats == nullptr) {
+        g_walk.stage = kStageStatsNull;
+        return nullptr;
+    }
+    if (!LooksLikePointer(stats)) {
+        g_walk.stage = kStageStatsRejected;
+        return nullptr;
+    }
+    return stats;
+}
+
+void ReportWalk(const char* who) {
+    const Walk w = g_walk;  // snapshot; nothing below may observe a later walk
+    const uint32_t nowMs = log::MillisSinceInit();
+
+    if (w.stage == g_lastStage) {
+        ++g_runLength;
+        // Marker-gated and thinned even then: one line per 64 walks, not one
+        // per walk.
+        if ((g_runLength & 63) == 0)
+            log::Trace("gameobj: %s still %s (%u in a row)", who, kStageName[w.stage],
+                       g_runLength);
+        return;
+    }
+
+    // Close the run that just ended. Printing it HERE, rather than at the start
+    // of the next one, is what makes a recovery legible: "ID_INVALID repeated 6
+    // times over 6180 ms" followed by "-> OK" is the entire diagnosis, and it is
+    // exactly what the 2026-08-29 session could not say.
+    if (g_lastStage >= 0 && LineBudget())
+        log::Writef("gameobj: ... previous outcome %s repeated %u time(s) over %u ms",
+                    kStageName[g_lastStage], g_runLength, nowMs - g_runFirstMs);
+
+    g_lastStage = w.stage;
+    g_runLength = 1;
+    g_runFirstMs = nowMs;
+
+    if (!LineBudget()) return;
+    log::Writef("gameobj: %s walk #%u at t+%u ms -> %s | id=0x%08X app=0x%08X "
+                "srv=0x%08X cre=0x%08X sts=0x%08X",
+                who, g_walkCount, nowMs, kStageName[w.stage], w.objectId,
+                Hex(w.appManager), Hex(w.server), Hex(w.creature), Hex(w.stats));
 }
 
 bool AbilityBase(void* stats, int ability, int* out) {

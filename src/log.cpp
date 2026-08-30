@@ -17,6 +17,7 @@ namespace {
 
 HANDLE g_file = INVALID_HANDLE_VALUE;
 bool g_diagnostic = false;
+DWORD g_initTick = 0;
 wchar_t g_dllDir[MAX_PATH] = {0};
 
 extern "C" IMAGE_DOS_HEADER __ImageBase;
@@ -37,7 +38,16 @@ void RawWrite(const char* text, size_t len) {
 
 bool DiagnosticEnabled() { return g_diagnostic; }
 
+// GetTickCount, not QPC: this is for ordering log lines, where millisecond
+// resolution is ample and a counter that cannot fail is worth more than one
+// that is precise. Unsigned subtraction gives the right answer across the
+// 49-day wrap.
+uint32_t MillisSinceInit() {
+    return static_cast<uint32_t>(GetTickCount() - g_initTick);
+}
+
 void Init() {
+    g_initTick = GetTickCount();
     ResolveDllDir();
 
     wchar_t marker[MAX_PATH];

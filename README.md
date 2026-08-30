@@ -137,26 +137,39 @@ Questo risolve un problema reale: uno script **non può** testare la presenza de
 
 ## Le funzioni disponibili oggi
 
-Dodici routine estese, dall'ID 877 in su. **Quattro sono provate in gioco**
-(877–879 e la sentinella `abs()`); le altre otto sono verificate staticamente ma
-**aspettano ancora una sessione reale** — è scritto qui perché la differenza
-conta.
+Dodici routine estese, dall'ID 877 in su. **Tutte e dodici sono ora provate in
+gioco**, nella sessione del 30/08/2026: venti test su venti PASS, compresi i
+quattro accessi alle creature e la nebbia a runtime.
 
 | ID | Funzione | Stato |
 |---|---|---|
 | 877 | `K2SE_GetVersion()` | ✅ in gioco |
 | 878/879 | `K2SE_SelfTest`, `K2SE_ReportTest` | ✅ in gioco |
-| 880 | `K2SE_EchoString` — round trip delle stringhe | ⏳ da provare |
-| 881 | `K2SE_GetAbilityScoreBase(oCreature, nAbility)` | ⏳ da provare |
-| 882 | `K2SE_GetSkillRankBase(oCreature, nSkill)` | ⏳ da provare |
-| 883 | `K2SE_GetFeatAcquired(oCreature, nFeat)` | ⏳ da provare |
-| 884 | `K2SE_GetSpellAcquired(oCreature, nSpell)` | ⏳ da provare |
-| 885–888 | controllo nebbia a runtime | ⏳ da provare, **opt-in** |
+| 880 | `K2SE_EchoString` — round trip delle stringhe | ✅ in gioco |
+| 881 | `K2SE_GetAbilityScoreBase(oCreature, nAbility)` | ✅ in gioco |
+| 882 | `K2SE_GetSkillRankBase(oCreature, nSkill)` | ✅ in gioco |
+| 883 | `K2SE_GetFeatAcquired(oCreature, nFeat)` | ✅ in gioco |
+| 884 | `K2SE_GetSpellAcquired(oCreature, nSpell)` | ✅ in gioco |
+| 885–888 | controllo nebbia a runtime | ✅ in gioco, **opt-in** |
+
+La prova che conta per 882 non è che risponda, ma **che risponda diverso da
+vanilla**: sullo schermo `heal 2/4` — rango base 2 contro totale 4 di
+`GetSkillRank`. Quel divario è esattamente ciò per cui la routine esiste, ed è
+un numero che il motore non sa riportare da solo. Una catena rotta avrebbe detto
+−1; una che si limitasse a ripetere vanilla avrebbe detto 4.
 
 881–884 sono **sole letture**, di proposito: camminano su offset di struttura
 importati, e un offset sbagliato in lettura costa un numero sbagliato mentre in
-scrittura corromperebbe un salvataggio. I mutatori arrivano quando le letture
-sono confermate.
+scrittura corromperebbe un salvataggio. Ora che le letture sono confermate in
+una sessione reale, i mutatori sono sbloccati — ma restano da scrivere.
+
+> **Una lezione, registrata perché è costata ore.** Per tre sessioni il log ha
+> detto `TEST 8..12 FAIL` mentre le routine funzionavano. `K2SE_ReportTest`
+> registrava solo il **primo** risultato per ogni test, e il primo heartbeat
+> parte prima che `GetFirstPC()` sia risolvibile: un transitorio congelato in
+> verdetto permanente. Lo schermo diceva la verità, il log no. Da qui il test 17
+> (il soggetto è valido?) e il logging delle **transizioni** invece dei primi
+> campioni — dettagli in [docs/session-2026-08-29-creature-reads.md](docs/session-2026-08-29-creature-reads.md).
 
 La nebbia si accende solo se esiste un file `k2se_fog.txt` accanto
 all'eseguibile: è l'unica parte di K2SE che gira sul thread di rendering, e non
@@ -188,19 +201,17 @@ python tools/export_to_kpm.py       # contributo verso monte
 
 *(Q1–Q7 e Q11 sono chiuse. Dettaglio in [DESIGN.md §7](DESIGN.md).)*
 
-**Una sessione di gioco, ed è il passo che blocca tutto il resto.** Otto delle
-dodici routine estese non hanno mai girato. La verifica statica — prologhi,
-`ret imm16`, byte ACTION emessi, build pulita — è necessaria ma **non
-sufficiente**, e questo progetto non tratta l'una per l'altra.
+**La sessione di gioco che bloccava tutto il resto è stata fatta** (30/08/2026).
+Le tre incognite che pesavano di più sono chiuse, e ognuna aveva la sua prova:
 
-| Da provare | Perché è il rischio maggiore |
+| Provato | La prova, non l'affermazione |
 |---|---|
-| **880** stringhe | La stringa che torna deve essere identica. Se differisce, l'ABI è sbagliata — non c'è altro che possa essere |
-| **881–884** creature | Camminano su **offset di struttura**: affermazioni sul layout a runtime, importate, non controllabili leggendo il file |
-| **885–888** nebbia | Thread di rendering, e riscrive i fragment program in volo |
+| **880** stringhe | `received "K2SE-880-abc" (length 12, buffer 13)` — e i due numeri **devono** essere diversi: il secondo campo di `CExoString` è la capacità del buffer, non la lunghezza |
+| **881–884** creature | Venti test su venti PASS, e `heal 2/4`: rango base contro totale vanilla. Gli offset importati sono giusti su questo binario |
+| **885–888** nebbia | `glhook: first fragment program rewritten (272 -> 295 bytes, OPTION ARB_fog_linear inserted)` — senza quella riga la pipeline Aspyr non legge affatto lo stato della nebbia |
 
-Poi, in ordine: sbloccare i mutatori se le letture sono giuste, chiudere i tag
-degli engine structure, contattare LaneDibello.
+Restano, in ordine: **scrivere i mutatori** (ora sbloccati: le letture sono
+confermate), chiudere i tag degli engine structure, contattare LaneDibello.
 
 ---
 

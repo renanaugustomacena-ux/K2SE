@@ -86,6 +86,24 @@ void main()
     string sOut = K2SE_EchoString(sIn);
     K2SE_ReportTest(7, TRUE, (sOut == sIn));
 
+    // Three lengths through the same K2SE-side shell. CExoString's second field
+    // is a buffer capacity, not a length, and a reused buffer keeps the OLD
+    // capacity -- so a length implemented as "capacity - 1" reports the long
+    // string's size for the short one, and underflows to 4294967295 on the
+    // empty one. Vanilla GetStringLength is the reference: it calls strlen.
+    K2SE_ReportTest(18, 12, GetStringLength(K2SE_EchoString("K2SE-880-abc")));
+    K2SE_ReportTest(19, 3,  GetStringLength(K2SE_EchoString("abc")));
+    K2SE_ReportTest(20, 0,  GetStringLength(K2SE_EchoString("")));
+
+    // --- is the subject even valid? -----------------------------------------
+    // Reported as its own test, because on 2026-08-29 it was not, and the five
+    // failures below were read for hours as "the creature reads are broken"
+    // when the honest reading was "we asked about nobody". A heartbeat can fire
+    // before GetFirstPC resolves; that is a fact about the trigger, not about
+    // the routines, and the log should say which one it is looking at.
+    K2SE_ReportTest(17, TRUE, (oPC != OBJECT_INVALID));
+    if (oPC == OBJECT_INVALID) oPC = OBJECT_SELF;
+
     // --- 881-884: the creature reads ----------------------------------------
     // Sanity bounds catch the two failure modes that matter: -1 means the
     // pointer chain broke, and a wild number means an offset is wrong.
@@ -109,18 +127,33 @@ void main()
     int nSkilTotal = GetSkillRank(SKILL_TREAT_INJURY, oPC);
 
     // --- 885-888: fog -------------------------------------------------------
-    // Status is 0 when the k2se_fog.txt marker is absent, which is the default.
-    // Reported, never failed: "off" is a valid state.
+    // What is being proved here is that the routines DISPATCH: that they pop
+    // their arguments and return cleanly through the normal path. That does not
+    // require leaving fog switched on, and this battery must never do so.
     //
-    // The setters are called even with fog off. They are no-ops in that case,
-    // and that is exactly what makes them worth calling here: it proves the
-    // routines dispatch, pop their arguments and return cleanly through the
-    // normal path, without depending on the render thread being involved.
+    // It used to end with SetFogEnabled(nFog != 0), which was written while the
+    // marker file was always absent -- nFog was 0, so it meant "off", and the
+    // comment above it said so. Arming the marker on 2026-08-30 silently turned
+    // that same line into "switch it ON", and the battery then re-applied a dark
+    // brown 20-120 fog on every heartbeat, in every area, for the whole session.
+    // Onderon's western square and the swoop track went black; interiors looked
+    // fine only because everything in them sits inside the 20-unit near plane.
+    //
+    // The lesson is the one k2se_mist.nss will have to repeat to every modder:
+    // the override is GLOBAL DLL STATE. It survives area transitions and
+    // save/load, so whoever turns it on owns turning it off.
     int nFog = K2SE_GetFogStatus();
     K2SE_ReportTest(13, TRUE, (nFog >= 0));
     K2SE_ReportTest(14, TRUE, (K2SE_SetFogRange(20.0, 120.0) >= 0));
     K2SE_ReportTest(15, TRUE, (K2SE_SetFogColor(0.25, 0.13, 0.06) >= 0));
-    K2SE_ReportTest(16, TRUE, (K2SE_SetFogEnabled(nFog != 0) >= 0));
+
+    // Unconditionally off, never a function of the status.
+    K2SE_ReportTest(16, TRUE, (K2SE_SetFogEnabled(FALSE) >= 0));
+
+    // And prove it: kOverrideActive is bit 2 (value 4) in the status word. This
+    // is the regression test for the paragraph above -- if a future edit leaves
+    // fog on, this fails on the first heartbeat instead of on the player's screen.
+    K2SE_ReportTest(21, 0, (K2SE_GetFogStatus() & 4));
 
     // --- on screen ----------------------------------------------------------
     AurPostString("K2SE v" + IntToString(nVer) + "  str " + IntToString(nStr) +
@@ -310,11 +343,29 @@ WHAT TO LOOK AT
      differ when an item or effect is modifying the stat -- that is correct, not
      a bug. What would be wrong is -1 (the pointer chain broke) or nonsense.
   2. The log: %LOCALAPPDATA%\\K2SE\\k2se.log
-     Expect `TEST  1..16` lines, each PASS.
+     Expect `TEST  1..20` lines, each PASS.
        1-6   proven on 27/08; these are a regression check
        7     the string round trip (880)
-       8-12  the creature reads (881-884) -- never run before
-       13-16 fog routines dispatch (885-888); status 0 = subsystem off
+       8-12  the creature reads (881-884)
+       13-16 fog routines dispatch (885-888)
+       17    is oPC valid at all -- read this one FIRST if 8-12 fail, because
+             a FAIL here means the heartbeat beat the player into existence
+             and 8-12 are reporting on nobody
+       18-20 string lengths through a reused shell (12 / 3 / 0)
+       21    fog override left OFF. The battery proves the fog routines
+             dispatch; it must never leave them switched on, because the
+             override is global state that outlives the area you set it in
+
+     A `TEST nn ... (CHANGED at t+N ms)` line means an answer flipped later in
+     the session -- that is the log correcting itself, not a new failure.
+
+     Also expect one `gameobj: ... -> OK` line per session. More than one means
+     the chain changed state, and each line names the hop that stopped it.
+
+     With fog armed, the line that decides whether fog is real is:
+       glhook: first fragment program rewritten
+     Without it the Aspyr pipeline never reads fog state and anything you see
+     on screen is unrelated to K2SE.
 
 Send me the log and I will read it.
 
