@@ -1,4 +1,5 @@
 kind,class,name,value,provenance,verified_by,notes
+function,CClientExoApp,GetClientObjectById,0x0073F550,k2se-re-20260902,disasm,ret 4; [this+4] -> 0x0078BDF0(id)
 function,CClientExoApp,GetClientOptions,0x0072FB00,kpm-db,prologue,
 function,CClientOptions,SetCameraMode,0x007B5E50,kpm-db,prologue,
 function,CExoString,CStrConstructor,0x00733570,kpm-db,prologue,
@@ -6,9 +7,26 @@ function,CExoString,CStrLenConstructor,0x00733680,kpm-db,prologue,
 function,CExoString,DefaultConstructor,0x00733540,k2se-ghidra,disasm,"zeroes CStr and Length, nothing else"
 function,CExoString,Destructor,0x00733780,k2se-ghidra,disasm,frees the game-owned buffer and nulls CStr
 function,CGameObjectArray,GetGameObject,0x0053DFB0,kpm-db,prologue,
+function,CSWCAnimBase,MapAnimCode,0x00863650,k2se-re-20260902,disasm,vtable +0xE0; (uint16 code) -> animations.2da row (0x290D -> 567)
+function,CSWCAnimBase,PlayRow,0x00860280,k2se-re-20260902,disasm,"vtable +0x44; (uint16 row, int flag) ret 8 -> 0x008602C0(model, row, flag)"
+function,CSWCCreature,GetAnimBase,0x007ED830,k2se-re-20260902,callsite,called by PlayOverlayAnimation handler 0x0068F440; returns CSWCAnimBase*
+function,CSWCCreature,GetDriveAccel,0x0077F600,k2se-re-20260902,disasm,"appearance+0x58, or const when stealthed without FEAT_STEALTH_RUN"
+function,CSWCCreature,SetDriveSpeed,0x00776E10,k2se-re-20260902,disasm,"ret 8: writes +0x3C8 speed, +0x3CC"
+function,CSWCMessage,HandleServerToClientCreatureUpdate,0x008079B0,k2se-re-20260902,disasm,3537 instructions; rewrites the client flag block +0x2E8..+0x2F4 (stealth bit at 0x00809E01)
+function,CSWCObject,GetServerObject,0x0077D800,k2se-re-20260902,disasm,via 0x007F2540 then vtable+0x30
 function,CSWInventory,GetItemInSlot,0x006D0620,kpm-db,prologue,
 function,CSWItem,GetBaseItem,0x006D6E30,kpm-db,prologue,
+function,CSWPlayerControlCamRelative,GetAccel,0x00867CA0,k2se-re-20260902,disasm,"thiscall, float: CSWCCreature::GetDriveAccel of the player"
+function,CSWPlayerControlCamRelative,GetAcceleration,0x00867AB0,k2se-re-20260902,disasm,"ret 0xC (out, vel, target); RK4 spring using GetAccel/GetMaxSpeed"
+function,CSWPlayerControlCamRelative,GetMaxSpeed,0x00867B40,k2se-re-20260902,disasm,"thiscall, float in ST0: appearance+0x5C or stealth speed +0x60; redirected by movement.cpp"
+function,CSWPlayerControlCamRelative,Update,0x00865830,k2se-re-20260902,disasm,ret 4 (float dt); the driven-player frame
+function,CSWSArea,GetGroundZ,0x0054B130,k2se-re-20260902,callsite,"(Vector* pos, int 1, int 0, int 0) -> float -- HYPOTHESIS from the mover"
+function,CSWSArea,TestMoveSegment,0x00550980,k2se-re-20260902,callsite,"(Vector* dst, Vector* src, float* radius, float hitradius, int, int) -> 1 when the move is free -- HYPOTHESIS from the mover"
+function,CSWSArea,TestPointWalkable,0x0054B650,k2se-re-20260902,callsite,"(Vector*, CPathfindInformation*) -> 1 -- HYPOTHESIS from the mover"
+function,CSWSCreature,DriveMoverUpdate,0x005C6340,k2se-re-20260902,disasm,"ret 0x10; reads the client drive speed, runs the walkmesh state machine (0x005C7370..0x005CB190), commits with SetPosition at 0x005C6E87/0x005C6ED8/0x005C6F9E"
 function,CSWSCreature,GetClientCreature,0x0058AE90,kpm-db,prologue,
+function,CSWSCreature,HasModeFlag,0x00563D70,k2se-re-20260902,disasm,ret 4; (this+0x1120 & mask) != 0; IsStealthed passes 1
+function,CSWSCreature,MovementUpdate,0x005C3F70,k2se-re-20260902,disasm,ret 4; calls DriveMoverUpdate when [this+0x11B0]==3
 function,CSWSCreatureStats,AddFeat,0x006F5B40,kpm-db,prologue,
 function,CSWSCreatureStats,AddKnownSpell,0x006B86A0,kpm-db,prologue,
 function,CSWSCreatureStats,GetClass,0x00844E40,kpm-db,prologue,
@@ -25,6 +43,10 @@ function,CSWSCreatureStats,SetSTRBase,0x006B67D0,kpm-db,prologue,
 function,CSWSCreatureStats,SetSkillRank,0x006B81C0,kpm-db,prologue,
 function,CSWSCreatureStats,SetWISBase,0x006B6960,kpm-db,prologue,
 function,CSWSObject,AddActionToFront,0x00540CA0,kpm-db,prologue,
+function,CSWSObject,GetArea,0x005453C0,k2se-re-20260902,callsite,used as `this` for the area walkmesh tests in the drive mover
+function,CSWSObject,SetDirtyBit,0x0054A430,k2se-re-20260902,disasm,ret 4; bitset at +0x224
+function,CSWSObject,SetOrientation,0x00543F10,k2se-re-20260902,disasm,ret 4; writes +0xA0; dirty bit 2
+function,CSWSObject,SetPosition,0x00543F50,k2se-re-20260902,disasm,"ret 0x10 (Vector*, int bClient, int, int bNoDirty); early-out if equal; dirty bit 1; redirected in the drive mover by movement.cpp"
 function,CSWVirtualMachineCommands,ExecuteCommand,0x00668FD0,k2se-ghidra,runtime,vtable slot 2; the NWScript routine dispatcher. K2SE hooks this slot
 function,CSWVirtualMachineCommands,InitializeCommands,0x00665F50,k2se-ghidra,runtime,vtable slot 1; allocates 877*4 and fills the routine table with literal stores
 function,CSWVirtualMachineCommands,InitializeSWMGCommands,0x006F5B80,k2se-ghidra,disasm,minigame installer; fills the remaining 103 routine slots
@@ -73,17 +95,53 @@ global,,RENDER_WIREFRAME,0x00A32A50,kpm-db,unverified,"in .data; holds a runtime
 global,,RULES_PTR,0x00A1B4D0,kpm-db,unverified,"in .data; holds a runtime pointer, not statically checkable"
 global,,TLK_TABLE_PTR,0x00A1B4B0,kpm-db,unverified,"in .data; holds a runtime pointer, not statically checkable"
 global,,VIRTUAL_MACHINE_PTR,0x00A1B4A8,kpm-db,runtime,exercised in a live K2SE session
+global,Other,APPEARANCE_COL_CREPERSPACE,0x00A0FD9C,k2se-re-20260902,disasm,
+global,Other,APPEARANCE_COL_DRIVEACCL,0x00A0FDA4,k2se-re-20260902,disasm,
+global,Other,APPEARANCE_COL_DRIVEANIMRUN_PC,0x00A0FDA8,k2se-re-20260902,disasm,
+global,Other,APPEARANCE_COL_DRIVEANIMWALK,0x00A0FDB4,k2se-re-20260902,disasm,
+global,Other,APPEARANCE_COL_DRIVEMAXSPEED,0x00A0FDB0,k2se-re-20260902,disasm,
+global,Other,APPEARANCE_COL_HITRADIUS,0x00A0FDD4,k2se-re-20260902,disasm,
+global,Other,APPEARANCE_COL_PERSPACE,0x00A0FDE4,k2se-re-20260902,disasm,
+global,Other,APPEARANCE_COL_RUNDIST,0x00A0FDEC,k2se-re-20260902,disasm,
+global,Other,CREATURESPEED_COL_RUNRATE,0x00A0FF10,k2se-re-20260902,disasm,
+global,Other,CREATURESPEED_COL_WALKRATE,0x00A0FF0C,k2se-re-20260902,disasm,
 offset,CAppManager,Client,0x0004,kpm-db,unverified,struct layout; confirm against a consuming handler
 offset,CAppManager,Server,0x0008,kpm-db,unverified,struct layout; confirm against a consuming handler
 offset,CExoString,CStr,0x0000,kpm-db,unverified,struct layout; confirm against a consuming handler
 offset,CExoString,Length,0x0004,kpm-db,unverified,struct layout; confirm against a consuming handler
 offset,CGameObject,Id,0x0004,kpm-db,unverified,struct layout; confirm against a consuming handler
 offset,CGameObject,ObjectType,0x0008,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CPathfindInformation,cameraspace,0x00000010,k2se-re-20260902,disasm,
+offset,CPathfindInformation,creperspace,0x00000008,k2se-re-20260902,disasm,
+offset,CPathfindInformation,hitradius,0x00000014,k2se-re-20260902,disasm,fallback 1.0
+offset,CPathfindInformation,perspace,0x00000004,k2se-re-20260902,disasm,read by the mover
 offset,CSWBaseItem,WeaponWield,0x0008,kpm-db,unverified,struct layout; confirm against a consuming handler
 offset,CSWCCreature,Running,0x03F8,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CSWCCreature,appearance,0x00000224,k2se-re-20260902,disasm,CSWCCreatureAppearance*
+offset,CSWCCreature,drive_speed,0x000003C8,k2se-re-20260902,disasm,float
+offset,CSWCCreature,flags,0x000002EC,k2se-re-20260902,disasm,word; bit0 stealth (client)
+offset,CSWCCreature,running,0x000003F8,k2se-re-20260902,disasm,byte (IsRunning)
+offset,CSWCCreatureAppearance,drive_accel,0x00000058,k2se-re-20260902,disasm,
+offset,CSWCCreatureAppearance,drive_max_speed,0x0000005C,k2se-re-20260902,disasm,
+offset,CSWCCreatureAppearance,stealth_speed,0x00000060,k2se-re-20260902,disasm,name is a hypothesis
+offset,CSWPlayerControlCamRelative,camera,0x00000008,k2se-re-20260902,disasm,
+offset,CSWPlayerControlCamRelative,enabled,0x0000000C,k2se-re-20260902,disasm,
+offset,CSWPlayerControlCamRelative,left_right,0x00000014,k2se-re-20260902,disasm,
+offset,CSWPlayerControlCamRelative,player_id,0x00000004,k2se-re-20260902,disasm,
+offset,CSWPlayerControlCamRelative,up_down,0x00000010,k2se-re-20260902,disasm,
+offset,CSWPlayerControlCamRelative,walking,0x00000018,k2se-re-20260902,disasm,walk modifier
 offset,CSWSCombatRound,OnHandAttacks,0x0AE0,kpm-db,unverified,struct layout; confirm against a consuming handler
 offset,CSWSCreature,CreatureStats,0x1198,kpm-db,unverified,struct layout; confirm against a consuming handler
 offset,CSWSCreature,Inventory,0x1150,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CSWSCreature,appearance_type,0x00001184,k2se-re-20260902,disasm,ushort
+offset,CSWSCreature,combat_real_flag,0x000011E8,k2se-re-20260902,disasm,"byte, GetIsInCombat bOnlyCountReal"
+offset,CSWSCreature,combat_round,0x00000520,k2se-re-20260902,disasm,non-null in combat
+offset,CSWSCreature,drive_accel,0x000011EC,k2se-re-20260902,disasm,from DRIVEACCl
+offset,CSWSCreature,mode_flags,0x00001120,k2se-re-20260902,disasm,bit0 stealth
+offset,CSWSCreature,move_flags,0x00001114,k2se-re-20260902,disasm,word; bit1 cleared for Immobile
+offset,CSWSCreature,orientation,0x000000A0,k2se-re-20260902,disasm,Vector
+offset,CSWSCreature,pathfind_info,0x00000380,k2se-re-20260902,disasm,CPathfindInformation*
+offset,CSWSCreature,position,0x00000094,k2se-re-20260902,disasm,Vector
 offset,CSWSCreatureStats,CHABase,0x00F7,kpm-db,unverified,struct layout; confirm against a consuming handler
 offset,CSWSCreatureStats,CONBase,0x00F1,kpm-db,unverified,struct layout; confirm against a consuming handler
 offset,CSWSCreatureStats,ClassCount,0x008D,kpm-db,unverified,struct layout; confirm against a consuming handler
@@ -91,13 +149,75 @@ offset,CSWSCreatureStats,DEXBase,0x00EF,kpm-db,unverified,struct layout; confirm
 offset,CSWSCreatureStats,INTBase,0x00F3,kpm-db,unverified,struct layout; confirm against a consuming handler
 offset,CSWSCreatureStats,STRBase,0x00ED,kpm-db,unverified,struct layout; confirm against a consuming handler
 offset,CSWSCreatureStats,WISBase,0x00F5,kpm-db,unverified,struct layout; confirm against a consuming handler
+offset,CSWSCreatureStats,movement_rate,0x000001A4,k2se-re-20260902,disasm,creaturespeed row
+offset,CSWSCreatureStats,runrate,0x000001AC,k2se-re-20260902,disasm,float
+offset,CSWSCreatureStats,walkrate,0x000001A8,k2se-re-20260902,disasm,float
 offset,CSWSObject,AreaId,0x0090,kpm-db,unverified,struct layout; confirm against a consuming handler
 offset,CSWSObject,Orientation,0x00A0,kpm-db,unverified,struct layout; confirm against a consuming handler
 offset,CSWSObject,Position,0x0094,kpm-db,unverified,struct layout; confirm against a consuming handler
 offset,CSWVirtualMachineCommands,m_pCommands,0x000C,k2se-ghidra,runtime,the routine table pointer; byte read at both 0x00665F71 and 0x00668FE7
+offset,CTwoDimArrays,camerastyle,0x00000078,k2se-re-20260902,disasm,table pointer
 offset,CVirtualMachine,m_pInternal,0x001C,k2se-ghidra,disasm,"every stack accessor forwards through it (mov ecx,[ecx+1Ch] at 0x006FD9B0)"
 constant,CSWVirtualMachineCommands,RoutineTableAllocBytes,0x00000DB4,k2se-ghidra,runtime,"877*4; the `push 0DB4h` at 0x00665F5A, unique in the whole 6.5MB image"
 constant,CSWVirtualMachineCommands,VanillaRoutineCount,0x0000036D,k2se-ghidra,runtime,877; the dispatcher's bound at 0x00668FDC and init's at 0x00665F87
+constant,CallSite,GetAccel_1,0x00867ABC,k2se-re-20260902,disasm,E8 in GetAcceleration
+constant,CallSite,GetMaxSpeed_1,0x0086603C,k2se-re-20260902,disasm,E8 in Update; first call each frame
+constant,CallSite,GetMaxSpeed_2,0x00867336,k2se-re-20260902,disasm,E8 in Update
+constant,CallSite,GetMaxSpeed_3,0x00867AC7,k2se-re-20260902,disasm,E8 in GetAcceleration
+constant,CallSite,SetDriveSpeed_update_tail,0x00867A33,k2se-re-20260902,disasm,E8 -> 0x00776E10 at the end of Update; once per frame; redirected by movement.cpp
+constant,CallSite,SetPosition_mover_1,0x005C6E87,k2se-re-20260902,disasm,E8 in DriveMoverUpdate (free move)
+constant,CallSite,SetPosition_mover_2,0x005C6ED8,k2se-re-20260902,disasm,E8 in DriveMoverUpdate (target reached)
+constant,CallSite,SetPosition_mover_3,0x005C6F9E,k2se-re-20260902,disasm,E8 in DriveMoverUpdate (tiny move)
+constant,Const,AnimRowDiveRoll,0x00000237,k2se-re-20260902,disasm,animations.2da diveroll
+constant,Const,OverlayCodeDiveRoll,0x0000290D,k2se-re-20260902,disasm,anim code -> row 567
+constant,Const,WalkModifierFactorAddr,0x0098C014,k2se-re-20260902,disasm,"float 0.5, multiplies the input vector when walking"
 constant,Other,ObjectInvalid,0x7F000000,k2se-ghidra,disasm,"the engine's own sentinel, from GetFirstPC's default value"
+vtable,CSWCAnimBase,vtable,0x009A454C,k2se-re-20260902,disasm,"RTTI, 62 slots"
+vtable,CSWCCreature,vtable,0x0099EE14,k2se-re-20260902,disasm,"RTTI, 88 slots"
+vtable,CSWPlayerControlCamRelative,vtable,0x009A4818,k2se-re-20260902,disasm,"RTTI, 12 slots"
+vtable,CSWSCreature,vtable,0x00994F5C,k2se-re-20260902,disasm,"RTTI, 57 slots"
 vtable,CSWVirtualMachineCommands,vtable,0x009940D0,k2se-ghidra,runtime,found via the MSVC RTTI string .?AVCSWVirtualMachineCommands@@ at 0x00A0F4F8
 class,CExoString,size,0x0008,k2se-ghidra,disasm,"two dwords; confirmed twice -- the default ctor writes only +0x00 and +0x04, and StackPushString's callee does push 8 / operator new"
+vtable,Camera,vtable,0x0098C45C,k2se-re-20260902,disasm,"RTTI .?AVCamera@@, 37 slots; slot 2 ApplyProjection, slot 3 Update (fov.cpp swaps it), slot 16 SetNearFar, slot 17 SetFOV"
+function,Camera,ApplyProjection,0x0047F320,k2se-re-20260902,disasm,"vtable slot 2; the only gluPerspective caller in the exe (E8 0x0047F6D7 -> thunk 0x0093B436 -> IAT 0x00986028); fovy = [this+0x204], near +0x210, far +0x214; also derives the culling frustum from +0x204"
+function,Camera,Update,0x00480E40,k2se-re-20260902,disasm,"vtable slot 3; (float dt) ret 4; advances the FOV animation at +0x208 (0x14 bytes: duration, elapsed, from, to, easing 0..3) then 0x004E1D40(this+4, dt)"
+function,Camera,SetFOV,0x0047F190,k2se-re-20260902,disasm,"vtable slot 17; (float degrees) ret 4; writes +0x204"
+function,Camera,SetNearFar,0x0047F160,k2se-re-20260902,disasm,"vtable slot 16; (float near, float far) ret 8"
+offset,Camera,FOV,0x00000204,k2se-re-20260902,disasm,"float, vertical degrees; default 45.0 from [0x0098C274]"
+offset,Camera,FOVAnimation,0x00000208,k2se-re-20260902,disasm,"pointer to a 0x14-byte lerp state or null"
+offset,Camera,Near,0x00000210,k2se-re-20260902,disasm,"float; default 0.1"
+offset,Camera,Far,0x00000214,k2se-re-20260902,disasm,"float; default 100.0"
+constant,Camera,DefaultFOV,0x0098C274,k2se-re-20260902,disasm,"float 45.0; default far 100.0 sits at 0x0098C270"
+constant,CallSite,gluPerspective_thunk,0x0047F6D7,k2se-re-20260902,disasm,"E8 -> 0x0093B436 (jmp [IAT 0x00986028]); the single gluPerspective call"
+vtable,CSWBehaviorCamera,vtable,0x009A1F94,k2se-re-20260902,disasm,"RTTI .?AVCSWBehaviorCamera@@, 8 slots; the game's chase camera object, holder of the camerastyle.2da values"
+function,CSWBehaviorCamera,ctor,0x007DD380,k2se-re-20260902,disasm,"stores vtable 0x009A1F94 at 0x007DD3C3; loads the area style through 0x007E1BD0 at 0x007DD5D7"
+function,CSWBehaviorCamera,LoadCameraStyle,0x007E1CA0,k2se-re-20260902,disasm,"(int row) ret 4; camerastyle.2da DISTANCE->+0x16C SPEED->+0x170 PITCH->+0x178 HEIGHT->+0x17C TILTSPEED->+0x190; row->+0x5C; distance copy->+0x88; VIEWANGLE->+0x8C and Camera::SetFOV via [this+0x1C]->vtable[1](). camera.cpp redirects its 3 call sites"
+function,CSWBehaviorCamera,LoadAreaCameraStyle,0x007E1BD0,k2se-re-20260902,disasm,"wrapper: row = clientApp->0x0073F430()->+0x48->+0xB8 (the area's CameraStyle field)"
+function,CSWBehaviorCamera,ApplyPendingStyle,0x007DE740,k2se-re-20260902,disasm,"reloads the style from global 0x00A108F8 when it is not -1, then resets it (script SetCameraStyle path)"
+function,CSWBehaviorCamera,SetupFromDefinition,0x007DDA10,k2se-re-20260902,disasm,"copies a camera definition (+0x10 style row, +0x14, +0x18) then LoadCameraStyle at 0x007DDC52"
+offset,CSWBehaviorCamera,Distance,0x0000016C,k2se-re-20260902,disasm,"float; read by the chase placement at 0x007E0D25, 0x007E22EF, 0x007E23D2; written by camera.cpp presets"
+offset,CSWBehaviorCamera,Speed,0x00000170,k2se-re-20260902,disasm,float
+offset,CSWBehaviorCamera,Pitch,0x00000178,k2se-re-20260902,disasm,"float degrees; read at 0x007DD644, 0x007DDD72, 0x007DE199, 0x007DE83A"
+offset,CSWBehaviorCamera,Height,0x0000017C,k2se-re-20260902,disasm,"float; read at 0x007E152B, 0x007E2339, 0x007E2492"
+offset,CSWBehaviorCamera,TiltSpeed,0x00000190,k2se-re-20260902,disasm,float
+offset,CSWBehaviorCamera,StyleRow,0x0000005C,k2se-re-20260902,disasm,"int; -1 before the first load"
+offset,CSWBehaviorCamera,DistanceCopy,0x00000088,k2se-re-20260902,disasm,"float = distance at load time; read at 0x007DE26C"
+offset,CSWBehaviorCamera,ViewAngle,0x0000008C,k2se-re-20260902,disasm,"float; the FOV handed to Camera::SetFOV (55 for DEFAULT, 60 EbonHawk)"
+offset,CSWBehaviorCamera,AuroraCameraHolder,0x0000001C,k2se-re-20260902,disasm,"pointer; its vtable[1]() returns the Aurora Camera"
+global,,PendingCameraStyleRow,0x00A108F8,k2se-re-20260902,disasm,"int; -1 = none; consumed by CSWBehaviorCamera::ApplyPendingStyle"
+constant,CallSite,LoadCameraStyle_1,0x007E1C0B,k2se-re-20260902,disasm,"E8 in the wrapper 0x007E1BD0; redirected by camera.cpp"
+constant,CallSite,LoadCameraStyle_2,0x007DDC52,k2se-re-20260902,disasm,"E8 in SetupFromDefinition; redirected by camera.cpp"
+constant,CallSite,LoadCameraStyle_3,0x007DE7D6,k2se-re-20260902,disasm,"E8 in ApplyPendingStyle; redirected by camera.cpp"
+function,CSWSCreature,LoadAppearance,0x0057FCE0,k2se-re-20260902,disasm,"thiscall (int) ret 4; reads the appearance.2da row from word [this+0x1184]; four E8 callers, all redirected by npcvariety.cpp"
+function,CSWSCreature,SetAppearanceType,0x00585120,k2se-re-20260902,disasm,"ret 16; writes +0x1184 at 0x005851D1/0x00585208 then LoadAppearance at 0x00585241; 10 callers incl. the script command handler 0x0066B7EF and the GUI 0x0085D5xx"
+function,CSWSCreature,SetAppearanceVariant,0x00585310,k2se-re-20260902,disasm,"ret 4; writes +0x1184 at 0x00585364 then LoadAppearance at 0x0058536E; callers 0x005A4C85, 0x005A4D5F"
+function,CSWSCreature,CreateFromTemplate,0x00576750,k2se-re-20260902,disasm,"ret 8; LoadAppearance at 0x00576AAF; callers 0x00572F58, 0x005744CC, 0x00630E17, 0x00631500 (name is a hypothesis)"
+function,CSWSCreature,LoadFromGFF_A,0x006AFED0,k2se-re-20260902,disasm,"UTC/save reader: FirstName..Appearance_Type, Appearance_Head (no TextureVar for creatures)"
+function,CSWSCreature,LoadFromGFF_B,0x006B3D10,k2se-re-20260902,disasm,"second creature GFF reader, 78 fields, Appearance_Type at 0x006B4B0C"
+function,Other,LoadAppearanceCaller_65A170,0x0065A170,k2se-re-20260902,disasm,"ret 8; LoadAppearance at 0x0065A9DD; single caller 0x0065FD17"
+offset,CSWSCreature,AppearanceRow,0x00001184,k2se-re-20260902,disasm,"uint16 appearance.2da row; the only 16-bit stores are in SetAppearanceType/Variant"
+constant,CallSite,LoadAppearance_1,0x00576AAF,k2se-re-20260902,disasm,"E8 in CreateFromTemplate; redirected by npcvariety.cpp"
+constant,CallSite,LoadAppearance_2,0x00585241,k2se-re-20260902,disasm,"E8 in SetAppearanceType; redirected by npcvariety.cpp"
+constant,CallSite,LoadAppearance_3,0x0058536E,k2se-re-20260902,disasm,"E8 in SetAppearanceVariant; redirected by npcvariety.cpp"
+constant,CallSite,LoadAppearance_4,0x0065A9DD,k2se-re-20260902,disasm,"E8 in 0x0065A170; redirected by npcvariety.cpp"
+constant,CVirtualMachine,RunScript_ret,0x0000000C,k2se-re-20260902,disasm,"RunScript(CExoString* name, uint32 objectId, int flag) pops 12 bytes; used by spawner.cpp"

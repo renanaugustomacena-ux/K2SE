@@ -18,7 +18,11 @@ GAME = r"G:\SteamLibrary\steamapps\common\Knights of the Old Republic II"
 KEY = os.path.join(GAME, "chitin.key")
 
 TYPES = {"nss": 2009, "ncs": 2010, "are": 2012, "git": 2023, "utc": 2027, "ifo": 2014,
-         "dlg": 2029, "2da": 2017}
+         "dlg": 2029, "2da": 2017,
+         # added 2026-09-02 for the movement/collision work: models, walkmeshes, layouts, GUI
+         "mdl": 2002, "mdx": 3008, "wok": 2016, "pwk": 3009, "dwk": 3010, "lyt": 3000,
+         "vis": 3001, "txi": 2022, "tpc": 3007, "gui": 2047, "utp": 2044, "utd": 2042,
+         "tlk": 2018}
 
 
 def read_key(path=KEY):

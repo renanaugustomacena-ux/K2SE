@@ -63,6 +63,7 @@ Push-Location $outDir
 $sources = @(
     "dllmain.cpp", "log.cpp", "fingerprint.cpp", "vm.cpp", "routines.cpp",
     "vmstack.cpp", "exostring.cpp", "gameobj.cpp", "glhook.cpp",
+    "config.cpp", "input.cpp", "callsite.cpp", "player.cpp", "anim.cpp", "movement.cpp", "fov.cpp", "camera.cpp", "spawner.cpp", "npcvariety.cpp",
     "proxy_version_generated.cpp"
 ) | ForEach-Object { Join-Path $root "src\$_" }
 
@@ -71,7 +72,7 @@ $cflags = @(
     "/nologo", "/c", "/W4", "/MT", "/GS-", "/std:c++17", "/permissive-", "/EHsc"
 ) + $opt + @(
     "/DWIN32_LEAN_AND_MEAN", "/DNOMINMAX", "/D_CRT_SECURE_NO_WARNINGS",
-    "/DK2SE_VERSION_MAJOR=0", "/DK2SE_VERSION_MINOR=1", "/DK2SE_VERSION_PATCH=0",
+    "/DK2SE_VERSION_MAJOR=0", "/DK2SE_VERSION_MINOR=2", "/DK2SE_VERSION_PATCH=0",
     "/I", (Join-Path $root "src")
 )
 

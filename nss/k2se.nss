@@ -143,3 +143,61 @@ int K2SE_SetFogColor(float fRed, float fGreen, float fBlue);
 //       // ... K2SE-only calls here ...
 //   }
 // -----------------------------------------------------------------------------
+
+// =============================================================================
+// Movement (K2 Jump / Crouch / Sprint) -- routines 889..893.
+//
+// The features run on the player controller's own frame and are configured by
+// k2se_movement.ini next to swkotor2.exe. These routines only expose state and
+// requests. Every one returns quietly (0) when the ini is absent.
+// =============================================================================
+
+// Bit flags: 1 installed, 2 sprinting, 4 crouching, 8 airborne, 16 rolling,
+// 32 sprint enabled, 64 crouch enabled, 128 jump enabled, 256 roll enabled.
+int K2SE_GetMovementStatus();
+
+// Session override of [Sprint] Factor. fFactor <= 0.0 restores the ini value.
+// Returns the status flags.
+int K2SE_SetSprintFactor(float fFactor);
+
+// Puts the player into (TRUE) or out of (FALSE) the crouch posture. Returns
+// TRUE if the crouch feature is installed.
+int K2SE_SetCrouch(int bOn);
+
+// Requests a jump / a roll on the next controller frame, exactly as if the key
+// had been pressed. The same rules apply (combat, stealth, cooldown). Returns
+// TRUE if the feature is installed.
+int K2SE_Jump();
+int K2SE_Roll();
+
+// Multi-FOV (k2-multi-fov) -- routines 894..895.
+// Vertical field of view in degrees for the scene camera (the game's own is 45).
+// K2SE_SetFOV(0.0, 0.0) clears the override; fSeconds <= 0.0 keeps the ini
+// smoothing. Dialogue, GUI and minigame cameras are never touched. Returns TRUE
+// if the FOV module is installed. K2SE_GetFOV returns the value K2SE currently
+// applies (or the game's own when the module is inactive).
+int K2SE_SetFOV(float fDegrees, float fSeconds);
+float K2SE_GetFOV();
+
+// Camera views -- routines 896..897. nView: 0 = the game's own camera style,
+// 1 = near, 2 = far, 3 = first person (chase camera at eye height, movement
+// keeps working, unlike the game's free look). Returns TRUE if installed;
+// K2SE_GetCameraView returns the active view or -1 when the feature is off.
+int K2SE_SetCameraView(int nView);
+int K2SE_GetCameraView();
+
+// Spawner -- routines 898..907, the data side of k2se_spawn.nss (see that
+// script). Entries come from <game>\k2se_spawns\<MODULE>.ini. Indices are 1-based.
+int K2SE_SpawnBegin(string sModule, string sAreaTag);   // loads the module file, returns the entry count
+int K2SE_SpawnMarkPresent(int nIndex);                  // an object stamped with this index exists already
+int K2SE_SpawnNeeded(int nIndex);                       // TRUE when the entry belongs here and is missing
+int K2SE_SpawnType(int nIndex);                         // OBJECT_TYPE_PLACEABLE or OBJECT_TYPE_CREATURE
+string K2SE_SpawnTemplate(int nIndex);                  // UTP / UTC resref
+float K2SE_SpawnX(int nIndex);
+float K2SE_SpawnY(int nIndex);
+float K2SE_SpawnZ(int nIndex);
+float K2SE_SpawnFacing(int nIndex);                     // degrees
+int K2SE_SpawnReport(int nIndex, int bCreated);         // tell K2SE (and its log) how CreateObject went
+
+// NPC variety -- routine 908. Bit 0 = installed, bits 8+ = appearance swaps so far.
+int K2SE_GetVarietyStatus();

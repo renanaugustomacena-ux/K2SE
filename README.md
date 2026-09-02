@@ -175,6 +175,28 @@ La nebbia si accende solo se esiste un file `k2se_fog.txt` accanto
 all'eseguibile: è l'unica parte di K2SE che gira sul thread di rendering, e non
 ha il diritto di destabilizzare una DLL che funziona.
 
+## Movimento (K2 Jump / Crouch / Sprint) — 0.2.0, non ancora provato in gioco
+
+Cinque moduli nuovi (`config`, `input`, `callsite`, `player`, `anim`, `movement`) e cinque
+routine (889–893). Tutto è **spento** senza `k2se_movement.ini` accanto all'exe; con il
+file, la DLL ridirige i call-site di `GetMaxSpeed` (sprint, ×fattore quando tieni Shift),
+riafferma il bit stealth del client per il **crouch** (C), riproduce `diveroll` come
+overlay per il **roll** (Alt) e, per il **salto** (Space), intercetta le tre chiamate a
+`CSWSObject::SetPosition` dentro il mover del server per alzare la Z lungo una parabola
+(v0: salto sul posto/in corsa, atterraggio dove l'engine riporta la quota).
+
+```
+python tools/deploy_movement.py --status                 cosa c'e' installato, conflitti tasti
+python tools/deploy_movement.py --remap-keys             libera Space e C in swkotor2.ini (backup)
+python tools/deploy_movement.py --install --enable sprint          sessione S1
+python tools/deploy_movement.py --install --enable sprint,roll,jump --banner
+python tools/deploy_movement.py --clean                  DLL precedente, ini rimosso
+```
+
+Niente di questo è stato ancora osservato in una partita: gli indirizzi sono verificati
+sul binario (`verify_offsets.py`), le ipotesi da chiudere in gioco sono elencate in
+`docs/session-2026-09-02-movement-re.md`. Piano e checklist: `../PIANO-DAZIONE-2026-09-02.md`.
+
 ## La tabella degli indirizzi
 
 `data/k2se_addresses.csv` — 102 indirizzi, ognuno con **provenienza** e **come è

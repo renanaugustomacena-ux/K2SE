@@ -6353,3 +6353,43 @@ int K2SE_SetFogRange(float fStart, float fEnd);
 int K2SE_SetFogColor(float fRed, float fGreen, float fBlue);
 // 888:
 int K2SE_GetFogStatus();
+// 889:
+int K2SE_GetMovementStatus();
+// 890:
+int K2SE_SetSprintFactor(float fFactor);
+// 891:
+int K2SE_SetCrouch(int bOn);
+// 892:
+int K2SE_Jump();
+// 893:
+int K2SE_Roll();
+// 894:
+int K2SE_SetFOV(float fDegrees, float fSeconds);
+// 895:
+float K2SE_GetFOV();
+// 896:
+int K2SE_SetCameraView(int nView);
+// 897:
+int K2SE_GetCameraView();
+// 898:
+int K2SE_SpawnBegin(string sModule, string sAreaTag);
+// 899:
+int K2SE_SpawnMarkPresent(int nIndex);
+// 900:
+int K2SE_SpawnNeeded(int nIndex);
+// 901:
+int K2SE_SpawnType(int nIndex);
+// 902:
+string K2SE_SpawnTemplate(int nIndex);
+// 903:
+float K2SE_SpawnX(int nIndex);
+// 904:
+float K2SE_SpawnY(int nIndex);
+// 905:
+float K2SE_SpawnZ(int nIndex);
+// 906:
+float K2SE_SpawnFacing(int nIndex);
+// 907:
+int K2SE_SpawnReport(int nIndex, int bCreated);
+// 908:
+int K2SE_GetVarietyStatus();

@@ -29,3 +29,6 @@ tools/nwnnsscomp/
 
 # Track D scratch output -- regenerate with tools/export_to_kpm.py
 out/kpm-contribution/
+
+# working backups of the address database
+data/*.bak-*

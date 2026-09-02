@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.21)
 # CMP0091: let CMAKE_MSVC_RUNTIME_LIBRARY select the CRT (needed for a static CRT).
 cmake_policy(SET CMP0091 NEW)
 
-project(K2SE VERSION 0.1.0 LANGUAGES CXX)
+project(K2SE VERSION 0.2.0 LANGUAGES CXX)
 
 # --- hard 32-bit gate -------------------------------------------------------
 # swkotor2.exe is a 32-bit process. A 64-bit build would silently produce a DLL
@@ -42,6 +42,16 @@ add_library(k2se SHARED
     src/exostring.cpp
     src/gameobj.cpp
     src/glhook.cpp
+    src/config.cpp
+    src/input.cpp
+    src/callsite.cpp
+    src/player.cpp
+    src/anim.cpp
+    src/movement.cpp
+    src/fov.cpp
+    src/camera.cpp
+    src/spawner.cpp
+    src/npcvariety.cpp
     "${GENERATED_PROXY}"
 )
 

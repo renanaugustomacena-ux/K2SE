@@ -1,8 +1,14 @@
 #include <windows.h>
 
+#include "config.h"
 #include "fingerprint.h"
 #include "glhook.h"
 #include "log.h"
+#include "movement.h"
+#include "fov.h"
+#include "camera.h"
+#include "spawner.h"
+#include "npcvariety.h"
 #include "offsets.h"
 #include "routines.h"
 #include "vm.h"
@@ -43,10 +49,28 @@ void OnAttach(HMODULE self) {
         k2se::log::Write("K2SE_LOAD_OK");
     } else {
         k2se::log::Writef("K2SE_LOAD_REFUSED: hook installation failed");
+        return;
     }
+
+    // Movement features (K2 Jump / Crouch / Sprint). Entirely driven by
+    // k2se_movement.ini next to the exe: no file, no redirected call sites.
+    // Installed last, after the VM hook is in, so a refusal here leaves a fully
+    // working K2SE 0.1 behind it.
+    k2se::config::Load();
+    k2se::config::LogAll();
+    k2se::movement::Install();
+    k2se::fov::Install();
+    k2se::camera::Install();
+    k2se::spawner::Install();
+    k2se::npcvariety::Install();
 }
 
 void OnDetach() {
+    k2se::npcvariety::Remove();
+    k2se::spawner::Remove();
+    k2se::camera::Remove();
+    k2se::fov::Remove();
+    k2se::movement::Remove();
     k2se::glhook::Remove();
     k2se::vm::RemoveHook();
     k2se::log::Shutdown();

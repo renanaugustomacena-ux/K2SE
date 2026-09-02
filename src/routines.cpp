@@ -8,6 +8,11 @@
 #include "gameobj.h"
 #include "glhook.h"
 #include "log.h"
+#include "movement.h"
+#include "fov.h"
+#include "camera.h"
+#include "spawner.h"
+#include "npcvariety.h"
 #include "offsets.h"
 #include "vm.h"
 #include "vmstack.h"
@@ -380,6 +385,208 @@ int H_GetFogStatus(int /*nParams*/) {
     return 0;
 }
 
+// --- movement (K2 Jump / Crouch / Sprint) -------------------------------------
+// 889..893. Thin shells over movement.cpp; the features themselves run on the
+// player controller's frame, these only expose state and requests to scripts.
+
+// 889: int K2SE_GetMovementStatus()
+// Bit flags (movement.h StatusBits): 1 installed, 2 sprinting, 4 crouching,
+// 8 airborne, 16 rolling, 32/64/128/256 sprint/crouch/jump/roll enabled.
+int H_GetMovementStatus(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    if (!PushInt(movement::Status())) return off::kErrPushFailed;
+#endif
+    return 0;
+}
+
+// 890: int K2SE_SetSprintFactor(float fFactor)
+// Overrides the ini factor for this session (<= 0 restores the ini value).
+int H_SetSprintFactor(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    float factor = 0.0f;
+    if (!PopFloat(&factor)) return off::kErrParam;
+    movement::SetSprintFactor(factor);
+    if (!PushInt(movement::Status())) return off::kErrPushFailed;
+#endif
+    return 0;
+}
+
+// 891: int K2SE_SetCrouch(int bOn)
+int H_SetCrouch(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    int on = 0;
+    if (!PopInt(&on)) return off::kErrParam;
+    if (!PushInt(movement::SetCrouch(on != 0) ? 1 : 0)) return off::kErrPushFailed;
+#endif
+    return 0;
+}
+
+// 892: int K2SE_Jump()
+int H_Jump(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    if (!PushInt(movement::RequestJump() ? 1 : 0)) return off::kErrPushFailed;
+#endif
+    return 0;
+}
+
+// 893: int K2SE_Roll()
+int H_Roll(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    if (!PushInt(movement::RequestRoll() ? 1 : 0)) return off::kErrPushFailed;
+#endif
+    return 0;
+}
+
+// 894: int K2SE_SetFOV(float fDegrees, float fSeconds)
+// Vertical FOV override for the scene camera (k2-multi-fov); fDegrees <= 0.0
+// clears it, fSeconds <= 0.0 keeps the ini smoothing. Only acts in gameplay
+// frames, never on dialogue or GUI cameras. TRUE if the FOV module is installed.
+int H_SetFOV(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    float degrees = 0.0f, seconds = 0.0f;
+    if (!PopFloat(&degrees)) return off::kErrParam;
+    if (!PopFloat(&seconds)) return off::kErrParam;
+    if (!PushInt(fov::SetOverride(degrees, seconds) ? 1 : 0)) return off::kErrPushFailed;
+#endif
+    return 0;
+}
+
+// 895: float K2SE_GetFOV()
+int H_GetFOV(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    if (!PushFloat(fov::Current())) return off::kErrPushFailed;
+#endif
+    return 0;
+}
+
+// 896: int K2SE_SetCameraView(int nView)   0 game style, 1 near, 2 far, 3 first person
+int H_SetCameraView(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    int view = 0;
+    if (!PopInt(&view)) return off::kErrParam;
+    if (!PushInt(camera::SetView(view) ? 1 : 0)) return off::kErrPushFailed;
+#endif
+    return 0;
+}
+
+// 897: int K2SE_GetCameraView()   -1 when camera views are not installed
+int H_GetCameraView(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    if (!PushInt(camera::GetView())) return off::kErrPushFailed;
+#endif
+    return 0;
+}
+
+// --- spawner, routines 898..907: the data side of k2se_spawn.nss ---------------
+// 898: int K2SE_SpawnBegin(string sModule, string sAreaTag)  -> entry count
+int H_SpawnBegin(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    ExoString module, area;
+    if (!module.valid() || !area.valid()) return off::kErrParam;
+    if (!PopString(&module)) return off::kErrParam;
+    if (!PopString(&area)) return off::kErrParam;
+    if (!PushInt(spawner::Begin(module.c_str(), area.c_str()))) return off::kErrPushFailed;
+#endif
+    return 0;
+}
+
+int PopIndexPushInt(int (*fn)(int)) {
+    int index = 0;
+    if (!PopInt(&index)) return off::kErrParam;
+    if (!PushInt(fn(index))) return off::kErrPushFailed;
+    return 0;
+}
+int PopIndexPushFloat(float (*fn)(int)) {
+    int index = 0;
+    if (!PopInt(&index)) return off::kErrParam;
+    if (!PushFloat(fn(index))) return off::kErrPushFailed;
+    return 0;
+}
+int MarkPresentInt(int i) { return spawner::MarkPresent(i) ? 1 : 0; }
+int NeededInt(int i) { return spawner::Needed(i) ? 1 : 0; }
+
+// 899: int K2SE_SpawnMarkPresent(int nIndex)
+int H_SpawnMarkPresent(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    return PopIndexPushInt(&MarkPresentInt);
+#else
+    return 0;
+#endif
+}
+// 900: int K2SE_SpawnNeeded(int nIndex)
+int H_SpawnNeeded(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    return PopIndexPushInt(&NeededInt);
+#else
+    return 0;
+#endif
+}
+// 901: int K2SE_SpawnType(int nIndex)   OBJECT_TYPE_PLACEABLE (64) or OBJECT_TYPE_CREATURE (1)
+int H_SpawnType(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    return PopIndexPushInt(&spawner::Type);
+#else
+    return 0;
+#endif
+}
+// 902: string K2SE_SpawnTemplate(int nIndex)
+int H_SpawnTemplate(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    int index = 0;
+    if (!PopInt(&index)) return off::kErrParam;
+    ExoString value(spawner::Template(index));
+    if (!value.valid()) return off::kErrParam;
+    if (!PushString(&value)) return off::kErrPushFailed;
+#endif
+    return 0;
+}
+// 903..906: float K2SE_SpawnX/Y/Z/Facing(int nIndex)
+int H_SpawnX(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    return PopIndexPushFloat(&spawner::X);
+#else
+    return 0;
+#endif
+}
+int H_SpawnY(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    return PopIndexPushFloat(&spawner::Y);
+#else
+    return 0;
+#endif
+}
+int H_SpawnZ(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    return PopIndexPushFloat(&spawner::Z);
+#else
+    return 0;
+#endif
+}
+int H_SpawnFacing(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    return PopIndexPushFloat(&spawner::Facing);
+#else
+    return 0;
+#endif
+}
+// 907: int K2SE_SpawnReport(int nIndex, int bCreated)
+int H_SpawnReport(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    int index = 0, ok = 0;
+    if (!PopInt(&index)) return off::kErrParam;
+    if (!PopInt(&ok)) return off::kErrParam;
+    if (!PushInt(spawner::Report(index, ok != 0) ? 1 : 0)) return off::kErrPushFailed;
+#endif
+    return 0;
+}
+// 908: int K2SE_GetVarietyStatus()
+int H_GetVarietyStatus(int /*nParams*/) {
+#if K2SE_ENABLE_STACK_ABI
+    if (!PushInt(npcvariety::Status())) return off::kErrPushFailed;
+#endif
+    return 0;
+}
+
 struct Extended {
     int id;
     const char* name;
@@ -403,6 +610,26 @@ constexpr Extended kExtended[] = {
     {886, "K2SE_SetFogRange", 2, &H_SetFogRange},
     {887, "K2SE_SetFogColor", 3, &H_SetFogColor},
     {888, "K2SE_GetFogStatus", 0, &H_GetFogStatus},
+    {889, "K2SE_GetMovementStatus", 0, &H_GetMovementStatus},
+    {890, "K2SE_SetSprintFactor", 1, &H_SetSprintFactor},
+    {891, "K2SE_SetCrouch", 1, &H_SetCrouch},
+    {892, "K2SE_Jump", 0, &H_Jump},
+    {893, "K2SE_Roll", 0, &H_Roll},
+    {894, "K2SE_SetFOV", 2, &H_SetFOV},
+    {895, "K2SE_GetFOV", 0, &H_GetFOV},
+    {896, "K2SE_SetCameraView", 1, &H_SetCameraView},
+    {897, "K2SE_GetCameraView", 0, &H_GetCameraView},
+    {898, "K2SE_SpawnBegin", 2, &H_SpawnBegin},
+    {899, "K2SE_SpawnMarkPresent", 1, &H_SpawnMarkPresent},
+    {900, "K2SE_SpawnNeeded", 1, &H_SpawnNeeded},
+    {901, "K2SE_SpawnType", 1, &H_SpawnType},
+    {902, "K2SE_SpawnTemplate", 1, &H_SpawnTemplate},
+    {903, "K2SE_SpawnX", 1, &H_SpawnX},
+    {904, "K2SE_SpawnY", 1, &H_SpawnY},
+    {905, "K2SE_SpawnZ", 1, &H_SpawnZ},
+    {906, "K2SE_SpawnFacing", 1, &H_SpawnFacing},
+    {907, "K2SE_SpawnReport", 2, &H_SpawnReport},
+    {908, "K2SE_GetVarietyStatus", 0, &H_GetVarietyStatus},
 };
 constexpr int kExtendedCount = static_cast<int>(sizeof(kExtended) / sizeof(kExtended[0]));
 
