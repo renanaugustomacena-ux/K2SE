@@ -57,19 +57,28 @@ constexpr uint32_t kCSWBehaviorCamera_SetupFromDefinition = 0x007DDA10;  // disa
 constexpr uint32_t kCSWBehaviorCamera_ctor                = 0x007DD380;  // disasm -- stores vtable 0x009A1F94 at 0x007DD3C3; loads the area style through 0x007E1BD0 at 0x007DD5D7
 
 // CSWCAnimBase
+constexpr uint32_t kCSWCAnimBase_GetModel    = 0x00861690;  // disasm -- vtable slot +0x98; (uint8 equipSlot, int flag); returns null unless [this+0xB8] is set and slot==0xFF
 constexpr uint32_t kCSWCAnimBase_MapAnimCode = 0x00863650;  // disasm -- vtable +0xE0; (uint16 code) -> animations.2da row (0x290D -> 567)
 constexpr uint32_t kCSWCAnimBase_PlayRow     = 0x00860280;  // disasm -- vtable +0x44; (uint16 row, int flag) ret 8 -> 0x008602C0(model, row, flag)
 
+// CSWCAppearance
+constexpr uint32_t kCSWCAppearance_CameraHookNode = 0x0085D260;  // disasm -- thiscall no args ret 0; model=[this+0x3C]->vt[0x98](0xFF,1); node=model->vt[0x10C](CAMERAHOOK); returns node->vt[0x18]() or the model. Class name is a hypothesis -- it is the object at CSWCCreature+0x224
+
 // CSWCCreature
-constexpr uint32_t kCSWCCreature_GetAnimBase   = 0x007ED830;  // callsite -- called by PlayOverlayAnimation handler 0x0068F440; returns CSWCAnimBase*
-constexpr uint32_t kCSWCCreature_GetDriveAccel = 0x0077F600;  // disasm -- appearance+0x58, or const when stealthed without FEAT_STEALTH_RUN
-constexpr uint32_t kCSWCCreature_SetDriveSpeed = 0x00776E10;  // disasm -- ret 8: writes +0x3C8 speed, +0x3CC
+constexpr uint32_t kCSWCCreature_GetAnimBase       = 0x007ED830;  // callsite -- called by PlayOverlayAnimation handler 0x0068F440; returns CSWCAnimBase*
+constexpr uint32_t kCSWCCreature_GetCameraHookNode = 0x00775930;  // disasm -- vtable slot +0xD0; thiscall no args; forwards to 0x0085D260 on [this+0x224]
+constexpr uint32_t kCSWCCreature_GetDriveAccel     = 0x0077F600;  // disasm -- appearance+0x58, or const when stealthed without FEAT_STEALTH_RUN
+constexpr uint32_t kCSWCCreature_GetModel          = 0x007747D0;  // disasm -- vtable slot +0x98; (uint8 equipSlot, int flag); 0xFF selects the body model; guards on [this+0x68] and [this+0x328]
+constexpr uint32_t kCSWCCreature_SetDriveSpeed     = 0x00776E10;  // disasm -- ret 8: writes +0x3C8 speed, +0x3CC
 
 // CSWCMessage
 constexpr uint32_t kCSWCMessage_HandleServerToClientCreatureUpdate = 0x008079B0;  // disasm -- 3537 instructions; rewrites the client flag block +0x2E8..+0x2F4 (stealth bit at 0x00809E01)
 
 // CSWCObject
 constexpr uint32_t kCSWCObject_GetServerObject = 0x0077D800;  // disasm -- via 0x007F2540 then vtable+0x30
+
+// CSWCameraFreeLook
+constexpr uint32_t kCSWCameraFreeLook_Update = 0x007E2AA0;  // disasm -- vtable slot 2; (float dt) ret 4; asks [this+0x14]->vt[0x98](name,&pos,&ori) for FreeLookHook then CameraHook (nonzero = found), then feeds the position to [this+0x10]->vt[0x5C]
 
 // CSWInventory
 constexpr uint32_t kCSWInventory_GetItemInSlot = 0x006D0620;  // prologue
@@ -240,7 +249,11 @@ constexpr uint32_t kOff_CSWBehaviorCamera_StyleRow           = 0x0000005C;  // d
 constexpr uint32_t kOff_CSWBehaviorCamera_TiltSpeed          = 0x00000190;  // disasm -- float
 constexpr uint32_t kOff_CSWBehaviorCamera_ViewAngle          = 0x0000008C;  // disasm -- float; the FOV handed to Camera::SetFOV (55 for DEFAULT, 60 EbonHawk)
 
+// CSWCAppearance
+constexpr uint32_t kOff_CSWCAppearance_AnimBase = 0x0000003C;  // disasm -- pointer to the CSWCAnimBase whose vtable[0x98] returns the Aurora model
+
 // CSWCCreature
+constexpr uint32_t kOff_CSWCCreature_Appearance  = 0x00000224;  // disasm -- pointer; player.cpp already resolves it; its CameraHookNode (0x0085D260) reaches the model
 constexpr uint32_t kOff_CSWCCreature_Running     = 0x03F8;  // unverified -- struct layout; confirm against a consuming handler
 constexpr uint32_t kOff_CSWCCreature_appearance  = 0x00000224;  // disasm -- CSWCCreatureAppearance*
 constexpr uint32_t kOff_CSWCCreature_drive_speed = 0x000003C8;  // disasm -- float
@@ -251,6 +264,10 @@ constexpr uint32_t kOff_CSWCCreature_running     = 0x000003F8;  // disasm -- byt
 constexpr uint32_t kOff_CSWCCreatureAppearance_drive_accel     = 0x00000058;  // disasm
 constexpr uint32_t kOff_CSWCCreatureAppearance_drive_max_speed = 0x0000005C;  // disasm
 constexpr uint32_t kOff_CSWCCreatureAppearance_stealth_speed   = 0x00000060;  // disasm -- name is a hypothesis
+
+// CSWCameraFreeLook
+constexpr uint32_t kOff_CSWCameraFreeLook_Camera = 0x00000010;  // disasm -- pointer; receives the hook position through vtable slot 0x5C
+constexpr uint32_t kOff_CSWCameraFreeLook_Model  = 0x00000014;  // disasm -- pointer; the object queried for node position+orientation by name via vtable slot 0x98
 
 // CSWPlayerControlCamRelative
 constexpr uint32_t kOff_CSWPlayerControlCamRelative_camera     = 0x00000008;  // disasm
@@ -345,11 +362,20 @@ constexpr uint32_t kConst_AnimRowDiveRoll        = 0x00000237;  // disasm -- ani
 constexpr uint32_t kConst_OverlayCodeDiveRoll    = 0x0000290D;  // disasm -- anim code -> row 567
 constexpr uint32_t kConst_WalkModifierFactorAddr = 0x0098C014;  // disasm -- float 0.5, multiplies the input vector when walking
 
+// NodeName
+constexpr uint32_t kNodeName_CameraHook      = 0x009A2078;  // disasm -- the string CameraHook; second name CSWCameraFreeLook::Update tries
+constexpr uint32_t kNodeName_CameraHookUpper = 0x0099F178;  // disasm -- the string CAMERAHOOK; spelling used by CSWCAppearance::CameraHookNode
+constexpr uint32_t kNodeName_FreeLookHook    = 0x009A2084;  // disasm -- the string FreeLookHook; first name CSWCameraFreeLook::Update tries
+constexpr uint32_t kNodeName_HeadHookUpper   = 0x0099EF88;  // disasm -- the string HEADHOOK; where the head model attaches to the body
+
 // Other
 constexpr uint32_t kOther_ObjectInvalid = 0x7F000000;  // disasm -- the engine's own sentinel, from GetFirstPC's default value
 
 // --- vtables -----------------------------------------------------
 // virtual function table addresses
+
+// CAuroraModel
+constexpr uint32_t kVtable_CAuroraModel = 0x009B9568;  // disasm -- RTTI .?AVCAuroraModel@@; the model object returned by GetModel
 
 // CSWBehaviorCamera
 constexpr uint32_t kVtable_CSWBehaviorCamera = 0x009A1F94;  // disasm -- RTTI .?AVCSWBehaviorCamera@@, 8 slots; the game's chase camera object, holder of the camerastyle.2da values
@@ -358,7 +384,10 @@ constexpr uint32_t kVtable_CSWBehaviorCamera = 0x009A1F94;  // disasm -- RTTI .?
 constexpr uint32_t kVtable_CSWCAnimBase = 0x009A454C;  // disasm -- RTTI, 62 slots
 
 // CSWCCreature
-constexpr uint32_t kVtable_CSWCCreature = 0x0099EE14;  // disasm -- RTTI, 88 slots
+constexpr uint32_t kVtable_CSWCCreature = 0x0099EE14;  // disasm -- RTTI .?AVCSWCCreature@@; slot +0x98 GetModel(uint8,int), slot +0xD0 GetCameraHookNode
+
+// CSWCameraFreeLook
+constexpr uint32_t kVtable_CSWCameraFreeLook = 0x009A2034;  // disasm -- RTTI .?AVCSWCameraFreeLook@@; 8 slots; ctor writes base vtable 0x009A1F94 first then this one (0x007E2519/0x007E2712/0x007E2A4D); slot 2 = Update(float)
 
 // CSWPlayerControlCamRelative
 constexpr uint32_t kVtable_CSWPlayerControlCamRelative = 0x009A4818;  // disasm -- RTTI, 12 slots
