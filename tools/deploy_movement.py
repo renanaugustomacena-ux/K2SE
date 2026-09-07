@@ -1,6 +1,9 @@
 """Install the K2SE build with the movement features (K2 Jump / Crouch / Sprint).
 
     python tools/deploy_movement.py --install [--enable sprint,crouch,jump,roll] [--banner]
+
+`firstperson` needs `camera` too: it only takes effect in the camera module's
+first-person view (cycled with N).
     python tools/deploy_movement.py --remap-keys      print the in-game rebinding steps (ini edits are reverted by the game)
     python tools/deploy_movement.py --restore-keys    put the [Keymapping] backup back
     python tools/deploy_movement.py --clean           previous DLL back, ini removed
@@ -31,9 +34,11 @@ INI_TEMPLATE = os.path.join(ROOT, "data", "k2se_movement.ini")
 DEPLOYED_INI = os.path.join(GAME, "k2se_movement.ini")
 SWKOTOR_INI = os.path.join(GAME, "swkotor2.ini")
 
-FEATURES = ("sprint", "crouch", "jump", "roll", "directional", "fov", "camera", "spawner", "npcvariety")
+FEATURES = ("sprint", "crouch", "jump", "roll", "directional", "fov", "camera", "firstperson",
+            "spawner", "npcvariety")
 SECTION_OF = {"sprint": "Sprint", "crouch": "Crouch", "jump": "Jump", "roll": "Roll",
               "directional": "Directional", "fov": "FOV", "camera": "Camera",
+              "firstperson": "FirstPerson",
               "spawner": "Spawner", "npcvariety": "NpcVariety"}
 SPAWN_SCRIPT = "k2se_spawn"
 SPAWN_SCRIPT_SRC = os.path.join(ROOT, "nss", SPAWN_SCRIPT + ".nss")

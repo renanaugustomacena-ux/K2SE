@@ -7,6 +7,7 @@
 
 #include "callsite.h"
 #include "config.h"
+#include "fpcam.h"
 #include "input.h"
 #include "log.h"
 #include "player.h"
@@ -119,6 +120,18 @@ void WriteStyle(float distance, float height, float pitch) {
     SafeWriteF32(Field(kOffPitch), pitch);
 }
 
+// The first-person preset's height is a measurement, not a setting: fpcam.cpp
+// resolves it from the character actually being driven (eye height varies from
+// 1.32 m for a child to 1.71 m, and the ini cannot know which one is on screen).
+// Every other view keeps the configured value.
+float EffectiveHeight(int view, const Preset& p) {
+    if (view != kViewFirstPerson) return p.height;
+    float forward = 0.0f;
+    float height = 0.0f;
+    if (fpcam::EyeOffset(&forward, &height) && height > 0.0f) return height;
+    return p.height;
+}
+
 void RestoreVanilla(const char* why) {
     if (!g_written || !g_vanillaKnown) return;
     WriteStyle(g_vanilla.distance, g_vanilla.height, g_vanilla.pitch);
@@ -143,7 +156,7 @@ void ApplyView(const char* why) {
         RestoreVanilla(why);
     } else if (g_vanillaKnown) {
         const Preset& p = g_cfg.presets[g_view];
-        WriteStyle(p.distance, p.height, p.pitch);
+        WriteStyle(p.distance, EffectiveHeight(g_view, p), p.pitch);
         g_written = true;
     }
     log::Writef("camera: view %d (%s) %s at t+%u ms", g_view, g_cfg.presets[g_view].name, why,
@@ -264,7 +277,7 @@ void OnGameplayFrame() {
     // changes) may write the fields between our frames.
     if (g_view != kViewVanilla && g_vanillaKnown) {
         const Preset& p = g_cfg.presets[g_view];
-        WriteStyle(p.distance, p.height, p.pitch);
+        WriteStyle(p.distance, EffectiveHeight(g_view, p), p.pitch);
         g_written = true;
     }
     if (g_bannerFrames > 0) {

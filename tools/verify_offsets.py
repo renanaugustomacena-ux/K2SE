@@ -194,6 +194,23 @@ def main():
     finally:
         sys.argv = saved
 
+    # The measured eye table is generated from the game's own models rather than
+    # from the exe, so it cannot drift with a patch the way an address can -- but
+    # it CAN drift from the models if someone edits the header by hand, and the
+    # first-person camera would then aim at a height nothing on screen has.
+    try:
+        import gen_eyetable
+        saved = sys.argv
+        sys.argv = ["gen_eyetable.py", "--check"]
+        try:
+            failures += gen_eyetable.main()
+        finally:
+            sys.argv = saved
+    except SystemExit as exc:
+        # No game install to measure against: the addresses above are still a
+        # complete answer, so say so and carry on rather than failing the run.
+        print("SKIP  eye table not checked (%s)" % exc)
+
     print("")
     if failures:
         print("%d PROBE(S) FAILED -- do not hook this binary." % failures)
