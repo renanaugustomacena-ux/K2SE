@@ -1,0 +1,1349 @@
+kind,resref,name,tag,appearance,model,source
+door,sw_door_per014,Airlock Inner Door {104PER},AirlockInnerDoor_103PER,0,T_DOOR01,103PER_s
+door,sw_door_201_001,Airlock {Generic},Airlock,0,T_DOOR01,201TEL_s
+door,d_203_a1,Apartment A1,door_a1,0,T_DOOR01,203TEL_s
+door,apartment_a2,Apartment A2,Apartment,0,T_DOOR01,203TEL_s
+door,sw_door_falt,Apartment A3{Falt},Apartment_Falt,0,T_DOOR01,203TEL_s
+door,apartment_b1,Apartment B1,Apartment,0,T_DOOR01,203TEL_s
+door,door_203chano,Apartment B2{Chano},Apartment,0,T_DOOR01,203TEL_s
+door,dr_telos_meeting,Apartment B3{Meeting},door_meeting,0,T_DOOR01,203TEL_s
+door,d_apartmentc1,Apartment C1{Batono},d_apartmentc1,0,T_DOOR01,203TEL_s
+door,apartment_c2,Apartment C2,Apartment,0,T_DOOR01,203TEL_s
+door,adoor_intro,Apartment C3{Intro},adoor_intro,0,T_DOOR01,203TEL_s
+door,door_203aptcmp_a,Apartment Complex A,ComplexA,0,T_DOOR01,203TEL_s
+door,door_203aptcmp_b,Apartment Complex B,ComplexB,0,T_DOOR01,203TEL_s
+door,door_203aptcmp_c,Apartment Complex C,ComplexC,0,T_DOOR01,203TEL_s
+door,audienceroomdoor,Audience Room Door,AudienceDoor,0,T_DOOR01,351NAR_s
+door,se_door,Barrier,se_door,0,T_DOOR01,411DXN_s
+door,sw_door,Barrier,sw_door,0,T_DOOR01,411DXN_s
+door,door_tel009,Bay Control,Door_BC,0,T_DOOR01,232TEL_s
+door,sw_door_telos001,Bay Control,dBayControl,0,T_DOOR01,201TEL_s
+door,sw_door_telos002,Bay Control {1},dBayControl,0,T_DOOR01,201TEL_s
+door,sw_door_201_002,Bay I Airlock,Airlock1,0,T_DOOR01,201TEL_s
+door,d_airlock2a001,Bay I Airlock {2},Airlock1a,0,T_DOOR01,201TEL_s
+door,sw_door_201_003,Bay II Airlock,Airlock2,0,T_DOOR01,201TEL_s
+door,d_airlock2a,Bay II Airlock {2},Airlock2a,0,T_DOOR01,201TEL_s
+door,sw_door_201_004,Bay III Airlock,Airlock3,0,T_DOOR01,201TEL_s
+door,d_airlock3a,Bay III Airlock {2},Airlock3a,0,T_DOOR01,201TEL_s
+door,door_per007,Blast Containment Field {1},FFDoor1,0,T_DOOR01,102PER_s
+door,door_per008,Blast Containment Field {2},FFDoor2,0,T_DOOR01,102PER_s
+door,door_per009,Blast Containment Field {3},FFDoor3,0,T_DOOR01,102PER_s
+door,door_per010,Blast Containment Field {4},FFDoor4,0,T_DOOR01,102PER_s
+door,hk50_door,Blast Door{HK-50},hk50_door,0,T_DOOR01,001EBO_s
+door,sw_door_hhead003,Blast Door{Impossible},BlastDoor,0,T_DOOR01,001EBO_s
+door,star_dorm,Blast Door{Starboard Dormitory},star_dorm,0,T_DOOR01,001EBO_s
+door,door_dxun007,Cage,305Cage,0,T_DOOR01,305NAR_s
+door,sw_door_202_008,Cantina,d_Cantina,0,T_DOOR01,202TEL_s
+door,sw_door_dan004,Cantina,d_cantina,0,T_DOOR01,222TEL_s
+door,d_207_cant_game,Cantina {Game},d_Cantina_game,0,T_DOOR01,207TEL_s
+door,sw_door_202_010,Cantina {Game},d_Cantina_game,0,T_DOOR01,202TEL_s
+door,d_202_cantinain,Cantina {Inner},d_Cantina,0,T_DOOR01,202TEL_s
+door,d_207_cant_main,Cantina {Main},d_Cantina_main,0,T_DOOR01,207TEL_s
+door,d_207_cant_ma001,Cantina {Outer},d_Cantina_outer,0,T_DOOR01,207TEL_s
+door,door_narshad004,Cantina{CA},CantinaDoor,0,T_DOOR01,301NAR_s
+door,door_650,Caved-in Door{to 650},door_650,0,T_DOOR01,605DAN_s
+door,sw_door_sith004,Cell Door,VisasDoor,0,T_DOOR01,851NIH_s
+door,sw_door_hhead008,Cockpit Door,cockpit_door,0,T_DOOR01,001EBO_s
+door,sw_door_per005,Containment Field {103PER},MainDoor_103PER,0,T_DOOR01,103PER_s
+door,sw_door_czerka1,Czerka Door 1,Czerka Door 1,0,T_DOOR01,bif
+door,door_czerkam,Czerka Mainframe,CzerkaM,0,T_DOOR01,209TEL_s
+door,door_per006,Damaged Door,DamagedDoor,0,T_DOOR01,105PER_s
+door,sw_door_sith003,Damaged Door,SithDoor,0,T_DOOR01,851NIH_s
+door,sw_door_taris008,Damaged Door,MedBayDoor,0,T_DOOR01,101PER_s
+door,sw_door_per008,Docking Door,DockDoor,0,T_DOOR01,101PER_s
+door,sw_door_taris009,Docking Door{151HAR},151HARDoor,0,T_DOOR01,101PER_s
+door,711_norm_door,Door,711_norm_door,0,T_DOOR01,711KOR_s
+door,adum_door,Door,adum_door,0,T_DOOR01,602DAN_s
+door,ao_door,Door,ao_door,0,T_DOOR01,602DAN_s
+door,door,Door,Door,0,T_DOOR01,702KOR_s
+door,door_barrack,Door,door_barrack,0,T_DOOR01,504OND_s
+door,door_mal002,Door,SionDoor,0,T_DOOR01,903MAL_s
+door,door_narshad011,Door,NarShaddaaDoor10,0,T_DOOR01,351NAR_s
+door,door_nih002,Door,RavagerDoor01,0,T_DOOR01,851NIH_s
+door,door_ond_004,Door,OnderonDoor03,0,T_DOOR01,506OND_s
+door,door_per002,Door,PeragusDoor1,0,T_DOOR01,102PER_s
+door,door_per004,Door,PeragusDoor3,0,T_DOOR01,105PER_s
+door,door_telosaca001,Door,TelosAcademyDoor1,0,T_DOOR01,262TEL_s
+door,enclave_door,Door,Enclave_Door,0,T_DOOR01,610DAN_s
+door,exit_door,Door,exit_door,0,T_DOOR01,411DXN_s
+door,iz_door_tower,Door,door_tower,0,T_DOOR01,504OND_s
+door,norm_doors,Door,norm_doors,0,T_DOOR01,602DAN_s
+door,nw_door,Door,nw_door,0,T_DOOR01,411DXN_s
+door,sw_door_hhead002,Door,Hammerhead1,0,T_DOOR01,151HAR_s
+door,sw_door_per001,Door,PeragusDoor1,0,T_DOOR01,101PER_s
+door,unlocked_door,Door,unlocked_door,0,T_DOOR01,601DAN_s
+door,sw_door_telos008,Door {Ithorian 01},Door_Ith_01,0,T_DOOR01,204TEL_s
+door,sw_door_hhead010,Door {PC Door},PCDoor,0,T_DOOR01,152HAR_s
+door,sw_door_hhead006,Door{152HAR},To_152HAR,0,T_DOOR01,151HAR_s
+door,711_1st_door,Door{1st},711_1st_door,0,T_DOOR01,711KOR_s
+door,711_2nd_door,Door{2nd},711_2nd_door,0,T_DOOR01,711KOR_s
+door,d_carth,Door{Carth},d_Carth,0,T_DOOR01,205TEL_s
+door,door_narshad002,Door{CA},Door,0,T_DOOR01,301NAR_s
+door,sw_door_telos010,Door{chodo's office},d_ith_office,0,T_DOOR01,204TEL_s
+door,door_conductor1,Door{Conductor1},door_conductor1,0,T_DOOR01,610DAN_s
+door,door_telosaca002,Door{Council Room},CouncilRoom,0,T_DOOR01,262TEL_s
+door,crypt_door,Door{Crypt},crypt_door,0,T_DOOR01,711KOR_s
+door,sw_door_dan1,Door{Dantooine Door 1},Dantooine Door 1,0,T_DOOR01,bif
+door,sw_door_dan2,Door{Dantooine Door 2},Dantooine Door 2,0,T_DOOR01,bif
+door,sw_door_dan3,Door{Dantooine Door 3},Dantooine Door 3,0,T_DOOR01,bif
+door,sw_door_dan4,Door{Dantooine Door 4},Dantooine Door 4,0,T_DOOR01,bif
+door,door_dan01,Door{Dantooine K2 01},DantooineK2Door01,0,T_DOOR01,bif
+door,door_dan02,Door{Dantooine K2 02},DantooineK2Door02,0,T_DOOR01,bif
+door,door_droid01,Door{Droid Planet 01},DroidPlanetDoor01,0,T_DOOR01,bif
+door,door_droid02,Door{Droid Planet 02},DroidPlanetDoor02,0,T_DOOR01,bif
+door,door_dxun01,Door{Dxun Door 01},DxunDoor01,0,T_DOOR01,bif
+door,door_dxun003,Door{Dxun Door 02},DxunDoor02,0,T_DOOR01,410DXN_s
+door,door_dxun02,Door{Dxun Door 02},DxunDoor02,0,T_DOOR01,bif
+door,door_dxun03,Door{Dxun Door 03},DxunDoor03,0,T_DOOR01,bif
+door,door_dxun04,Door{Dxun Door 04},DxunDoor04,0,T_DOOR01,bif
+door,door_dxun05,Door{Dxun Door 05},DxunDoor05,0,T_DOOR01,bif
+door,door_dxun06,Door{Dxun Door 06},DxunDoor06,0,T_DOOR01,bif
+door,door_dxun07,Door{Dxun Door 07},DxunDoor07,0,T_DOOR01,bif
+door,door_enter,Door{Enter/Exit},door_enter,0,T_DOOR01,702KOR_s
+door,d_entrance,Door{Entrance},d_entrance,0,T_DOOR01,903MAL_s
+door,door_203exb,Door{Exchange Bedroom},door_203exb,0,T_DOOR01,208TEL_s
+door,door_203exes,Door{Exchange Escape},door_203exes,0,T_DOOR01,208TEL_s
+door,door_203exin,Door{Exchange Inner},door_203exin,0,T_DOOR01,208TEL_s
+door,door_203exlo,Door{Exchange Loppak},door_203exlo,0,T_DOOR01,208TEL_s
+door,door_203ex,Door{Exchange Normal},door_203ex,0,T_DOOR01,208TEL_s
+door,door_203exst,Door{Exchange Storage},door_203exst,0,T_DOOR01,208TEL_s
+door,sw_door_dan006,Door{Garage},garage_door,0,T_DOOR01,601DAN_s
+door,door_gas,Door{Gas},door_gas,0,T_DOOR01,506OND_s
+door,sw_door_hhead2,Door{Hammer Head  - Broken},Hammer Head Door 2,0,T_DOOR01,bif
+door,sw_door_hhead1,Door{Hammerhead Door 1},Hammerhead 1,0,T_DOOR01,bif
+door,door_har03,Door{Harbinger Engine},HarbingerEngineDoor,0,T_DOOR01,bif
+door,sw_door_per025,Door{HK50 Open Door},HK50Door2,0,T_DOOR01,103PER_s
+door,interiordoor,Door{Interior},NarShaddaaDoor01,0,T_DOOR01,305NAR_s
+door,door_kor08,Door{Korriban Door 08},KorribanDoor08,0,T_DOOR01,bif
+door,door_kor09,Door{Korriban Door 09},KorribanDoor09,0,T_DOOR01,bif
+door,sw_door_kban1,Door{Korriban Door 1},Korriban Door 1,0,T_DOOR01,bif
+door,sw_door_kban2,Door{Korriban Door 2},Korriban Door 2,0,T_DOOR01,bif
+door,sw_door_kban004,Door{Korriban Door 3},KorribanDoor3,0,T_DOOR01,701KOR_s
+door,sw_door_kban3,Door{Korriban Door 3},Korriban Door 3,0,T_DOOR01,bif
+door,sw_door_kban4,Door{Korriban Door 4},Korriban Door 4,0,T_DOOR01,bif
+door,sw_door_kban5,Door{Korriban Door 5},Korriban Door 5,0,T_DOOR01,bif
+door,sw_door_kban6,Door{Korriban Door 6},Korriban Door 6,0,T_DOOR01,bif
+door,sw_door_kban7,Door{Korriban Door 7},Korriban Door 7,0,T_DOOR01,bif
+door,sw_door_per013,Door{Kreia Prison Warning},PrisonRoomDr,0,T_DOOR01,101PER_s
+door,sw_door_per012,Door{Kreia Warning},GuardRoomDr,0,T_DOOR01,101PER_s
+door,711_last_door,Door{Last},711_last_door,0,T_DOOR01,711KOR_s
+door,door_library,Door{Library},door_library,0,T_DOOR01,702KOR_s
+door,door_locked_dif,Door{Locked Difficult},door_locked_dif,0,T_DOOR01,702KOR_s
+door,711_lock_door,Door{Locked; Bashable},711_lock_door,0,T_DOOR01,711KOR_s
+door,152lockeddoor,Door{Locked},Hammerhead1,0,T_DOOR01,152HAR_s
+door,door_locked,Door{Locked},door_locked,0,T_DOOR01,702KOR_s
+door,door_loot,Door{Loot},door_loot,0,T_DOOR01,506OND_s
+door,door_mal01,Door{Malachor Door 01},MalachorDoor01,0,T_DOOR01,bif
+door,door_mal003,Door{Malachor Door 02},MalachorDoor02,0,T_DOOR01,903MAL_s
+door,door_mal02,Door{Malachor Door 02},MalachorDoor02,0,T_DOOR01,bif
+door,door_mal03,Door{Malachor Door 03},MalachorDoor03,0,T_DOOR01,bif
+door,door_malopen,Door{Malachor Door Open},MalachorDoorOpen,0,T_DOOR01,905MAL_s
+door,sw_door_manaan3,Door{Manaan 3},Manaan Door 3,0,T_DOOR01,bif
+door,sw_door_manaan4,Door{Manaan 4},Manaan Door 4,0,T_DOOR01,bif
+door,sw_door_manaan5,Door{Manaan 5},Manaan Door 5 - Freight Door,0,T_DOOR01,bif
+door,sw_door_manaan6,Door{Manaan 6},Manaan Door 6 - Hotel Door,0,T_DOOR01,bif
+door,mk2ambush,Door{Mk 2 Ambush},Mk2Ambush,0,T_DOOR01,103PER_s
+door,door_narshad01,Door{Nar Shaddaa 01},NarShaddaaDoor01,0,T_DOOR01,bif
+door,door_narshad015,Door{Nar Shaddaa 01},NarShaddaaDoor01,0,T_DOOR01,301NAR_s
+door,door_narshad02,Door{Nar Shaddaa 02},NarShaddaaDoor02,0,T_DOOR01,bif
+door,door_narshad03,Door{Nar Shaddaa 03},NarShaddaaDoor03,0,T_DOOR01,bif
+door,door_narshad04,Door{Nar Shaddaa 04},NarShaddaaDoor04,0,T_DOOR01,bif
+door,door_narshad05,Door{Nar Shaddaa 05},NarShaddaaDoor05,0,T_DOOR01,bif
+door,door_narshad06,Door{Nar Shaddaa 06},NarShaddaaDoor06,0,T_DOOR01,bif
+door,door_narshad07,Door{Nar Shaddaa 07},NarShaddaaDoor07,0,T_DOOR01,bif
+door,door_narshad08,Door{Nar Shaddaa 08},NarShaddaaDoor08,0,T_DOOR01,bif
+door,door_narshad09,Door{Nar Shaddaa 09},NarShaddaaDoor09,0,T_DOOR01,bif
+door,door_narshad10,Door{Nar Shaddaa 10},NarShaddaaDoor10,0,T_DOOR01,bif
+door,door_secnorth,Door{North Security},door_secnorth,0,T_DOOR01,506OND_s
+door,door_ond_01,Door{Onderon 01},OnderonDoor01,0,T_DOOR01,bif
+door,door_ond_02,Door{Onderon 02},OnderonDoor02,0,T_DOOR01,bif
+door,door_ond_03,Door{Onderon 03},OnderonDoor03,0,T_DOOR01,bif
+door,door_ond_04,Door{Onderon 04},OnderonDoor04,0,T_DOOR01,bif
+door,door_ond_05,Door{Onderon 05},OnderonDoor05,0,T_DOOR01,bif
+door,door_ond_06,Door{Onderon 06},OnderonDoor06,0,T_DOOR01,bif
+door,door_palsecurity,Door{Palace Security},door_palsecurity,0,T_DOOR01,506OND_s
+door,door_per003,Door{Peragus Door 1 (103PER2)},DOOR_103PER2,0,T_DOOR01,103PER_s
+door,door_per01,Door{Peragus Door 1},PeragusDoor1,0,T_DOOR01,bif
+door,door_per02,Door{Peragus Door 2},PeragusDoor2,0,T_DOOR01,bif
+door,door_per03,Door{Peragus Door 3},PeragusDoor3,0,T_DOOR01,bif
+door,door_per04,Door{Peragus Door 4},PeragusDoor4,0,T_DOOR01,bif
+door,door_per05,Door{Peragus Door 5},PeragusDoor5,0,T_DOOR01,bif
+door,prisondoor,Door{Prison},PrisonDoor,0,T_DOOR01,262TEL_s
+door,door_puzzle,Door{Puzzle},door_puzzle,0,T_DOOR01,506OND_s
+door,sw_door_rakata4,Door{Rakata 4},Rakata Door 4,0,T_DOOR01,bif
+door,door_nih01,Door{Ravager Door 01},RavagerDoor01,0,T_DOOR01,bif
+door,d_refugee3,Door{Refugee3},d_refugee3,0,T_DOOR01,301NAR_s
+door,sw_door_sith5,Door{Sith 5},Sith Door 5,0,T_DOOR01,bif
+door,door_ass,Door{Sith Assassin Attack},door_ass,0,T_DOOR01,702KOR_s
+door,door_secnorth001,Door{SouthSecurity},door_secsouth,0,T_DOOR01,506OND_s
+door,sw_door_sforge1,Door{Star Forge 1},Star Forge Door 1,0,T_DOOR01,bif
+door,door_static,Door{Static},door_static,0,T_DOOR01,506OND_s
+door,sw_door_taris6,Door{Taris 6},Taris Door 6,0,T_DOOR01,bif
+door,sw_door_taris7,Door{Taris 7},Taris Door 7,0,T_DOOR01,bif
+door,sw_door_taris9,Door{Taris 9},Taris Door 9,0,T_DOOR01,bif
+door,door_telosacad1,Door{Telos Academy Door 1},TelosAcademyDoor1,0,T_DOOR01,bif
+door,door_telosacad2,Door{Telos Academy Door 2},TelosAcademyDoor2,0,T_DOOR01,bif
+door,door_telos03,Door{Telos Door 03},TelosDoor03,0,T_DOOR01,bif
+door,door_telos05,Door{Telos Door 05},TelosDoor05,0,T_DOOR01,bif
+door,door_telos06,Door{Telos Door 06},TelosDoor06,0,T_DOOR01,bif
+door,door_tel07,Door{Telos Door 07},TelosDoor07,0,T_DOOR01,bif
+door,door_tel08,Door{Telos Door 08},TelosDoor08,0,T_DOOR01,bif
+door,door_tel09,Door{Telos Door 09},TelosDoor09,0,T_DOOR01,bif
+door,door_tel10,Door{Telos Door 10},TelosDoor10,0,T_DOOR01,bif
+door,door_tel11,Door{Telos Door 11},TelosDoor11,0,T_DOOR01,bif
+door,door_tel12,Door{Telos Door 12},TelosDoor12,0,T_DOOR01,bif
+door,door_tel014,Door{Telos Door 13},TelosDoor13,0,T_DOOR01,222TEL_s
+door,door_tel13,Door{Telos Door 13},TelosDoor13,0,T_DOOR01,bif
+door,door_tel134,Door{Telos Door 13},TelosDoor13,0,T_DOOR01,222TEL_s
+door,door_tel015,Door{Telos Door 14},TelosDoor14,0,T_DOOR01,204TEL_s
+door,door_tel016,Door{Telos Door 14},TelosDoor14,0,T_DOOR01,204TEL_s
+door,door_tel14,Door{Telos Door 14},TelosDoor14,0,T_DOOR01,bif
+door,door_tel15,Door{Telos Door 15},TelosDoor15,0,T_DOOR01,bif
+door,door_tel16,Door{Telos Door 16},TelosDoor16,0,T_DOOR01,bif
+door,door_tel17,Door{Telos Door 17},TelosDoor17,0,T_DOOR01,bif
+door,sw_door_kban002,Door{temple entrance},KorribanTempleDoor,0,T_DOOR01,701KOR_s
+door,door_terena,Door{Terena},Door_Terena,0,T_DOOR01,602DAN_s
+door,door_thorium,Door{Thorium Charges},door_thorium,0,T_DOOR01,702KOR_s
+door,door_torture,Door{Torture Room},door_torture,0,T_DOOR01,702KOR_s
+door,door_training,Door{Training Room},door_training,0,T_DOOR01,702KOR_s
+door,zherron_door,Door{Zherron},zherron_door,0,T_DOOR01,602DAN_s
+door,dxuncachedoor,Dxun Cache Door,DxunCacheDoor,0,T_DOOR01,404DXN_s
+door,dxuncache,Dxun Cache Door{Blow up},DxunCache,0,T_DOOR01,402DXN_s
+door,cachedooropen,Dxun Cache Door{Open},CacheDoorOpen,0,T_DOOR01,404DXN_s
+door,dxuncache_imp,Dxun Cache Door{Thorium},DxunCache_imp,0,T_DOOR01,402DXN_s
+door,sw_door_taris010,Emergency Blast Door,BlastDoor1,0,T_DOOR01,101PER_s
+door,sw_door_per007,Emergency Blast Door{103PER},Hatch_103PERDoor,0,T_DOOR01,101PER_s
+door,sw_door_per006,Emergency Blast Door{105PER},Hatch_105PERDoor,0,T_DOOR01,101PER_s
+door,sw_door_per004,Emergency Hatch{102PER},102PERDoor,0,T_DOOR01,101PER_s
+door,sw_door_hhead009,Engine Hatch,152HAREngDoor,0,T_DOOR01,153HAR_s
+door,engine_door,Engine Room Door,engine_door,0,T_DOOR01,001EBO_s
+door,sealeddoor001,Escape Route{303},EscapeRoute,0,T_DOOR01,305NAR_s
+door,door_tel001,Force Field,TelosDoor1,0,T_DOOR01,232TEL_s
+door,sw_door_ffiel001,Force Field,ForceField,0,T_DOOR01,351NAR_s
+door,sw_door_ffield,Force Field,Force Field,0,T_DOOR01,bif
+door,door_tel002,Force Field {2},TelosDoor2,0,T_DOOR01,232TEL_s
+door,door_telfirst,Force Field {First},TelosDoorFirst,0,T_DOOR01,232TEL_s
+door,sw_door_ffiel002,Force Field{1},ForceField1,0,T_DOOR01,351NAR_s
+door,sw_door_ffiel003,Force Field{2},ForceField2,0,T_DOOR01,351NAR_s
+door,sw_door_ffiel004,Force Field{3},ForceField3,0,T_DOOR01,351NAR_s
+door,sw_door_ffiel005,Force Field{4},ForceField4,0,T_DOOR01,351NAR_s
+door,sw_door_ffiel006,Force Field{5},ForceField5,0,T_DOOR01,351NAR_s
+door,sw_door_ffiel007,Force Field{6},ForceField6,0,T_DOOR01,351NAR_s
+door,sw_door_ffiel008,Force Field{7},ForceField7,0,T_DOOR01,351NAR_s
+door,ffield_lower,Force Field{Lower},ffield_lower,0,T_DOOR01,504OND_s
+door,ffield_upper,Force Field{Upper},ffield_upper,0,T_DOOR01,504OND_s
+door,sw_door_sforg002,Hangar Door{003EBO},TO_003EBO,0,T_DOOR01,262TEL_s
+door,hangar_door2,Hangar Door{basilisk},hangar_door2,0,T_DOOR01,403DXN_s
+door,hangar_door1,Hangar Door{shuttle},hangar_door1,0,T_DOOR01,403DXN_s
+door,351door_highsec,High Security Door,SecDoor,0,T_DOOR01,351NAR_s
+door,interiordoor004,High Security Door,HighSecuritDoor,0,T_DOOR01,305NAR_s
+door,interiordoor001,High Security Door{Interior},HighSecuritDoorInterior,0,T_DOOR01,305NAR_s
+door,interiordoor003,High Security Door{Ring},DoorRing,0,T_DOOR01,305NAR_s
+door,door_nih004,High Security Door{Security},RavagerDoor01,0,T_DOOR01,852NIH_s
+door,sealed_door1,Inner Garage Door,sealed_door1,0,T_DOOR01,001EBO_s
+door,iziz_door002,Iziz Door,iziz_door1,0,T_DOOR01,502OND_s
+door,iziz_door1,Iziz Door,iziz_door1,0,T_DOOR01,501OND_s
+door,dhagon_door,Iziz Door{Dhagon Ghent},dhagon_door,0,T_DOOR01,512OND_s
+door,sw_door_kash1,Kashyyyk Door 1,Kashyyyk Door 1,0,T_DOOR01,bif
+door,sw_door_kash2,Kashyyyk Door 2,Kashyyyk Door 2,0,T_DOOR01,bif
+door,sw_door_kash3,Kashyyyk Door 3,Kashyyyk Door 3,0,T_DOOR01,bif
+door,enclave_door_lck,Locked Door,Enclave_Door_Locked,0,T_DOOR01,610DAN_s
+door,jorr_door,Locked Door{Jorran},jorr_door,0,T_DOOR01,610DAN_s
+door,sw_door_hhead005,Low Security Door,001EBODrSec,0,T_DOOR01,001EBO_s
+door,sw_door_per011,Low Security Door,PeragusDoor1,0,T_DOOR01,103PER_s
+door,sw_door_hhead004,Low Security Door {Locked},Hammerhead1,0,T_DOOR01,151HAR_s
+door,sw_door_czerk001,Low Security Door{Cargo},CargoDoor,0,T_DOOR01,003EBO_s
+door,sw_door_hhead011,Low Security Door{Cargo},001EBODrSec,0,T_DOOR01,001EBO_s
+door,interiordoor002,Low Security Door{Interior},NarShaddaaDoor01,0,T_DOOR01,305NAR_s
+door,sw_door_hhead007,Main Hold Door,001EBODr1,0,T_DOOR01,001EBO_s
+door,door_mal004,Malachor Door{sealed},SealedDoor,0,T_DOOR01,905MAL_s
+door,sw_door_manaan1,Manaan Door 1,Manaan Door 1,0,T_DOOR01,bif
+door,sw_door_manaan2,Manaan Door 2,Manaan Door 2,0,T_DOOR01,bif
+door,sw_door_taris007,Medical Storage,MedClosetDoor,0,T_DOOR01,101PER_s
+door,sw_door_sforg003,Meditation Chamber,MedChamber,0,T_DOOR01,262TEL_s
+door,sw_door_202_009,Merchant,d_Merchant,0,T_DOOR01,202TEL_s
+door,sw_door_dan003,Merchant,d_merchant,0,T_DOOR01,222TEL_s
+door,door_tel004,Military Door {A1},TelosDoor3A1,0,T_DOOR01,232TEL_s
+door,door_tel005,Military Door {A2},TelosDoor3A2,0,T_DOOR01,232TEL_s
+door,door_tel006,Military Door {B1},TelosDoor3B1,0,T_DOOR01,232TEL_s
+door,door_tel007,Military Door {B2},TelosDoor3B2,0,T_DOOR01,232TEL_s
+door,door_tel010,Military Door {C1},TelosDoor3C1,0,T_DOOR01,232TEL_s
+door,door_tel011,Military Door {C2},TelosDoor3C2,0,T_DOOR01,232TEL_s
+door,door_tel013,Military Door {Chris},TelosDoor3Chris,0,T_DOOR01,232TEL_s
+door,door_tel008,Military Door {Tank},TelosDoor3T,0,T_DOOR01,232TEL_s
+door,door_tel012,Military Door {Unpowered},TelosDoor3U,0,T_DOOR01,232TEL_s
+door,sw_door_202_006,Module Door,d_Module,0,T_DOOR01,202TEL_s
+door,sw_door_per010,Morgue Door,MorgueDoor,0,T_DOOR01,101PER_s
+door,304enter001,Nar Shaddaa Docks,304Enter,0,T_DOOR01,304NAR_s
+door,sealed_door2,Outer Garage Door,sealed_door2,0,T_DOOR01,001EBO_s
+door,door_dxun004,Portcullis{End},Portcullis1,0,T_DOOR01,902MAL_s
+door,door_dxun005,Portcullis{Start},Portcullis2,0,T_DOOR01,902MAL_s
+door,door_203sealed,Pressure Door {Sealed},door_204sealed,0,T_DOOR01,204TEL_s
+door,kh_door_locked,Private Door{stays locked},kh_door_locked,0,T_DOOR01,602DAN_s
+door,visquisdoor,Private Lounge,VisquisDoor,0,T_DOOR01,304NAR_s
+door,sw_door_rakata1,Rakata Door 1,Rakata Door 1,0,T_DOOR01,bif
+door,sw_door_rakata2,Rakata Door 2,Rakata Door 2,0,T_DOOR01,bif
+door,sw_door_rakata3,Rakata Door 3,Rakata Door 3,0,T_DOOR01,bif
+door,door_dan002,Sealed Door,SealedDoor,0,T_DOOR01,004EBO_s
+door,door_narshad009,Sealed Hatch,SealedHatch,0,T_DOOR01,351NAR_s
+door,d_222doorsealed,Sealed Module Door,d_doorsealed,0,T_DOOR01,222TEL_s
+door,d_sealed221,Sealed Module Door,d_sealed,0,T_DOOR01,220TEL_s
+door,sw_door_202_007,Sealed Module Door,d_ModuleS,0,T_DOOR01,202TEL_s
+door,d_222doorseal001,Sealed Module Door {851NIH},TO_851NIH,0,T_DOOR01,222TEL_s
+door,d_sealed222czerk,Sealed Module Door {Czerka},d_sealedczerka,0,T_DOOR01,220TEL_s
+door,sw_door_sith005,Sealed Module Door {Shuttle},d_doorshuttlesealed,0,T_DOOR01,222TEL_s
+door,door_nih003,Security Door,RavagerDoor01,0,T_DOOR01,851NIH_s
+door,door_security,Security Door,Door,0,T_DOOR01,351NAR_s
+door,door_tel003,Security Door,TelosDoor3,0,T_DOOR01,232TEL_s
+door,kh_door,Security Door,kh_door,0,T_DOOR01,602DAN_s
+door,security_door,Security Door,security_door,0,T_DOOR01,403DXN_s
+door,sw_door_202_004,Security Door,d_Security,0,T_DOOR01,202TEL_s
+door,sw_door_dan005,Security Door,d_tsfsecurity,0,T_DOOR01,222TEL_s
+door,sw_door_per015,Security Door {104PER},SecurityDoor104PER,0,T_DOOR01,103PER_s
+door,door_conductor2,Security Door{Conductor2},door_conductor2,0,T_DOOR01,610DAN_s
+door,enclave_door_sec,Security Door{Disciple},Enclave_Security_Door,0,T_DOOR01,610DAN_s
+door,ff_inner,Security Door{Inner},ff_inner,0,T_DOOR01,506OND_s
+door,locked_door,Security Door{Mandalore},locked_door,0,T_DOOR01,403DXN_s
+door,ff_outer,Security Door{Outer},ff_outer,0,T_DOOR01,506OND_s
+door,k2doors001,Security Door{Saquesh},saquesh_door,0,T_DOOR01,302NAR_s
+door,door_serroco,Security Door{tough lock},SerrocoLocked,0,T_DOOR01,302NAR_s
+door,sw_door_221,Shuttle Door {Suburban Red},d_Suburban,0,T_DOOR01,222TEL_s
+door,sw_door_202_001,Shuttle Door {Suburban},d_Suburban,0,T_DOOR01,202TEL_s
+door,sw_door_202_002,Shuttle Door{Docks},d_Docks,0,T_DOOR01,202TEL_s
+door,sw_door_sith1,Sith Door 1,Sith Door 1,0,T_DOOR01,bif
+door,sw_door_sith2,Sith Door 2,Sith Door 2,0,T_DOOR01,bif
+door,sw_door_sith3,Sith Door 3,Sith Door 3,0,T_DOOR01,bif
+door,sw_door_sith4,Sith Door 4,Sith Door 4,0,T_DOOR01,bif
+door,sw_door_sith6,Sith Force Field,Sith Door 6,0,T_DOOR01,bif
+door,d_sithsarc,Sith Sarcophagus,d_sithsarc,0,T_DOOR01,411DXN_s
+door,sw_door_dan002,Static Dantooine Door 1,DantooineDoor1,0,T_DOOR01,601DAN_s
+door,sw_door_taris015,Storage{Generic},StorageGeneric,0,T_DOOR01,201TEL_s
+door,enclave_door_stu,Stuck Door,Enclave_Door_Stuck,0,T_DOOR01,610DAN_s
+door,kh_door_locke001,Stuck Door{storage},kh_door_storage,0,T_DOOR01,602DAN_s
+door,door_narshad003,Swoop Garage{CA},GarageDoor,0,T_DOOR01,301NAR_s
+door,sw_door_taris1,Taris Door 1,Taris Door 1,0,T_DOOR01,bif
+door,sw_door_taris2,Taris Door 2,Taris Door 2,0,T_DOOR01,bif
+door,sw_door_taris3,Taris Door 3,Taris Door 3,0,T_DOOR01,bif
+door,sw_door_taris4,Taris Door 4,Taris Door 4,0,T_DOOR01,bif
+door,sw_door_taris5,Taris Door 5,Taris Door 5,0,T_DOOR01,bif
+door,sw_door_taris8,Taris Door 8,Taris Door 8,0,T_DOOR01,bif
+door,sw_door_tat1,Tatooine Door 1,Tatooine Door 1,0,T_DOOR01,bif
+door,sw_door_tat2,Tatooine Door 2,Tatooine Door 2,0,T_DOOR01,bif
+door,sw_door_tat3,Tatooine Door 3,Tatooine Door 3,0,T_DOOR01,bif
+door,unk41_tplshield1,Temple Shield,unk41_tplshield,0,T_DOOR01,232TEL_s
+door,sw_door_telos01,To Entertainment 081,Ent081,0,T_DOOR01,203TEL_s
+door,d_urban222,To Urban 081,d_urban,0,T_DOOR01,220TEL_s
+door,sarc_door,Tomb Door,sarc_door,0,T_DOOR01,411DXN_s
+door,tomb_door,Tomb Door,tomb_door,0,T_DOOR01,410DXN_s
+door,sw_door_taris011,Transit Shuttle Bay,Urban,0,T_DOOR01,201TEL_s
+door,d_202armory,TSF Armory,d_TSFArmory,0,T_DOOR01,202TEL_s
+door,door_narshad006,TSF Armory,d_tsfarmory,0,T_DOOR01,222TEL_s
+door,door_narshad007,TSF Jail,d_tsfjail,0,T_DOOR01,222TEL_s
+door,sw_door_202_003,TSF Jail,d_Jail,0,T_DOOR01,202TEL_s
+door,door_narshad005,TSF Station,d_tsfstation,0,T_DOOR01,222TEL_s
+door,sw_door_202_005,TSF Station,Station,0,T_DOOR01,202TEL_s
+door,sw_door_sforg001,Turbolift Seal{261TEL},TO_261TEL,0,T_DOOR01,262TEL_s
+door,sw_door_per003,Turbolift{103PER},PERDoor103,0,T_DOOR01,101PER_s
+door,sw_door_per002,Turbolift{105PER},PERDoor105,0,T_DOOR01,101PER_s
+door,sw_door_unnamed1,Unnamed World Door 1,Unnamed World Door 1,0,T_DOOR01,bif
+door,sw_door_telos009,Vivarium{Ithorian Plant},d_ith_plant,0,T_DOOR01,204TEL_s
+door,sw_door_test,Wood_strong,TestDoor,0,T_DOOR01,bif
+door,door_flophouse_s,{CA}Door{Secret},Flophouse_Secret,0,T_DOOR01,303NAR_s
+door,door_narshad010,{CFA}Door{Locked},NarShaddaaDoor01,0,T_DOOR01,303NAR_s
+door,to304nar,{CFA}Jekk'Jekk Tarr,TO_304NAR,0,T_DOOR01,303NAR_s
+door,door_pylon3,{JDM}Door{Pylon 3},pylon3,0,T_DOOR01,303NAR_s
+door,door_narshad008,{kds}Door{Twin Sun Prop},TwinDoor,0,T_DOOR01,301NAR_s
+door,inner_door,{MHC}Door{Inner Warehouse},Inner_Door,0,T_DOOR01,303NAR_s
+door,secret_door,{MHC}Door{Secret},Secret_Door,0,T_DOOR01,303NAR_s
+door,sealeddoor,{MHC}Sealed Door,Sealed_Door,0,T_DOOR01,303NAR_s
+door,d_vogga,{MHC}Security Door{Vogga},Vogga_Door,0,T_DOOR01,303NAR_s
+door,ct96635,{MHC}Warehouse{Inner},Door_Warehouse_Inner,0,T_DOOR01,303NAR_s
+door,door_warehouse,{MHC}Warehouse{Outer},Door_Warehouse_Outer,0,T_DOOR01,303NAR_s
+door-model,,BrokenDoor,,58,DOR_HAR02,2da
+door-model,,CzerkaDoor1,,33,DOR_LZA01,2da
+door-model,,DantooineDoor1,,27,DOR_LDA01,2da
+door-model,,DantooineDoor2,,34,DOR_LDA02,2da
+door-model,,DantooineDoor3,,35,DOR_LDA03,2da
+door-model,,DantooineDoor4,,36,DOR_LDA04,2da
+door-model,,DantooineK2Door01,,103,DOR_DAN01,2da
+door-model,,DantooineK2Door02,,121,DOR_DAN02,2da
+door-model,,DroidPlanetDoor01,,90,DOR_DRO01,2da
+door-model,,DroidPlanetDoor02,,91,DOR_DRO02,2da
+door-model,,DxunDoor01,,65,DOR_DXN01,2da
+door-model,,DxunDoor02,,66,DOR_DXN02,2da
+door-model,,DxunDoor03,,67,DOR_DXN03,2da
+door-model,,DxunDoor04,,92,DOR_DXN04,2da
+door-model,,DxunDoor05,,93,DOR_DXN05,2da
+door-model,,DxunDoor06,,94,DOR_DXN06,2da
+door-model,,DxunDoor07,,123,DOR_DXN7,2da
+door-model,,EbonHawkDoor01,,71,DOR_EH1,2da
+door-model,,Fancy,,1,T_DOOR02,2da
+door-model,,ForceField,,10,T_Door11,2da
+door-model,,ForceField2,,12,MyDoor2,2da
+door-model,,Hammerhead1,,48,DOR_HAR01,2da
+door-model,,HarbingerDoor03,,78,DOR_HAR03,2da
+door-model,,Jeweled,,8,T_Door09,2da
+door-model,,KashDoor1,,26,DOR_LKA01,2da
+door-model,,KashDoor2,,32,DOR_LKA02,2da
+door-model,,KashDoor3,,44,DOR_LKA03,2da
+door-model,,KorribanDoor08,,104,DOR_LKO08,2da
+door-model,,KorribanDoor09,,102,DOR_LKO09,2da
+door-model,,KorribanDoor1,,15,DOR_LKO01,2da
+door-model,,KorribanDoor2,,16,DOR_LKO02,2da
+door-model,,KorribanDoor3,,28,DOR_LKO03,2da
+door-model,,KorribanDoor4,,40,DOR_LKO04,2da
+door-model,,KorribanDoor5,,41,DOR_LKO05,2da
+door-model,,KorribanDoor6,,42,DOR_LKO06,2da
+door-model,,KorribanDoor7,,43,DOR_LKO07,2da
+door-model,,MalachorDoor01,,99,DOR_MAL01,2da
+door-model,,MalachorDoor02,,100,DOR_MAL02,2da
+door-model,,MalachorDoor03,,122,DOR_MAL03,2da
+door-model,,ManaanDoor1,,13,DOR_LMA01,2da
+door-model,,ManaanDoor2,,14,DOR_LMA02,2da
+door-model,,ManaanDoor2NPres,,60,DOR_LMA02,2da
+door-model,,ManaanDoor3,,53,DOR_LMA03,2da
+door-model,,ManaanDoor4,,54,DOR_LMA04,2da
+door-model,,ManaanDoor5,,55,DOR_LMA05,2da
+door-model,,ManaanDoor6,,56,DOR_LMA06,2da
+door-model,,Metal,,5,T_Door06,2da
+door-model,,NarShaddaaDoor01,,73,DOR_NAR01,2da
+door-model,,NarShaddaaDoor02,,79,DOR_NAR02,2da
+door-model,,NarShaddaaDoor03,,80,DOR_NAR03,2da
+door-model,,NarShaddaaDoor04,,81,DOR_NAR04,2da
+door-model,,NarShaddaaDoor05,,82,DOR_NAR05,2da
+door-model,,NarShaddaaDoor06,,83,DOR_NAR06,2da
+door-model,,NarShaddaaDoor07,,84,DOR_NAR07,2da
+door-model,,NarShaddaaDoor08,,85,DOR_NAR01s,2da
+door-model,,NarShaddaaDoor09,,86,DOR_NAR09,2da
+door-model,,NarShaddaaDoor10,,87,DOR_NAR10,2da
+door-model,,OnderonDoor01,,95,DOR_OND01,2da
+door-model,,OnderonDoor02,,96,DOR_OND02,2da
+door-model,,OnderonDoor03,,105,DOR_OND03,2da
+door-model,,OnderonDoor04,,106,DOR_OND04,2da
+door-model,,OnderonDoor05,,107,DOR_OND05,2da
+door-model,,OnderonDoor06,,108,DOR_OND06,2da
+door-model,,PeragusDoor01,,64,DOR_PER01,2da
+door-model,,PeragusDoor01,,77,DOR_PER05,2da
+door-model,,PeragusDoor02,,68,DOR_PER02,2da
+door-model,,PeragusDoor02NoPres,,70,DOR_PER02,2da
+door-model,,PeragusDoor03,,69,DOR_PER03,2da
+door-model,,PeragusDoor04,,74,DOR_PER04,2da
+door-model,,PeragusDoor06,,88,DOR_PER06,2da
+door-model,,Porticullis,,2,T_Door03,2da
+door-model,,Porticullis2,,3,T_Door04,2da
+door-model,,RakataDoor1,,17,DOR_LRK01,2da
+door-model,,RakataDoor2,,18,DOR_LRK02,2da
+door-model,,RakataDoor3,,31,DOR_LRK03,2da
+door-model,,RakataDoor4,,57,DOR_LRK04,2da
+door-model,,RavagerDoor01,,109,DOR_NIH01,2da
+door-model,,Rusted,,4,T_Door05,2da
+door-model,,SithDoor1,,24,DOR_LSI01,2da
+door-model,,SithDoor1NoPres,,59,DOR_LSI01,2da
+door-model,,SithDoor2,,25,DOR_LSI02,2da
+door-model,,SithDoor3,,39,DOR_LSI03,2da
+door-model,,SithDoor4,,47,DOR_LSI04,2da
+door-model,,SithDoor5,,50,DOR_LSI05,2da
+door-model,,SithForceField,,62,Dor_LSI06,2da
+door-model,,StarForgeDoor1,,52,DOR_LSF01,2da
+door-model,,Stone,,7,T_Door08,2da
+door-model,,Stone_evil,,6,T_Door07,2da
+door-model,,TarisDoor1,,19,DOR_LTS01,2da
+door-model,,TarisDoor10,,61,DOR_LTS10,2da
+door-model,,TarisDoor2,,20,DOR_LTS02,2da
+door-model,,TarisDoor3,,21,DOR_LTS03,2da
+door-model,,TarisDoor4,,22,DOR_LTS04,2da
+door-model,,TarisDoor5,,37,DOR_LTS05,2da
+door-model,,TarisDoor6,,45,DOR_LTS06,2da
+door-model,,TarisDoor7,,46,DOR_LTS07,2da
+door-model,,TarisDoor8,,49,DOR_LTS08,2da
+door-model,,TarisDoor9,,51,DOR_LTS09,2da
+door-model,,TatooineDoor1,,23,DOR_LTA01,2da
+door-model,,TatooineDoor2,,29,DOR_LTA02,2da
+door-model,,TatooineDoor3,,30,DOR_LTA03,2da
+door-model,,TelosDoor02,,89,DOR_TEL02,2da
+door-model,,TelosDoor03,,101,DOR_TEL03,2da
+door-model,,TelosDoor04,,72,DOR_TEL04,2da
+door-model,,TelosDoor05,,97,DOR_TEL05,2da
+door-model,,TelosDoor06,,98,DOR_TEL06,2da
+door-model,,TelosDoor07,,110,DOR_TEL07,2da
+door-model,,TelosDoor08,,111,DOR_TEL08,2da
+door-model,,TelosDoor09,,112,DOR_TEL09,2da
+door-model,,TelosDoor10,,113,DOR_TEL10,2da
+door-model,,TelosDoor11,,114,DOR_TEL11,2da
+door-model,,TelosDoor12,,115,DOR_TEL12,2da
+door-model,,TelosDoor13,,116,DOR_TEL13,2da
+door-model,,TelosDoor14,,117,DOR_TEL14,2da
+door-model,,TelosDoor15,,118,DOR_TEL15,2da
+door-model,,TelosDoor16,,119,DOR_TEL16,2da
+door-model,,TelosDoor17,,120,DOR_TEL17,2da
+door-model,,Test,,11,MyDoor,2da
+door-model,,UnknownWld_Door,,63,Dor_UKN01,2da
+door-model,,UnknownWld_Door,,75,Dor_UKN01,2da
+door-model,,UnnamedDoor1,,38,DOR_LUN01,2da
+door-model,,Wood_weak,,9,T_Door10,2da
+door-model,,YavinDoor1,,76,Dor_LYV01,2da
+placeable,3cfd_invis,3CFD Invis,3CFD_invis,0,PLC_Invis,001EBO_s
+placeable,koltank001,<FullName>'s Kolto Tank,KolTank,0,PLC_Invis,101PER_s
+placeable,body_invis001,<FullName>{Invis},pc_invis,0,PLC_Invis,001EBO_s
+placeable,term_acc,Access Terminal,term_acc,53,PLC_InfoTerm,504OND_s
+placeable,plc_acidpool,Acid Pool,AcidPool,0,PLC_Invis,bif
+placeable,plc_firixa01,Acid Pool,Firixa01,123,PLC_Firixa01,bif
+placeable,comppnl003,Administration Computer{Invis},Adm_Console,0,PLC_Invis,101PER_s
+placeable,termal008,Airlock Terminal{1 emergency},ta1emergency,23,PLC_CompPnl,201TEL_s
+placeable,termal007,Airlock Terminal{1a},TermAirlock1a,23,PLC_CompPnl,201TEL_s
+placeable,termal003,Airlock Terminal{1},TermAirlock1,23,PLC_CompPnl,201TEL_s
+placeable,termal005,Airlock Terminal{2a},TermAirlock2a,23,PLC_CompPnl,201TEL_s
+placeable,termal2,Airlock Terminal{2},TermAirlock2,23,PLC_CompPnl,201TEL_s
+placeable,termal006,Airlock Terminal{3a},TermAirlock3a,23,PLC_CompPnl,201TEL_s
+placeable,termal004,Airlock Terminal{3},TermAirlock3,23,PLC_CompPnl,201TEL_s
+placeable,beer001,Alien Pale Ale,AlienPaleAle,187,PLC_Beer,301NAR_s
+placeable,plc_beer,Alien Pale Ale,AlienPaleAle,187,PLC_Beer,bif
+placeable,anc_box_se,Ancient Box{SE},anc_box_se,285,PLC_barrel1,411DXN_s
+placeable,anc_box_sw,Ancient Box{SW},anc_box_sw,285,PLC_barrel1,411DXN_s
+placeable,anc_terminal_se,Ancient Terminal,anc_terminal_se,232,PLC_NadCom,411DXN_s
+placeable,anc_terminal_sw,Ancient Terminal,anc_terminal_sw,232,PLC_NadCom,411DXN_s
+placeable,anc_terminal,Ancient Terminal{NE},anc_terminal,54,PLC_Invis,411DXN_s
+placeable,anc_terminal_nw,Ancient Terminal{NW},anc_terminal_nw,54,PLC_Invis,411DXN_s
+placeable,term_puzzle_se,Ancient Terminal{Puzzle-SE},term_puzzle_se,54,PLC_Invis,411DXN_s
+placeable,term_puzzle_sw,Ancient Terminal{Puzzle-SW},term_puzzle_sw,54,PLC_Invis,411DXN_s
+placeable,plc_armoire01,Armoire 01,Armoire01,283,PLC_armoire,bif
+placeable,armoryconsole001,Auxiliary Console,gotoarmory,54,PLC_Invis,351NAR_s
+placeable,comppnl_nad001,B-4D4 Computer Panel,plc_b4d4_control,232,PLC_NadCom,221TEL_s
+placeable,plc_comppnl_nad,B-4D4 Computer Panel,plc_comppnl_nad,232,PLC_NadCom,bif
+placeable,plant_tel002,Bachani Plant,smug_plant,266,PLC_Planter2,204TEL_s
+placeable,plc_backpack,Backpack,Backpack,3,PLC_Backpack,bif
+placeable,g_trescivil002,Bag,CivilBagStrap,140,PLC_Bag04,bif
+placeable,plc_bag04,Bag,GroundBagBagStrap,140,PLC_Bag04,bif
+placeable,bag_headtech,Bag{Head Technician},bag_headtech,140,PLC_Bag04,610DAN_s
+placeable,bag_datapad2,Bag{Tuk'ata Datapad},Bag_datapad2,140,PLC_Bag04,702KOR_s
+placeable,plc_banner01,Banner01,Banner01,284,PLC_banner,bif
+placeable,plc_bnthcrps,Bantha Corpse,BnthCrps,4,PLC_BnthCrps,bif
+placeable,plc_barrel01,Barrel01,Barrel01,285,PLC_barrel1,bif
+placeable,plc_barrel02,Barrel02,Barrel02,286,PLC_barrel2,bif
+placeable,plc_btlscreen01,Battle Screen 1,Battle Screen 1,155,PLC_BtlScreen01,bif
+placeable,plc_btlscreen02,Battle Screen 2,Battle Screen 2,156,PLC_BtlScreen02,bif
+placeable,termtel005,Bay Control,TermB,0,PLC_Invis,232TEL_s
+placeable,plc_bdroid,bDroid01,bDroid01,287,PLC_bDroid,bif
+placeable,bed002,Bed,203_Bed,5,PLC_Bed1,203TEL_s
+placeable,plc_dbed01,Bed Double 01,d_Bed01,294,PLC_dBed,bif
+placeable,plc_bedking01,Bed King 01,BedKing01,304,PLC_kBed,bif
+placeable,plc_com_bed01,Bed Single 01,Com_Bed01,291,PLC_combed,bif
+placeable,plc_bedsingle01,Bed Single 02,BedSingle01,321,PLC_sbed,bif
+placeable,plc_bench,Bench,Bench,7,PLC_Bench,bif
+placeable,plc_bench2,Bench 2,Bench2,192,PLC_Bench2,bif
+placeable,bitharm,Bith Arm Holding Datapad,bitharm,95,PLC_SevrdArm,303NAR_s
+placeable,blastsmoke,BlastSmoke,BlastSmoke,108,PLC_StmVentC,102PER_s
+placeable,body_invis,Body{Invis container},body_invis,0,PLC_Invis,001EBO_s
+placeable,gencrps004,Body{Kreia Placeable},kreia_corpse,271,P_KreiaStunt,001EBO_s
+placeable,plc_bones01,Bones01,Bones01,288,PLC_Bones,bif
+placeable,plc_brazier01,Brazier 01{411},Brazier01,272,PLC_braz01,bif
+placeable,comppnl006,Briefing Room Console,BrfRoomCon,0,PLC_Invis,151HAR_s
+placeable,computer_busted,Broken Computer Panel,computer_busted,23,PLC_CompPnl,610DAN_s
+placeable,alibi_droid,Broken Droid,alibi_droid,12,PLC_BroknDrd,512OND_s
+placeable,bdroid001,Broken Droid,bDroid01,287,PLC_bDroid,001EBO_s
+placeable,g_tresdrd001,Broken Droid,LowBroknDrd,12,PLC_BroknDrd,bif
+placeable,g_tresdrd002,Broken Droid,MidBroknDrd,12,PLC_BroknDrd,bif
+placeable,g_tresdrd003,Broken Droid,HighBroknDrd,12,PLC_BroknDrd,bif
+placeable,g_tresdrd004,Broken Droid,LowBroknDrd,12,PLC_BroknDrd,001EBO_s
+placeable,plc_brokndrd,Broken Droid,BroknDrd,12,PLC_BroknDrd,bif
+placeable,g_tresdrd005,Broken Droid{2},LowBroknDrd,268,PLC_Robo2Lie,102PER_s
+placeable,g_tresdrd006,Broken Droid{3},LowBroknDrd,268,PLC_Robo2Lie,102PER_s
+placeable,g_tresdrd007,Broken Droid{4},LowBroknDrd,268,PLC_Robo2Lie,102PER_s
+placeable,g_tresdrd008,Broken Droid{Comps 2},LowBroknDrd,269,PLC_Robo1Stand,103PER_s
+placeable,plc_brkndroid01,Broken Droid{Mining},BrokenDroidMining,267,PLC_Robo1Lie,bif
+placeable,plc_brkndroid02,Broken Droid{Mining},BrokenDroidMining,268,PLC_Robo2Lie,bif
+placeable,plc_brkndroid03,Broken Droid{Mining},BrokenDroidMining,269,PLC_Robo1Stand,bif
+placeable,infoterm001,Broken Log Terminal,Minconbro,349,PLC_InfoTerm_b,105PER_s
+placeable,plc_brknsfan,Broken Sewer Fan,BrknSFan,121,PLC_BrknSFan,bif
+placeable,bwire,Broken Wires{invis},bwire,54,PLC_Invis,403DXN_s
+placeable,sign001,Bumani Exchange Corp.,Sign,98,PLC_Sign,220TEL_s
+placeable,sign_exch,Bumani Exchange Corp.,SignExch,98,PLC_Sign,203TEL_s
+placeable,plc_burnjunk,Burning Pile of Refuse,BurnJunk,13,PLC_BurnJunk,bif
+placeable,plc_btnpnlht,Button Panel - High tech; hand sized  similar to a computer screen,BtnPnlHT,14,PLC_BtnPnlHT,bif
+placeable,plc_btnpnllt,Button Panel - Low tech; hand sized; stone with a wooden frame,BtnPnlLT,15,PLC_BtnPnlLT,bif
+placeable,plc_buzzbugs,Buzzing Insects,BuzzBugs,120,PLC_BuzzBugs,bif
+placeable,plc_cagelong,Cage (Long),CageLong,350,PLC_LngCage,bif
+placeable,plc_cagelg,Cage - Large,CAGELG,16,PLC_CageLg,bif
+placeable,plc_cagesm,Cage - Small,CAGESM,17,PLC_CageSm,bif
+placeable,plc_cage01,Cage01,Cage01,289,PLC_cage,bif
+placeable,cage_jedi,Cage{Dead Jedi},cage_jedi,16,PLC_CageLg,702KOR_s
+placeable,cage_tukata,Cage{Tuk'ata},cage_tukata,16,PLC_CageLg,702KOR_s
+placeable,plc_firepit2,Campfire; Low-Tech,campfire; low tech,129,PLC_FirePit2,bif
+placeable,captlookat,Capt look at{Invisible},Captlookat,167,PLC_InvEb,604DAN_s
+placeable,g_tresmillow014,Cargo Canister{Empty},MilLowMetalBox,72,PLC_MetalBox,106PER_s
+placeable,plc_carpet01,Carpet01,Carpet01,290,PLC_carpet,bif
+placeable,carthinvis,Carth Invis,carthinvis,0,PLC_Invis,602DAN_s
+placeable,clingfan001,Ceiling Fan,clingfan,18,PLC_fan01,301NAR_s
+placeable,plc_clingfan,Ceiling Fan,clingfan,18,PLC_fan01,bif
+placeable,cjar001,Ceramic Jar,CeramicJar,179,PLC_CJar,710KOR_s
+placeable,plc_cjar,Ceramic Jar,CeramicJar,179,PLC_CJar,bif
+placeable,chair_mil_002,Chair - Luxurious,Chair2,19,PLC_Chair1,301NAR_s
+placeable,plc_chair2,Chair - Luxurious,Chair2,20,PLC_Chair2,bif
+placeable,plc_chair_mil_01,Chair - Military,Chair2,19,PLC_Chair1,bif
+placeable,plc_chair03,Chair03,Chair03,315,PLC_chair3,bif
+placeable,plc_chair04,Chair04,Chair04,316,PLC_chair4,bif
+placeable,bag005,Cheat Bag,GroundBagBagStrap,140,PLC_Bag04,305NAR_s
+placeable,metalbox001,Cheat Box,MetalBox,72,PLC_MetalBox,231TEL_s
+placeable,check_mines,Check Mines{Invisible},check_mines,167,PLC_InvEb,711KOR_s
+placeable,cont_med002,Chemical Dispenser,ChemDispenser,270,PLC_MedCan,304NAR_s
+placeable,cont_med003,Chemical Dispensing Station{Invis},ChemDispenser2,0,PLC_Invis,304NAR_s
+placeable,plc_chest01,Chest 01{411},Chest01,275,PLC_Cht01,bif
+placeable,plc_chewdhmn,Chewed Corpse - Human Commoner,ChewdHmn,21,PLC_ChewdHmn,bif
+placeable,plc_chwdtwlk,Chewed Corpse - Twi'lek Commoner,ChwdTwlk,22,PLC_ChwdTwlk,bif
+placeable,plc_chwdnblc,Chewed Nobleman's Corpse,ChwdNblC,119,PLC_ChwdNblC,bif
+placeable,twilek_body,Chewed Twi'lek Corpse,twilek_body,22,PLC_ChwdTwlk,702KOR_s
+placeable,invisibleplaceab,Circle Cutscene Dialogue,CircleCutsceneDlg,0,PLC_Invis,401DXN_s
+placeable,plc_cjar3,Clay Bowl,ClayBowl,185,PLC_Cjar3,bif
+placeable,plc_cjar2,Clay Urn,ClayUrn,184,PLC_Cjar2,bif
+placeable,sign002,Closed for Remodeling,Sign,98,PLC_Sign,221TEL_s
+placeable,plc_bed2,Comfortable Double Bed,Bed2,6,PLC_Bed2,bif
+placeable,plc_commpanel01,Comm_Panel01,Comm_Panel01,292,PLC_commPanel,bif
+placeable,commandconsole,Command Console,M478Console,54,PLC_Invis,351NAR_s
+placeable,comppnl002,Communications Console,Comcon,0,PLC_Invis,001EBO_s
+placeable,comppnl007,Communications Terminal{Med},wallt_med,292,PLC_commPanel,204TEL_s
+placeable,pnl_cputercon01,Computer Console01,ComputerCon01,293,PLC_cputerCon,bif
+placeable,plc_companlgrey,Computer Panel - Floor (Dark Grey),CompPanelGrey,347,PLC_CompPnl_b,bif
+placeable,plc_comppnl,Computer Panel - Floor Mount,ComputerPanel,23,PLC_CompPnl,bif
+placeable,plc_comwallgrey,Computer Panel - Wall (Dark Grey),CompWallGrey,348,PLC_CompPnl2_b,bif
+placeable,plc_comppnl2,Computer Panel - Wall Mount,ComputerPanel,24,PLC_CompPnl2,bif
+placeable,comp_cond,Computer Panel{Conductor},comp_cond,23,PLC_CompPnl,610DAN_s
+placeable,computer_library,Computer Panel{Library},computer_library,23,PLC_CompPnl,702KOR_s
+placeable,comp_main,Computer Panel{Main},comp_main,23,PLC_CompPnl,602DAN_s
+placeable,comp_prot_droid,Computer Panel{Prot Droid},comp_prot_droid,24,PLC_CompPnl2,610DAN_s
+placeable,computer_quiz,Computer Panel{Student},computer_quiz,23,PLC_CompPnl,702KOR_s
+placeable,computer_torture,Computer Panel{Torture Room},computer_torture,23,PLC_CompPnl,702KOR_s
+placeable,computer_train,Computer Panel{Training Room},computer_train,23,PLC_CompPnl,702KOR_s
+placeable,plc_comscrngrey,Computer Screen - Floor (Dark Grey),CompScrnGrey,349,PLC_InfoTerm_b,bif
+placeable,sec_term_boom,Computer Terminal{Boom},sec_term_boom,53,PLC_InfoTerm,506OND_s
+placeable,sec_term_gas,Computer Terminal{Gas},sec_term_gas,53,PLC_InfoTerm,506OND_s
+placeable,sec_term_puzz,Computer Terminal{Puzzle},sec_term_puzz,53,PLC_InfoTerm,506OND_s
+placeable,sec_term_tobin,Computer Terminal{Tobin},sec_term_tobin,53,PLC_InfoTerm,506OND_s
+placeable,signspeaker,Computer{Sign Speaker},SignSpeaker,0,PLC_Invis,001EBO_s
+placeable,g_tresmilhig010,Container{Head},HoldHead,77,PLC_PlstcCrt,950COR_s
+placeable,g_tresmilhig011,Container{Stuff},HoldStuff,77,PLC_PlstcCrt,950COR_s
+placeable,inveb006,Coorta{Fake},CoortaFake,167,PLC_InvEb,105PER_s
+placeable,g_tresgencorp001,Corpse,LowCorpse,42,PLC_GenCrps,bif
+placeable,g_tresgencorp002,Corpse,MidCorpse,42,PLC_GenCrps,bif
+placeable,g_tresgencorp003,Corpse,HighCorpse,42,PLC_GenCrps,bif
+placeable,g_tresgencorp008,Corpse,LowCorpse,271,P_KreiaStunt,101PER_s
+placeable,plc_bodykray,Corpse - Krayt Dragon,KraytCorpse,218,PLC_bodyKray,bif
+placeable,oscoutcrps,Corpse - Onderon Scout,OScoutCrps,99,PLC_SSldCrps,402DXN_s
+placeable,plc_bodyranc,Corpse - Rancor,RancorCorpse,217,PLC_bodyRanc,bif
+placeable,plc_rsldcrps,Corpse - Republic Soldier,RSldCrps,89,PLC_RSldCrps,bif
+placeable,rsldcrps004,Corpse - Republic Soldier{Container 2},RSldCrps,89,PLC_RSldCrps,152HAR_s
+placeable,rsldcrps003,Corpse - Republic Soldier{Container 3},RSldCrps,89,PLC_RSldCrps,152HAR_s
+placeable,rsldcrps002,Corpse - Republic Soldier{Container Gen},RSldCrps,89,PLC_RSldCrps,152HAR_s
+placeable,rsldcrps001,Corpse - Republic Soldier{Container},RSldCrps,89,PLC_RSldCrps,152HAR_s
+placeable,rsldcrps005,Corpse - Republic Soldier{Datapad},RSldCrps,89,PLC_RSldCrps,152HAR_s
+placeable,plc_ssldcrps,Corpse - Sith Soldier,SSldCrps,99,PLC_SSldCrps,bif
+placeable,g_tresgencorp011,Corpse{Coorta Thugs},LowCorpse,42,PLC_GenCrps,105PER_s
+placeable,g_tresgencorp009,Corpse{Energy Shield + Medpac},HighCorpse,42,PLC_GenCrps,102PER_s
+placeable,g_tresgencorp007,Corpse{No Loot},LowCorpse,243,PLC_GenCrps04,101PER_s
+placeable,g_tresgencorp010,Corpse{Normal},HighCorpse,42,PLC_GenCrps,102PER_s
+placeable,corpse_maintoff,Corpse{PER Maintenance Officer},CorpseMaintenanceOfficer,282,PLC_Maintoff,bif
+placeable,g_tresgencorp012,Corpse{Peragus},LowCorpse,42,PLC_GenCrps,105PER_s
+placeable,g_tresgencorp006,Corpse{Security Spike},LowCorpse,242,PLC_GenCrps03,101PER_s
+placeable,g_tresgencorp013,Corpse{Storage},LowCorpse,42,PLC_GenCrps,105PER_s
+placeable,g_tresgencorp005,Corpse{Vibrocutter},LowCorpse,242,PLC_GenCrps03,101PER_s
+placeable,plc_crate,Crate,CrateWdn,25,PLC_Crate,bif
+placeable,cryform_bl001,Crystal Formation,cryform_bl,134,PLC_SCrysBlu,604DAN_s
+placeable,plc_datapad,Cutscene Datapad,Cutscene Datapad,125,PLC_DataPad,bif
+placeable,plc_ban,Czerka Ad Banner,CzerkaAdBanner,222,PLC_Stock,bif
+placeable,sign003,Czerka Corporation,Sign,98,PLC_Sign,220TEL_s
+placeable,sign_czerka,Czerka Corporation,SignCzerka,98,PLC_Sign,203TEL_s
+placeable,203_mainframe,Czerka Mainframe,203_mainframe,54,PLC_Invis,209TEL_s
+placeable,plc_marker,Czerka Marker Post,Czerka Marker Post,130,PLC_Marker,bif
+placeable,plc_czsign,Czerka Neon Sign,CzerkaSign,224,PLC_CzSign,bif
+placeable,desk003,Czerka Reception Desk,ComputerPanel3,28,PLC_Desk2,209TEL_s
+placeable,plc_sonicdev,Czerka Sonic Device,Czerka Sonic Device,131,PLC_SonicDev,bif
+placeable,plc_dnglvine,Dangling Vine - From Above,DnglVine,26,PLC_DnglVine,bif
+placeable,darkforce,Dark Force,DarkForce,278,PLC_DkfrcSmk,711KOR_s
+placeable,plc_smokedfrc01,Dark Force Smoke 01,DarkForceSmoke01,278,PLC_DkfrcSmk,bif
+placeable,darkforce001,Dark Force{Destroy Shyrak},DarkForce_shyrak,278,PLC_DkfrcSmk,711KOR_s
+placeable,taint_ds,Dark Side Energy,taint_ds,54,PLC_Invis,411DXN_s
+placeable,taint_ds2,Dark Side Energy,taint_ds2,54,PLC_Invis,411DXN_s
+placeable,inveb007,DataCam{Invis},DataCam,167,PLC_InvEb,105PER_s
+placeable,datapad_contain,Datapad{container},datapad_contain,125,PLC_DataPad,610DAN_s
+placeable,jedi_cont,Dead Jedi{invis container},jedi_cont,167,PLC_InvEb,711KOR_s
+placeable,dead_mandy,Dead Mandalorian,dead_mandy,54,PLC_Invis,402DXN_s
+placeable,deadmerc_cont,Dead Mercenaries{container},deadmerc_cont,125,PLC_DataPad,610DAN_s
+placeable,plc_deadfall_01,Deadfall 1,Deadfall 1,158,PLC_Deadfall_01,bif
+placeable,plc_deadfall_02,Deadfall 2,Deadfall 2,159,PLC_Deadfall_02,bif
+placeable,death_invis,death_invis,death_invis,167,PLC_InvEb,711KOR_s
+placeable,plc_decoitem01,Deco Wall Item01,Deco_Item01,295,PLC_decoItem,bif
+placeable,ebcont001,Decontamination Chamber{Fake Target},InvisDecon,54,PLC_Invis,106PER_s
+placeable,ebcont002,Decontamination Door{Fake},DestroyDe,54,PLC_Invis,106PER_s
+placeable,turret_fake_a,Defense Turret{Fake A},turret_fake_a,167,PLC_InvEb,601DAN_s
+placeable,turret_fake_b,Defense Turret{Fake B},turret_fake_b,167,PLC_InvEb,601DAN_s
+placeable,turret_fake_c,Defense Turret{Fake C},turret_fake_c,167,PLC_InvEb,601DAN_s
+placeable,plc_desk1,Desk - Basic Office,Desk1,27,PLC_Desk1,bif
+placeable,plc_desk2,Desk - Fancy Office,Desk2,28,PLC_Desk2,bif
+placeable,desk_off,Desk{deactivated},desk_off,296,PLC_exDesk,610DAN_s
+placeable,invisible006,Disc4Invis,Disc4Invis,54,PLC_Invis,003EBO_s
+placeable,invisible007,DiscInvis,DiscInvis,54,PLC_Invis,003EBO_s
+placeable,doorinvblk001,Door{Invisible Door Blocker},doorinvblk,360,PLC_DBlk,101PER_s
+placeable,plc_doorinvblk,Door{Invisible Door Blocker},doorinvblk,360,PLC_DBlk,bif
+placeable,beer003,Drink,Drink,188,PLC_Beer2,301NAR_s
+placeable,plc_beer2,Drink,Drink,188,PLC_Beer2,bif
+placeable,plc_dripwatr,Dripping water effect from ceiling,DripWatr,29,PLC_DripWatr,bif
+placeable,comp_turret001,Droid Control Station,comp_droid,23,PLC_CompPnl,602DAN_s
+placeable,power_gen,Droid Power Generator,power_gen,314,PLC_pgen,410DXN_s
+placeable,plc_ebcont,Ebon Hawk Container,Ebon Hawk Container,153,PLC_EbCont,bif
+placeable,plc_ebstrg,Ebon Hawk Container,EbStorage,220,PLC_LevInd,bif
+placeable,inveb002,Ebon Hawk Turret{Invisible},Turret,167,PLC_InvEb,002EBO_s
+placeable,plc_esparklg,Electrical spark effect - large,ESparkLg,30,PLC_ESparkLg,bif
+placeable,plc_esparksm,Electrical spark effect - small,ESparkSm,31,PLC_ESparkSm,bif
+placeable,btnpnlht001,Emergency Tunnel Control,305term,14,PLC_BtnPnlHT,305NAR_s
+placeable,plc_ends,Endar Spire Screen,EndarSpireScreen,174,PLC_EndS,bif
+placeable,inveb005,Engine Port{Invisible},eng_port,167,PLC_InvEb,002EBO_s
+placeable,plc_envrsuit,Environmental Suit,EnvrSuit,32,PLC_EnvrSuit,bif
+placeable,plc_equppack,Equipment Pack,EqupPack,33,PLC_EqupPack,bif
+placeable,comppnl004,Escape Pod,EscapePod,0,PLC_Invis,151HAR_s
+placeable,plc_exdesk01,Executive Desk01,Ex_Desk01,296,PLC_exDesk,bif
+placeable,plc_extable01,Executive Table01,Ex_Table01,297,PLC_extable,bif
+placeable,invis_explode,Explosion{invisible trigger},invis_explode,167,PLC_InvEb,404DXN_s
+placeable,plstccrt001,Explosive Barrel,ExpBarrel,77,PLC_PlstcCrt,107PER_s
+placeable,door_override,Exposed Wiring{Door Override},door_override,167,PLC_InvEb,002EBO_s
+placeable,fake_alien,fake_alien,fake_alien,54,PLC_Invis,502OND_s
+placeable,fake_mand,fake_mand,fake_mand,54,PLC_Invis,501OND_s
+placeable,fake_mira,fake_mira,fake_mira,54,PLC_Invis,411DXN_s
+placeable,fake_replace,fake_replace,fake_replace,54,PLC_Invis,502OND_s
+placeable,plc_rfl2,Falling Roof 2,RoofFall2,193,PLC_RFL2,bif
+placeable,plc_rfl,Falling Roof M39aa,RoofFall,145,PLC_Rfl,bif
+placeable,plc_rfb,Falling Roof Rubble,RoofFallRubble,194,PLC_InvCalo,bif
+placeable,plc_filecabinet,File Cabinet 01,FileCabinet01,298,PLC_fileCab,bif
+placeable,plc_firepit,Fire Pit,FirePit,34,PLC_FirePit,bif
+placeable,plc_firpitlg,Fire Pit - Large,FirPitLg,35,PLC_FirPitLg,bif
+placeable,plc_flmbrstc,Flame burst - continual,FlmBrstC,36,PLC_FlmBrstC,bif
+placeable,plc_flmbrsti,Flame burst - intermittent,FlmBrstI,37,PLC_FlmBrstI,bif
+placeable,flameexhaust,Flame Exhaust,FlameExhaust1,231,PLC_Stmtrap,104PER_s
+placeable,flameexhaust001,Flame Exhaust,FlameExhaust2,231,PLC_Stmtrap,104PER_s
+placeable,plc_flpnl,Floor Panel,Floor Panel,152,PLC_FlPnl,bif
+placeable,plc_chair1,Food pile - organized on a table,Chair1,38,PLC_FoodPile,bif
+placeable,plc_foodpile,Food pile - organized on a table,FoodPile,38,PLC_FoodPile,bif
+placeable,g_trescivil001,Footlocker,CivilFootLker,39,PLC_FootLker,bif
+placeable,g_trescivil005,Footlocker,CivilFootLker,39,PLC_FootLker,105PER_s
+placeable,g_tresmilhig001,Footlocker,MilHighFootLker,39,PLC_FootLker,bif
+placeable,g_tresmillow001,Footlocker,MilLowFootLker,39,PLC_FootLker,bif
+placeable,g_tresmilmid001,Footlocker,MilMidFootLker,39,PLC_FootLker,bif
+placeable,plc_footlker,Footlocker,FootLker,39,PLC_FootLker,bif
+placeable,locker_armory,Footlocker{Armory 1},locker_armory,39,PLC_FootLker,506OND_s
+placeable,locker_armory2,Footlocker{Armory 2},locker_armory2,39,PLC_FootLker,506OND_s
+placeable,footlocker_comp,Footlocker{Computer Datapad},footlocker_comp,39,PLC_FootLker,702KOR_s
+placeable,footlocker_empty,Footlocker{Empty; Open},footlocker_empty,39,PLC_FootLker,602DAN_s
+placeable,g_trescivil004,Footlocker{Empty},CivilFootLker,39,PLC_FootLker,101PER_s
+placeable,g_tresmillow015,Footlocker{Exit Room},MilLowFootLker,39,PLC_FootLker,106PER_s
+placeable,fl_flamethrow,Footlocker{Flamethrower},fl_flamethrow,39,PLC_FootLker,001EBO_s
+placeable,bast_footlocker,Footlocker{Holocron},bast_footlocker,39,PLC_FootLker,702KOR_s
+placeable,g_tresmillow007,Footlocker{locked},MilLowFootLkerLocked,39,PLC_FootLker,bif
+placeable,g_tresmillow016,Footlocker{Locked},MilLowFootLker,39,PLC_FootLker,106PER_s
+placeable,footlocker_llt,Footlocker{Low; Locked; No Bash},footlocker_llt,39,PLC_FootLker,610DAN_s
+placeable,footlocker_ll,Footlocker{Low; Locked},footlocker_ll,39,PLC_FootLker,610DAN_s
+placeable,footlocker_mlt,Footlocker{Mid; Locked; No Bash},footlocker_mlt,39,PLC_FootLker,610DAN_s
+placeable,fl_parts,Footlocker{Parts},fl_parts,39,PLC_FootLker,001EBO_s
+placeable,fl_spikes,Footlocker{Spikes},fl_spikes,39,PLC_FootLker,001EBO_s
+placeable,g_trescivil003,Footlocker{Stealth},CivilFootLker,39,PLC_FootLker,101PER_s
+placeable,plc_fccage,Force Cage,Force Cage,151,PLC_FcCage,bif
+placeable,vrookcage,Force Cage,vrookcage,173,PLC_FcCage2,604DAN_s
+placeable,plc_fccage2,Force Cage 2,Force Cage 2,173,PLC_FcCage2,bif
+placeable,plc_forcecageblk,Force Cage Blocker,ForceCageBlocker,280,PLC_FcCageA,bif
+placeable,forcecageblk001,Force Cage Blocker{attons},AttonCageBlocker,280,PLC_FcCageA,101PER_s
+placeable,forcecageblk002,Force Cage Blocker{kreia},forcecage_kreia,280,PLC_FcCageA,202TEL_s
+placeable,forcecageblk003,Force Cage Blocker{player},forcecage_player,280,PLC_FcCageA,202TEL_s
+placeable,fccage003,Force Cage{Atton},AttonCage,173,PLC_FcCage2,101PER_s
+placeable,fccage005,Force Cage{Killers},killer_cage,173,PLC_FcCage2,202TEL_s
+placeable,fccage004,Force Cage{off},ForceCage2,173,PLC_FcCage2,101PER_s
+placeable,fccage007,Force Cage{Party Members},cage_party,173,PLC_FcCage2,202TEL_s
+placeable,fccage006,Force Cage{Player},cage_player,173,PLC_FcCage2,202TEL_s
+placeable,fccage008,Force Cage{samhan},ForceCageSamHan,173,PLC_FcCage2,202TEL_s
+placeable,invisible004,G0T0Invis,G0T0Invis,54,PLC_Invis,003EBO_s
+placeable,invisible001,Galaxy Map,Galaxymap,54,PLC_Invis,001EBO_s
+placeable,dungheap002,Garbage Pile,alibi_garbage,209,PLC_DungHeap1,512OND_s
+placeable,plc_smoke,Gas Cloud,Smoke,100,PLC_Smoke,bif
+placeable,stmventc002,Gas Leak,GasLeak,281,PLC_StmVntgrn,105PER_s
+placeable,gasvent1,GasLeak,GasLeak,281,PLC_StmVntgrn,106PER_s
+placeable,plc_gencrps,Generic Corpse,Corpse,42,PLC_GenCrps,bif
+placeable,plc_gencrps2,Generic Corpse 2,corpse2,43,PLC_GenCrps2,bif
+placeable,plc_gencrps3,Generic Corpse 3,corpse3,242,PLC_GenCrps03,bif
+placeable,plc_gencrps4,Generic Corpse 4,corpse4,243,PLC_GenCrps04,bif
+placeable,plc_gencrps5,Generic Corpse 5,corpse5,244,PLC_GenCrps05,bif
+placeable,plc_gencrps6,Generic Corpse 6 - Sheet,corpse6,245,PLC_GenCrps06,bif
+placeable,plc_gencrps7,Generic Corpse 7 - Sheet,corpse7,246,PLC_GenCrps07,bif
+placeable,plc_gentable,Generic Table 01,GenericTable01,299,PLC_genTable,bif
+placeable,crystal_cont,Glowing Crystal Formation,crystal_cont,167,PLC_InvEb,604DAN_s
+placeable,plc_glowpudl,Glowing Puddle,GlowPuddle,44,PLC_GlowPudl,bif
+placeable,plc_gong,Gong,Gong,45,PLC_Gong,bif
+placeable,plc_gwing,GWing Escape Ship,GWing,176,PLC_Gwing,bif
+placeable,corpse_tukata,Half-Eaten Corpse,corpse_tukata,43,PLC_GenCrps2,710KOR_s
+placeable,plc_hangplant01,Hanging Plant 01,HangingPlant01,300,PLC_hangPlant,bif
+placeable,plc_dungheap,Heap of Garbage,DungHeap,195,PLC_DungHeap,bif
+placeable,plc_dungheap1,Heap of Garbage 2,DungHeap1,209,PLC_DungHeap1,bif
+placeable,cont_tunnel,High Security Cylinder{Requires Tunneler},cont_tunnel,77,PLC_PlstcCrt,001EBO_s
+placeable,plc_holodisk01,Holo Disk 01,HoloDisk01,301,PLC_holoDisk,bif
+placeable,plc_holodisk02,Holo Disk 02,HoloDisk02,302,PLC_holoDsk,bif
+placeable,holo_dan,holo_dan,hologram,337,PLC_holodan,003EBO_s
+placeable,holo_dxn,holo_dxn,hologram,338,PLC_holodxn,003EBO_s
+placeable,holo_kor,holo_kor,hologram,339,PLC_holokor,003EBO_s
+placeable,holo_mal,holo_mal,hologram,340,PLC_holomal,003EBO_s
+placeable,holo_nar,holo_nar,hologram,341,PLC_holonar,003EBO_s
+placeable,holo_ond,holo_ond,hologram,342,PLC_holoond,003EBO_s
+placeable,holo_per,holo_per,hologram,343,PLC_holopera,003EBO_s
+placeable,holo_tel,holo_tel,hologram,344,PLC_holotelos,003EBO_s
+placeable,plc_holoart2,Hologram - Abstract animated multicolored objects,HoloArt2,49,PLC_HoloArt2,bif
+placeable,plc_holoart1,Hologram - female with swirling lights,HoloArt1,48,PLC_HoloArt1,bif
+placeable,plc_holodant,Hologram_Planet_Dantooine,HoloDant,337,PLC_holodan,bif
+placeable,plc_holodxun,Hologram_Planet_Dxun,holodxun,338,PLC_holodxn,bif
+placeable,plc_holokorr,Hologram_Planet_Korriban,holokorr,339,PLC_holokor,bif
+placeable,plc_holomal,Hologram_Planet_Malachor,holomal,340,PLC_holomal,bif
+placeable,plc_holonar,Hologram_Planet_NarShad,holonar,341,PLC_holonar,bif
+placeable,plc_holoond,Hologram_Planet_Onderon,holoond,342,PLC_holoond,bif
+placeable,plc_holopera,Hologram_Planet_Peragus,holopera,343,PLC_holopera,bif
+placeable,plc_holotelos,Hologram_Planet_Telos,holotelos,344,PLC_holotelos,bif
+placeable,invisible009,HoloInvis,HoloInvis,54,PLC_Invis,003EBO_s
+placeable,plc_hvrsled,Hover Sled,HvrSled,50,PLC_HvrSled,bif
+placeable,plc_hvrslede,Hover Sled - With Swoop Bike Engine,HvrSledE,51,PLC_HvrSledE,bif
+placeable,plc_hyper,Hyper Drive,Hyperdrive,180,PLC_Hyper,bif
+placeable,invisible002,Hyper Drive{invis},InvisibleHD,54,PLC_Invis,001EBO_s
+placeable,hyper001,Hyperdrive,Hyperdrive,180,PLC_Hyper,001EBO_s
+placeable,plc_drive,Hyperdrive Part,HyperdriveParts,182,PLC_Drive,bif
+placeable,kiosk004,Information on the Struggle,Kiosk3,61,PLC_Kiosk3,503OND_s
+placeable,info_term,Information Terminal,info_term,53,PLC_InfoTerm,201TEL_s
+placeable,levind001,Information Terminal,InfoTerminal,220,PLC_LevInd,220TEL_s
+placeable,plc_infoterm,Information Terminal,InfoTerm,53,PLC_InfoTerm,bif
+placeable,termlvl,Information Terminal{202},TermLvl,53,PLC_InfoTerm,202TEL_s
+placeable,speaker_invis,Invis Speaker,speaker_invis,167,PLC_InvEb,604DAN_s
+placeable,invis_atton_end,invis_atton_end,invis_atton_end,54,PLC_Invis,904MAL_s
+placeable,invis_reaction,invis_reaction,invis_reaction,54,PLC_Invis,bif
+placeable,plc_blockage,Invisible Barrier,Blockage,142,PLC_Blockage,bif
+placeable,plc_invcalo,Invisible Calo Nord rubble,InvisibleCaloNord,219,PLC_InvCalo,bif
+placeable,plc_inveb,Invisible Ebon Container,EbContainerInv,167,PLC_InvEb,bif
+placeable,invisiblelocatio,Invisible Location Marker,InvisibleLocationMarker,0,PLC_Invis,001EBO_s
+placeable,invis_obj,Invisible Object,invis_obj,167,PLC_InvEb,711KOR_s
+placeable,plc_invis,Invisible Placeholder,Invisible,54,PLC_Invis,bif
+placeable,plc_invisible,Invisible Placeholder,Invisible,54,PLC_Invis,bif
+placeable,plc_ithplant01,Ith Plant 01,IthPlant01,303,PLC_ithPlant1,bif
+placeable,sign004,Ithorian Compound,Sign,98,PLC_Sign,221TEL_s
+placeable,sign_ithcomp,Ithorian Compound,SignIthComp,98,PLC_Sign,204TEL_s
+placeable,203_ith_pc,Ithorian Computer,203_ith_pc,23,PLC_CompPnl,204TEL_s
+placeable,desk004,Jana Lorso's Desk,ComputerPanel4,28,PLC_Desk2,203TEL_s
+placeable,jor_look1,Jorran Look 1,jor_look1,167,PLC_InvEb,610DAN_s
+placeable,jor_look2,Jorran Look 2,jor_look2,167,PLC_InvEb,610DAN_s
+placeable,plc_jnkspdr1,Junked Land Speeder,JnkSpdr1,55,PLC_JnkSpdr1,bif
+placeable,plc_jnkspdr2,Junked Land Speeder,JnkSpdr2,56,PLC_JnkSpdr2,bif
+placeable,plc_jnkswpb1,Junked Swoop Bike,JnkSwpB1,57,PLC_JnkSwpB1,bif
+placeable,plc_jnkswpb2,Junked Swoop Bike,JnkSwpB2,58,PLC_JnkSwpB2,bif
+placeable,plc_katrncps,Katarn Body,Katarn Body,132,PLC_KatrnCps,bif
+placeable,plc_knrthcps,Kinrath Body,Kinrath body,126,PLC_KnrthCps,bif
+placeable,plc_knrthvin,Kinrath Body & Vine,Kinrath body & Vine,127,PLC_KnrthVin,bif
+placeable,plc_knrthegg,Kinrath Egg,Kinrath Egg,128,PLC_KnrthEgg,bif
+placeable,knrthegg,Kinrath Egg{bashable},KinrathEgg,128,PLC_KnrthEgg,604DAN_s
+placeable,plc_kiosk2,Kiosk - Droid Parts,Kiosk2,60,PLC_Kiosk2,bif
+placeable,plc_kiosk1,Kiosk - Food,Kiosk1,59,PLC_Kiosk1,bif
+placeable,plc_kiosk3,Kiosk - Generic,Kiosk3,61,PLC_Kiosk3,bif
+placeable,plc_kolp1,Kolto Harvester 1,Kolto Harvester 1,165,PLC_Kolp1,bif
+placeable,plc_kolp2,Kolto Harvester 2,Kolto Harvester 2,166,PLC_Kolp2,bif
+placeable,koltank002,Kolto Tank - Empty,KolTank3,63,PLC_KolTank,152HAR_s
+placeable,plc_koltank,Kolto Tank - Empty,KolTank,63,PLC_KolTank,bif
+placeable,plc_koltank2,Kolto Tank With Floating Body,KolTank2,64,PLC_KolTank2,bif
+placeable,fake_kreia,Kreia,fake_kreia,54,PLC_Invis,402DXN_s
+placeable,invisokreia,Kreia,InvisoKreia,0,PLC_Invis,303NAR_s
+placeable,kreia,Kreia,Kreia,167,PLC_InvEb,701KOR_s
+placeable,invisible010,Kreia2Invis,Kreia2Invis,54,PLC_Invis,003EBO_s
+placeable,invisible008,KreiaInvis,KreiaInvis,54,PLC_Invis,003EBO_s
+placeable,kreia_voice,Kreia{Invisible Placeholder},Kreia_Voice,54,PLC_Invis,903MAL_s
+placeable,kreia_invis001,Kreia{Invisible Revan Cutscene},kreia,167,PLC_InvEb,711KOR_s
+placeable,kreia_invis,Kreia{Invisible},kreia_invis,167,PLC_InvEb,604DAN_s
+placeable,fake_kumus,Kumus,fake_kumus,54,PLC_Invis,402DXN_s
+placeable,medicalworkbench,Lab Station,MedicalWorkbench,168,PLC_RepTab1,151HAR_s
+placeable,medstation,Lab Station,MedBen,168,PLC_RepTab1,101PER_s
+placeable,plc_workb_med,Lab Station,MedBen,168,PLC_RepTab1,bif
+placeable,workb_med001,Lab Station,MedBen,168,PLC_RepTab1,232TEL_s
+placeable,plc_cagelgb,Lage Cage - Empty (Impassable),CageLgB,226,PLC_CageLgB,bif
+placeable,plc_lndspdr3,Land Speeder 3,Landspeeder3,172,PLC_LndSpdr3,bif
+placeable,lndspdr002,Landspeeder,231_LndSpdr,65,PLC_LndSpdr1,231TEL_s
+placeable,plc_lndspdr1,Landspeeder,LndSpdr1,65,PLC_LndSpdr1,bif
+placeable,plc_lndspdr2,Landspeeder 2,LndSpdr2,66,PLC_LndSpdr2,bif
+placeable,cryform_bl,Large Crystal Formation,cryform_bl,134,PLC_SCrysBlu,604DAN_s
+placeable,g_tresmilhig003,Large Locker,MilHighLockerLg,67,PLC_LockerLg,bif
+placeable,g_tresmillow003,Large Locker,MilLowLockerLg,67,PLC_LockerLg,bif
+placeable,g_tresmilmid003,Large Locker,MilMidLockerLg,67,PLC_LockerLg,bif
+placeable,locker_nil001,Large Locker,Locker_Nihlus,346,PLC_NIL_Locker,851NIH_s
+placeable,locker_nil002,Large Locker,Locker_Nihlus,346,PLC_NIL_Locker,851NIH_s
+placeable,locker_nil003,Large Locker,Locker_Nihlus,346,PLC_NIL_Locker,851NIH_s
+placeable,locker_nil004,Large Locker,Locker_Nihlus,346,PLC_NIL_Locker,851NIH_s
+placeable,plc_lockerlg,Large Locker,LockerLg,67,PLC_LockerLg,bif
+placeable,locker_barrac001,Large Locker{Barrack},locker_barrack,67,PLC_LockerLg,504OND_s
+placeable,locker_barrack,Large Locker{Barrack},locker_barrack,67,PLC_LockerLg,504OND_s
+placeable,g_tresmillow013,Large Locker{Cold 2},MilLowLockerLg,67,PLC_LockerLg,105PER_s
+placeable,locker_empty,Large Locker{Empty},locker_empty,67,PLC_LockerLg,602DAN_s
+placeable,lg_locker_ll,Large Locker{low; locked},lg_locker_ll,67,PLC_LockerLg,610DAN_s
+placeable,bldpdllg001,Large Puddle of Blood,BldPdlLg,10,PLC_BldPdlLg,610DAN_s
+placeable,plc_bldpdllg,Large Puddle of Blood,BldPdlLg,10,PLC_BldPdlLg,bif
+placeable,plc_levind,Level Information Terminal,LevelInfo,220,PLC_LevInd,bif
+placeable,plc_lever,Lever,Lever,68,PLC_Lever,bif
+placeable,lift_to_002,Lift Controls{to 002EBO},lift_to_002,0,PLC_Invis,001EBO_s
+placeable,plc_light,Light,Light,189,PLC_Light,bif
+placeable,lightningpoint,LightningPoint,LightningPoint,0,PLC_Invis,303NAR_s
+placeable,lockerlg001,Locker,LockerLg,67,PLC_LockerLg,101PER_s
+placeable,plc_locker_nil,Locker_Nihlus,Locker_Nihlus,346,PLC_NIL_Locker,bif
+placeable,plc_locker01,Lockers 01,Locker01,306,PLC_lockers,bif
+placeable,g_tresmilhig007,Locker{need key},locker_locked,67,PLC_LockerLg,001EBO_s
+placeable,infoterm002,Log Terminal,Mincon,349,PLC_InfoTerm_b,105PER_s
+placeable,plc_lbench01,Long Bench 01,LongBench01,305,PLC_Lbench,bif
+placeable,lookatcont,Look at cont{Invisible},Lookatcont,167,PLC_InvEb,604DAN_s
+placeable,look_atton,look_atton,look_atton,54,PLC_Invis,401DXN_s
+placeable,plc_mdetect01,M Detect 01,MDetect01,307,PLC_mDetect,bif
+placeable,backpack001,Magic Pazaak Backpack,MPBackpack,3,PLC_Backpack,202TEL_s
+placeable,invisible003,MaidInvis,MaidInvis,54,PLC_Invis,003EBO_s
+placeable,plc_endcorps,Malak's Dead Jedi,EndCorps,143,PLC_EndCorps,bif
+placeable,plc_mantab1,Manaan Table 1,ManaanTable1,170,PLC_ManTab1,bif
+placeable,plc_mantab2,Manaan Table 2,ManaanTable2,171,PLC_ManTab2,bif
+placeable,shuttle_iziz,Mandalorian Shuttle{invis},shuttle_iziz,54,PLC_Invis,403DXN_s
+placeable,mandlook,MandLook,MandLook,167,PLC_InvEb,605DAN_s
+placeable,plc_fntnmrbl,Marble Fountain,FntnMrbl,40,PLC_FntnMrbl,bif
+placeable,vash_container,Master Lonna Vash{Container},vash_container,167,PLC_InvEb,702KOR_s
+placeable,g_tresmillow006,Medical Bay Container,MilLowPlstcCylin,77,PLC_PlstcCrt,101PER_s
+placeable,g_tresmillow011,Medical Bay Container{Chems},MilLowPlstcCylin,77,PLC_PlstcCrt,101PER_s
+placeable,g_tresmillow010,Medical Bay Container{No hint},MilLowPlstcCylin,77,PLC_PlstcCrt,101PER_s
+placeable,reptab002,Medical Bay Workbench,Medben,168,PLC_RepTab1,105PER_s
+placeable,comppnl001,Medical Computer,MedCom,347,PLC_CompPnl_b,101PER_s
+placeable,g_tresmilhig009,Medical Storage Bin{medipac},med_bin,72,PLC_MetalBox,001EBO_s
+placeable,sign_remodel,Medical Unit,resunit,98,PLC_Sign,204TEL_s
+placeable,plc_medbench01,Medium Bench 01,MediumBench01,308,PLC_medBench,bif
+placeable,plc_medcan01,Medium Can 01,MediumCan01,309,PLC_medCan2,bif
+placeable,plc_medcan02,Medium Can 01,MediumCan01,309,PLC_medCan2,bif
+placeable,plc_medstation01,Medium Station 01,MediumStation01,310,PLC_MStation,bif
+placeable,g_tresmilhig004,Metal Box,MilHighMetalBox,72,PLC_MetalBox,bif
+placeable,g_tresmillow004,Metal Box,MilLowMetalBox,72,PLC_MetalBox,bif
+placeable,g_tresmillow017,Metal Box,MilLowMetalBox,72,PLC_MetalBox,106PER_s
+placeable,g_tresmilmid004,Metal Box,MilMidMetalBox,72,PLC_MetalBox,bif
+placeable,g_tresmilmid008,Metal Box,MilMidMetalBox,72,PLC_MetalBox,303NAR_s
+placeable,plc_metalbox,Metal Box,MetalBox,72,PLC_MetalBox,bif
+placeable,cont_sensor_drds,Metal Box - Combat Training{Sensor Droids},cont_sensor_drds,72,PLC_MetalBox,001EBO_s
+placeable,metalbox004,Metal Box{Cheat},MetalBoxC,72,PLC_MetalBox,232TEL_s
+placeable,metalbox002,Metal Box{Components},MetalBoxC,72,PLC_MetalBox,232TEL_s
+placeable,g_tresmilmid009,Metal Box{droid},MilMidMetalBox,72,PLC_MetalBox,303NAR_s
+placeable,metalbox003,Metal Box{Grenades},MetalBoxG,72,PLC_MetalBox,232TEL_s
+placeable,g_tresmillow008,Metal Box{locked},MilLowMetalBoxLocked,72,PLC_MetalBox,bif
+placeable,box_puzzle,Metal Box{Puzzle Reward},box_puzzle,72,PLC_MetalBox,506OND_s
+placeable,g_tresmilmid010,Metal Box{special},MilMidMetalBox,72,PLC_MetalBox,303NAR_s
+placeable,g_tresmilhig002,Metal Case,MilHighMetalCase,138,PLC_Bag02,bif
+placeable,g_tresmillow002,Metal Case,MilLowMetalCase,138,PLC_Bag02,bif
+placeable,g_tresmilmid002,Metal Case,MilMidMetalCase,138,PLC_Bag02,bif
+placeable,plc_bag02,Metal Case,GroundBagMetalCase,138,PLC_Bag02,bif
+placeable,plc_fntnmetl,Metal Fountain,FntnMetl,41,PLC_FntnMetl,bif
+placeable,mil_locker,Military Locker,mil_locker,39,PLC_FootLker,702KOR_s
+placeable,bed003,Military Style Cot,Bed1,5,PLC_Bed1,203TEL_s
+placeable,plc_bed1,Military Style Cot,Bed1,5,PLC_Bed1,bif
+placeable,militiawoundeda,Militia Wounded A{Invis},MilitiaWoundedA,0,PLC_Invis,602DAN_s
+placeable,militiawoundedb,Militia Wounded B{Invis},MilitiaWoundedB,0,PLC_Invis,602DAN_s
+placeable,militiawoundedc,Militia Wounded C{Invis},MilitiaWoundedC,0,PLC_Invis,602DAN_s
+placeable,militiawoundedd,Militia Wounded D{Invis},MilitiaWoundedD,0,PLC_Invis,602DAN_s
+placeable,minechecke,MineCheckE,MineCheckE,167,PLC_InvEb,601DAN_s
+placeable,minecheckw,MineCheckW,MineCheckW,167,PLC_InvEb,601DAN_s
+placeable,cont_med004,Mira{Invis},MiraVoice,0,PLC_Invis,304NAR_s
+placeable,plc_mstrevap,Moisture Vaporator,MstrEvap,73,PLC_MstrEvap,bif
+placeable,corpse,Mummified Corpse,corpse,43,PLC_GenCrps2,411DXN_s
+placeable,sith_mummy,Mummified Ludo Kressh,sith_mummy,43,PLC_GenCrps2,711KOR_s
+placeable,mu_treasure1,Museum Treasure{1},mu_treasure1,54,PLC_Invis,506OND_s
+placeable,mu_treasure2,Museum Treasure{2},mu_treasure2,54,PLC_Invis,506OND_s
+placeable,mu_treasure3,Museum Treasure{3},mu_treasure3,54,PLC_Invis,506OND_s
+placeable,mu_treasure4,Museum Treasure{4},mu_treasure4,54,PLC_Invis,506OND_s
+placeable,news_report,News Hologram,news_report,53,PLC_InfoTerm,501OND_s
+placeable,sithritual001,Nihilus Death Effect,SithRitualEffect,256,PLC_Sithrit,852NIH_s
+placeable,plc_officeeq01,Office Equipment 01,OfficeEquipment01,311,PLC_officeEq01,bif
+placeable,plc_officeeq02,Office Equipment 02,OfficeEquipment02,312,PLC_officeEq02,bif
+placeable,plc_oilbath01,Oil Bath 01,OilBath01,313,PLC_oilbath,bif
+placeable,plc_oilpudle,Oil Puddle,Oil Puddle,124,PLC_OilPudle,bif
+placeable,inveb003,Open Hatch{Invisible},openhatch,167,PLC_InvEb,002EBO_s
+placeable,201_freighter,Orbital Shuttle,201_shuttle,54,PLC_Invis,201TEL_s
+placeable,201_freighter001,Orbital Shuttle{Czerka},shuttle_czerka,54,PLC_Invis,201TEL_s
+placeable,parade_listen,parade_listen,parade_listen,54,PLC_Invis,504OND_s
+placeable,pands,Parts and Spikes,pands,39,PLC_FootLker,401DXN_s
+placeable,plc_partpile,Parts pile - organized machine parts on table,PartPile,74,PLC_PartPile,bif
+placeable,plc_pazaak,Pazaak Cards,PazaakCards,183,PLC_Pazaak,bif
+placeable,pclook,PC Look,PCLook,167,PLC_InvEb,702KOR_s
+placeable,perim_sensor,Perimeter Sensor,perim_sensor,131,PLC_SonicDev,410DXN_s
+placeable,p_detonator_2,Permacrete Detonator,p_detonator_2,345,PLC_permaDet,402DXN_s
+placeable,unk42_raksuperco,Permacrete Detonator,p_detonator,345,PLC_permaDet,402DXN_s
+placeable,plc_permdet,Permacrete_Detonator,Permacrete_Detonator,345,PLC_permaDet,bif
+placeable,plc_bag03,Pile of Cloth,GroundBagPileofCloth,139,PLC_Bag03,bif
+placeable,plc_puzpillr,Pillar,PuzPillr,144,PLC_PuzPillr,bif
+placeable,plc_plantpltr01,Plant Planter01,PlantPlanter01,317,PLC_Pplant01,bif
+placeable,plc_plantpltr02,Plant Planter02,PlantPlanter02,318,PLC_Pplant02,bif
+placeable,plc_plant_tel01,Planter Telos 01,PlanterTelos01,266,PLC_Planter2,bif
+placeable,g_tresmilhig005,Plasteel Cylinder,MilHighPlstcCylin,77,PLC_PlstcCrt,bif
+placeable,g_tresmilhig006,Plasteel Cylinder,PlsCylSpk,77,PLC_PlstcCrt,001EBO_s
+placeable,g_tresmillow005,Plasteel Cylinder,MilLowPlstcCylin,77,PLC_PlstcCrt,bif
+placeable,g_tresmilmid005,Plasteel Cylinder,MilMidPlstcCylin,77,PLC_PlstcCrt,bif
+placeable,plc_plstccrt,Plasteel Cylinder,PlstcCrt,77,PLC_PlstcCrt,bif
+placeable,zhug_chest,Plasteel Cylinder,zhug_chest,77,PLC_PlstcCrt,401DXN_s
+placeable,cont_med012,Plasteel Cylinder Medical,PlasteelCylinderMedical,270,PLC_MedCan,101PER_s
+placeable,plc_cont_med01,Plasteel Cylinder Medical,PlasteelCylinderMedical,270,PLC_MedCan,bif
+placeable,g_tresmillow009,Plasteel Cylinder{locked},MilLowPlstcCylinLocked,77,PLC_PlstcCrt,bif
+placeable,stmventc001,Poison Gas,PoisonGas,281,PLC_StmVntgrn,105PER_s
+placeable,stmventc003,Poison Gas{CS},PoisonGasCS,281,PLC_StmVntgrn,105PER_s
+placeable,ponlartalkto,Ponlar Talk To,PonlarTalkTo,54,PLC_Invis,502OND_s
+placeable,eng_star001,Port Engine,eng_star,0,PLC_Invis,001EBO_s
+placeable,cmp_port,Port Engine Relay,cmp_port,167,PLC_InvEb,002EBO_s
+placeable,plc_potbrkn01,Pot Broken 01,PotBroken01,274,PLC_PotBr1,bif
+placeable,plc_pot01,Pot Whole 01{411},PotWhole01,273,PLC_PotWh1,bif
+placeable,plc_plant1,Potted plant - alien looking,Plant1,75,PLC_Plant1,bif
+placeable,plc_plant2,Potted plant 2 - alien looking,Plant2,76,PLC_Plant2,bif
+placeable,g_tressndppl003,Pouch,TresSndPplPouch,137,PLC_Bag01,bif
+placeable,g_tressndppl004,Pouch,TresSndPplPouch,137,PLC_Bag01,301NAR_s
+placeable,plc_bag01,Pouch,GroundBagPouch,137,PLC_Bag01,bif
+placeable,plc_pwrcond,Power Conductor,Power Conductor,154,PLC_PwrCond,bif
+placeable,pwrcond001,Power Conductor,XTerminal,154,PLC_PwrCond,101PER_s
+placeable,xterm1,Power Conductor,xterm1,154,PLC_PwrCond,504OND_s
+placeable,xterm2,Power Conductor,xterm2,154,PLC_PwrCond,504OND_s
+placeable,xterminal,Power Conductor,xterminal,154,PLC_PwrCond,502OND_s
+placeable,cond1_1,Power Conductor{1_1},cond1_1,154,PLC_PwrCond,610DAN_s
+placeable,cond1_2,Power Conductor{1_2},cond1_2,154,PLC_PwrCond,610DAN_s
+placeable,cond2_1,Power Conductor{2_1},cond2_1,154,PLC_PwrCond,610DAN_s
+placeable,cond2_2,Power Conductor{2_2},cond2_2,154,PLC_PwrCond,610DAN_s
+placeable,cond3_1,Power Conductor{3_1},cond3_1,154,PLC_PwrCond,610DAN_s
+placeable,cond3_2,Power Conductor{3_2},cond3_2,154,PLC_PwrCond,610DAN_s
+placeable,cond4_1,Power Conductor{4_1},cond4_1,154,PLC_PwrCond,610DAN_s
+placeable,cond4_2,Power Conductor{4_2},cond4_2,154,PLC_PwrCond,610DAN_s
+placeable,cond5_1,Power Conductor{5_1},cond5_1,154,PLC_PwrCond,610DAN_s
+placeable,cond5_2,Power Conductor{5_2},cond5_2,154,PLC_PwrCond,610DAN_s
+placeable,cond6_1,Power Conductor{6_1},cond6_1,154,PLC_PwrCond,610DAN_s
+placeable,cond6_2,Power Conductor{6_2},cond6_2,154,PLC_PwrCond,610DAN_s
+placeable,cond7_1,Power Conductor{7_1},cond7_1,154,PLC_PwrCond,610DAN_s
+placeable,cond7_2,Power Conductor{7_2},cond7_2,154,PLC_PwrCond,610DAN_s
+placeable,cond_busted,Power Conductor{busted},cond_busted,154,PLC_PwrCond,610DAN_s
+placeable,conductor1,Power Conductor{Power Station 1},conductor1,154,PLC_PwrCond,610DAN_s
+placeable,conductor2,Power Conductor{Power Station 2},conductor2,154,PLC_PwrCond,610DAN_s
+placeable,conductor3,Power Conductor{Power Station 3},conductor3,154,PLC_PwrCond,610DAN_s
+placeable,plc_powgen01,Power Generator 01,PowerGenerator01,314,PLC_pgen,bif
+placeable,debris,Power Surge{Invis},debris,0,PLC_Invis,001EBO_s
+placeable,prologue,Prologue{Invis},Prologue,0,PLC_Invis,001EBO_s
+placeable,inveb001,Proton Missile{Invisible},ProtonMis,167,PLC_InvEb,002EBO_s
+placeable,plc_pulchain,Pull Chain,PulChain,79,PLC_PulChain,bif
+placeable,inveb004,Quadlasers{Invisible},Quad,167,PLC_InvEb,002EBO_s
+placeable,racedialog,racedialog,racedialog,54,PLC_Invis,211TEL_s
+placeable,radar_smoke,radar_smoke,radar_smoke,108,PLC_StmVentC,403DXN_s
+placeable,radar_spark,radar_spark,radar_spark,30,PLC_ESparkLg,403DXN_s
+placeable,plc_rbench,Rakata Bench,RakataBench,196,PLC_RBench,bif
+placeable,plc_rakatflg3,Rakata Flag - Black,BlackRakataFlag,191,PLC_RakatFlg3,bif
+placeable,plc_rakatflg2,Rakata Flag - Red,RedRakataFlag,190,PLC_RakatFlg2,bif
+placeable,plc_rakatbed,Rakatan bed,RakatBed,80,PLC_RakatBed,bif
+placeable,plc_rakatcom,Rakatan Computer Terminal,RakatCom,122,PLC_RakatCom,bif
+placeable,plc_rakatcrp,Rakatan corpse on pike,RakatCrp,83,PLC_RakatCrp,bif
+placeable,plc_rakathol,Rakatan Hologram,Rakatan Hologram,133,PLC_RakatHol,bif
+placeable,plc_rakatflg,Rakatan War Flag,RakatFlg,85,PLC_RakatFlg,bif
+placeable,pnltel001,Reactor Control,Reactor,23,PLC_CompPnl,232TEL_s
+placeable,g_tresrefuse001,Refuse Pile,LowRfPileSm,88,PLC_RfPileSm,bif
+placeable,g_tresrefuse002,Refuse Pile,MidRfPileMd,87,PLC_RfPileMd,bif
+placeable,g_tresrefuse003,Refuse Pile,HighRfPileLg,86,PLC_RfPileLg,bif
+placeable,plc_rfpilelg,Refuse Pile - Large,RfPileLg,86,PLC_RfPileLg,bif
+placeable,plc_rfpilemd,Refuse Pile - Medium,RfPileMd,87,PLC_RfPileMd,bif
+placeable,plc_rfpilesm,Refuse Pile - Small,RfPileSm,88,PLC_RfPileSm,bif
+placeable,plc_repequip01,Rep Equipment01,RepEquipment01,319,PLC_repEquip,bif
+placeable,plc_reptab1,Repair Table 1,RepairTable1,168,PLC_RepTab1,bif
+placeable,plc_reptab2,Repair Table 2,RepairTable2,169,PLC_RepTab2,bif
+placeable,rev_end,Revan End Dialogue,rev_end,54,PLC_Invis,702KOR_s
+placeable,plc_riflepts01,Rifle Parts01,RifleParts01,320,PLC_riflePts,bif
+placeable,plc_ring01,Ring of Hanoi 1,Ring01,227,PLC_Ring01,bif
+placeable,plc_ring02,Ring of Hanoi 2,Ring02,228,PLC_Ring02,bif
+placeable,plc_ring03,Ring of Hanoi 3,Ring03,229,PLC_Ring03,bif
+placeable,plc_ring04,Ring of Hanoi 4,Ring04,230,PLC_Ring04,bif
+placeable,411_ritual_fx,Ritual Effects,411_ritual_fx,160,PLC_SpdDist,411DXN_s
+placeable,ritual_source,ritual_source,ritual_source,54,PLC_Invis,411DXN_s
+placeable,plc_acd,River of Acid,AcidRvr,141,PLC_Acd,bif
+placeable,g_tresrub001,Rubble,LowRubble,162,PLC_Rub1,bif
+placeable,g_tresrub002,Rubble,MidRubble,162,PLC_Rub1,bif
+placeable,g_tresrub003,Rubble,HighRubble,162,PLC_Rub1,bif
+placeable,g_tresrubshd001,Rubble,LowShdLndRubble,162,PLC_Rub1,bif
+placeable,g_tresrubshd002,Rubble,MidShdLndRubble,162,PLC_Rub1,bif
+placeable,g_tresrubshd003,Rubble,HighShdLndRubble,162,PLC_Rub1,bif
+placeable,plc_rubble,Rubble,rubble,91,PLC_Rubble,bif
+placeable,plc_rub1,Rubble 1,Rubble1,162,PLC_Rub1,bif
+placeable,plc_rub2,Rubble 2,Rubble2,163,PLC_Rub2,bif
+placeable,plc_rub3,Rubble 3,Rubble3,164,PLC_Rub3,bif
+placeable,cont_sensor,Rubble{Sensor},cont_sensor,162,PLC_Rub1,604DAN_s
+placeable,plc_rpcont2,Ruined Pillar,RuinedPillar,197,PLC_RPCont2,bif
+placeable,plc_rpcont1,Ruined Pillar Container,RuinedPillarCont,198,PLC_RPCont1,bif
+placeable,plc_rneoblsk,Rune Covered Obelisk,RneOblsk,92,PLC_RneOblsk,bif
+placeable,plc_rnepillr,Rune Covered Pillar,RnePillr,93,PLC_RnePillr,bif
+placeable,comp_port,Rusted Computer Port,comp_port,167,PLC_InvEb,401DXN_s
+placeable,plc_scrysblu,Saber Crystal - Blue,Saber Crystal - Blue,134,PLC_SCrysBlu,bif
+placeable,plc_scrysgrn,Saber Crystal - Green,Saber Crystal - Green,135,PLC_SCrysGrn,bif
+placeable,plc_scrysred,Saber Crystal - Red,Saber Crystal - Red,136,PLC_SCrysRed,bif
+placeable,plc_scrysppl,Sabre Crystal - Purple,Saber Crystal - Purple,149,PLC_SCrysPpl01,bif
+placeable,plc_scrysylw,Sabre Crystal - Yellow,Saber Crystal - Yellow,150,PLC_SCrysYlw01,bif
+placeable,g_slvgpk,Salvage Pack,MilLowPlstcCylin,3,PLC_Backpack,232TEL_s
+placeable,exp_comp,Salvageable Parts,exp_comp,54,PLC_Invis,401DXN_s
+placeable,gencrps001,Salvager Corpse,sal_corpse1,42,PLC_GenCrps,610DAN_s
+placeable,g_tresmilmid006,Scattered Survival Kit,MilMidMetalCase,138,PLC_Bag02,105PER_s
+placeable,g_tresmilmid007,Scattered Survival Kit{Empty},MilMidMetalCase,138,PLC_Bag02,105PER_s
+placeable,scout_pov,scout_pov,scout_pov,54,PLC_Invis,402DXN_s
+placeable,armoryconsole,Security Console,gotoarmory,54,PLC_Invis,351NAR_s
+placeable,security_console,Security Console,security_console,0,PLC_Invis,001EBO_s
+placeable,pnltel002,Security Control,Security,23,PLC_CompPnl,232TEL_s
+placeable,desk002,Security Desk,SecTer,27,PLC_Desk1,101PER_s
+placeable,ith_locker,Security Locker,ith_locker,67,PLC_LockerLg,201TEL_s
+placeable,lockerlg002,Security Locker,SecLoc,67,PLC_LockerLg,101PER_s
+placeable,lockerlg003,Security Locker{Stealth},SecLoc,67,PLC_LockerLg,101PER_s
+placeable,invisible013,Security System,sec_system,54,PLC_Invis,003EBO_s
+placeable,ebstrg001,Security Terminal,SecTer,0,PLC_Invis,101PER_s
+placeable,sec_terminal,Security Terminal,sec_terminal,347,PLC_CompPnl_b,101PER_s
+placeable,pl_termkavar,Security Terminal{Kavar},pl_termkavar,23,PLC_CompPnl,506OND_s
+placeable,pl_termnorth,Security Terminal{North},pl_termnorth,23,PLC_CompPnl,506OND_s
+placeable,sec_term_no,Security Terminal{North},sec_term_no,24,PLC_CompPnl2,502OND_s
+placeable,sec_term_quest,Security Terminal{Quest},sec_term_quest,24,PLC_CompPnl2,502OND_s
+placeable,pl_termeast,Security Terminal{South},pl_termeast,23,PLC_CompPnl,506OND_s
+placeable,sec_term,Security Terminal{South},sec_term,24,PLC_CompPnl2,502OND_s
+placeable,sentry2_standin,sentry2_standin,sentry2_standin,54,PLC_Invis,402DXN_s
+placeable,plc_sevrdarm,Severed Arm Holding Datapad,SevrdArm,95,PLC_SevrdArm,bif
+placeable,sevrdarm001,Severed Arm Holding Datapad,SevrdArm,95,PLC_SevrdArm,711KOR_s
+placeable,plc_sewerfan,Sewer Fan,SewerFan,96,PLC_SewerFan,bif
+placeable,plc_shelf01,Shelf{01},shelf01,354,PLC_Shelf001,bif
+placeable,plc_shelf02,Shelf{02},Shelf02,355,PLC_Shelf02,bif
+placeable,plc_shelf03,Shelf{03},Shelf03,356,PLC_Shelf03,bif
+placeable,plc_shelf04,Shelf{04},Shelf04,357,PLC_Shelf04,bif
+placeable,plc_shelf05,Shelf{05},Shelf05,358,PLC_Shelf05,bif
+placeable,plc_shelf06,Shelf{06},Shelf06,359,PLC_Shelf06,bif
+placeable,inveb009,Shift Assignment Console{Fake},DestroyDorm,167,PLC_InvEb,105PER_s
+placeable,plc_shipparts01,Ship Parts01,ShipParts01,322,PLC_shpParts1,bif
+placeable,plc_shipparts02,Ship Parts02,ShipParts02,323,PLC_shpPart2,bif
+placeable,plc_shipparts03,Ship Parts03,ShipParts03,324,PLC_shpPart3,bif
+placeable,plc_shipparts04,Ship Parts04,ShipParts04,325,PLC_shpPart4,bif
+placeable,sign005,Shuttle Bay Elevator,Sign,98,PLC_Sign,220TEL_s
+placeable,sign_shuttle,Shuttle Bay Elevator,SignShuttle,98,PLC_Sign,203TEL_s
+placeable,plc_sign,Sign,Sign,98,PLC_Sign,bif
+placeable,sith_banner,Sith Banner,sith_banner,252,PLC_SithBan,411DXN_s
+placeable,plc_sithban01,Sith Banner 01,SithBanner01,252,PLC_SithBan,bif
+placeable,plc_sithban02,Sith Banner 02,SithBanner02,253,PLC_SithBan2,bif
+placeable,sith_casket,Sith Casket,sith_casket,254,PLC_SithCst,411DXN_s
+placeable,plc_sithcskt01,Sith Casket 01,SithCasket01,254,PLC_SithCst,bif
+placeable,skullcorpse,Sith Corpse,skullcorpse,43,PLC_GenCrps2,710KOR_s
+placeable,plc_sithflag,Sith Flag,SithFlag,177,PLC_SithFlag,bif
+placeable,sith_gas,Sith Gas Cloud,sith_gas,257,PLC_SithMist01,411DXN_s
+placeable,sith_gas_corr,Sith Gas Cloud (Corridor),sith_gas_corr,262,PLC_SithMist06,411DXN_s
+placeable,sith_holocron,Sith Holocron,sith_holocron,250,PLC_Sithmn4,702KOR_s
+placeable,plc_sithmon01,Sith Monument 01,SithMonument01,247,PLC_Sithmn,bif
+placeable,plc_sithmon02,Sith Monument 02,SithMonument02,248,PLC_Sithmn2,bif
+placeable,plc_sithmon03,Sith Monument 03,SithMonument03,249,PLC_Sithmn3,bif
+placeable,plc_sithmon04,Sith Monument 04,SithMonument04,250,PLC_Sithmn4,bif
+placeable,plc_sithmon05,Sith Monument 05,SithMonument05,251,PLC_Sithmn5,bif
+placeable,sith_mon1,Sith Monument 1,sith_mon1,247,PLC_Sithmn,411DXN_s
+placeable,sith_mon2,Sith Monument 2,sith_mon2,248,PLC_Sithmn2,411DXN_s
+placeable,sith_mon3,Sith Monument 3,sith_mon3,249,PLC_Sithmn3,411DXN_s
+placeable,sith_mon4,Sith Monument 4,sith_mon4,250,PLC_Sithmn4,411DXN_s
+placeable,sith_mon5,Sith Monument 5,sith_mon5,251,PLC_Sithmn5,411DXN_s
+placeable,sith_ritual,Sith Ritual,sith_ritual,256,PLC_Sithrit,411DXN_s
+placeable,plc_sithritual,Sith Ritual Effect,SithRitualEffect,256,PLC_Sithrit,bif
+placeable,plc_sithsarc,Sith Sarcophagus,SithSarc,146,PLC_SithSarc,bif
+placeable,sith_statue,Sith Statue,sith_statue,255,PLC_SithStat,411DXN_s
+placeable,plc_sitalien,Sitting Alien,SittingAlien,213,L_Alien02,bif
+placeable,plc_sitalien2,Sitting Alien 2,SittingAlien2,214,L_Alien05,bif
+placeable,plc_sitbith,Sitting Bith,SittingBith,199,N_bith,bif
+placeable,plc_sitcomfem,Sitting Commoner - Female,SittingCommFemale,211,L_CommF,bif
+placeable,plc_sitcommale,Sitting Commoner - Male,SittingCommMale,212,L_CommM,bif
+placeable,plc_sitrakata,Sitting Rakata,SittingRakata,200,N_rakata,bif
+placeable,plc_sitrodian,Sitting Rodian,SittingRodian,201,N_rodian,bif
+placeable,sitrodian001,Sitting Rodian,SittingRodian,212,L_CommM,503OND_s
+placeable,plc_sitswoopg,Sitting Swoopganger,SittingSwoopganger,208,N_swoopgang,bif
+placeable,plc_sittwilfem,Sitting Twilek Female,SittingTwilekFemale,203,N_twilekF,bif
+placeable,plc_sittwilmale,Sitting Twilek Male,SittingTwilekMale,204,N_twilekM,bif
+placeable,plc_sitwalrus,Sitting Walrusman,SittingWalrusman,205,N_Walrusman,bif
+placeable,plc_sitwookfem,Sitting WookieeFemale,SittingWookieFemale,206,N_wookieF,bif
+placeable,plc_sitwookmale,Sitting WookieeMale,SittingWookieMale,207,N_wookieM,bif
+placeable,corpse_tr_hss001,Skeletal Corpse,corpse_tr_hss001,43,PLC_GenCrps2,701KOR_s
+placeable,corpse_tr_hss002,Skeletal Corpse,corpse_tr_hss002,43,PLC_GenCrps2,701KOR_s
+placeable,corpse_tr_hss003,Skeletal Corpse,corpse_tr_hss003,43,PLC_GenCrps2,701KOR_s
+placeable,corpse_tr_hss004,Skeletal Corpse,corpse_tr_hss004,43,PLC_GenCrps2,701KOR_s
+placeable,corpse_tr_hss005,Skeletal Corpse,corpse_tr_hss005,43,PLC_GenCrps2,701KOR_s
+placeable,corpse_tr_hss006,Skeletal Corpse,corpse_tr_hss006,43,PLC_GenCrps2,701KOR_s
+placeable,corpse_tr_hssiss,Skeletal Corpse,corpse_tr_hssiss,43,PLC_GenCrps2,701KOR_s
+placeable,g_tressklcorp001,Skeletal Corpse,LowSkelCorpse,43,PLC_GenCrps2,bif
+placeable,g_tressklcorp002,Skeletal Corpse,MidSkelCorpse,43,PLC_GenCrps2,bif
+placeable,g_tressklcorp003,Skeletal Corpse,HighSkelCorpse,43,PLC_GenCrps2,bif
+placeable,g_tressklcorp004,Skeletal Corpse,HighSkelCorpse,43,PLC_GenCrps2,401DXN_s
+placeable,g_tressklcorp005,Skeletal Corpse,HighSkelCorpse,43,PLC_GenCrps2,401DXN_s
+placeable,g_tressklcorp006,Skeletal Corpse,LowSkelCorpse,52,PLC_HmnSkel,401DXN_s
+placeable,hmnskel001,Skeletal Human Remains,HmnSkel,52,PLC_HmnSkel,610DAN_s
+placeable,plc_hmnskel,Skeletal Human Remains,HmnSkel,52,PLC_HmnSkel,bif
+placeable,skip,Skip Prologue,Skip,0,PLC_Invis,001EBO_s
+placeable,bldpdlsm001,Small Puddle of Blood,BldPdlsm,11,PLC_BldPdlSm,610DAN_s
+placeable,plc_bldpdlsm,Small Puddle of Blood,BldPdlsm,11,PLC_BldPdlSm,bif
+placeable,sod3_invis,SOD3{Invis},SOD3_invis,167,PLC_InvEb,503OND_s
+placeable,plc_spcsuit,Space Suit,Spacesuit,181,PLC_SpcSuit,bif
+placeable,spcsuit001,Space Suit,Spacesuit,181,PLC_SpcSuit,103PER_s
+placeable,plc_swireflr,Sparking wires - floor,SWireFlr,101,PLC_SWireFlr,bif
+placeable,plc_swirewal,Sparking wires - wall,SWireWal,102,PLC_SWireWal,bif
+placeable,wires_starboard,Sparking wires - wall,wires_starboard,102,PLC_SWireWal,002EBO_s
+placeable,wires_door,Sparking Wires{door override},wires_door,101,PLC_SWireFlr,002EBO_s
+placeable,spark_wire,Sparking Wires{Garage Door},spark_wire,0,PLC_Invis,001EBO_s
+placeable,wires_port,Sparking Wires{port engine},wires_port,101,PLC_SWireFlr,002EBO_s
+placeable,spark_starboard,Spark{starboard engine},spark_starboard,30,PLC_ESparkLg,002EBO_s
+placeable,speechlook,speechlook,Invisible,54,PLC_Invis,601DAN_s
+placeable,plc_spddist,Speeder Distortion,Speeder Distortion,160,PLC_SpdDist,bif
+placeable,k_star_map_01,Star map,K_STAR_MAP_01,103,PLC_StarMap,bif
+placeable,k_star_map_02,Star map,K_STAR_MAP_02,103,PLC_StarMap,bif
+placeable,k_star_map_03,Star map,K_STAR_MAP_03,103,PLC_StarMap,bif
+placeable,k_star_map_04,Star map,K_STAR_MAP_04,103,PLC_StarMap,bif
+placeable,k_star_map_05,Star map,K_STAR_MAP_05,103,PLC_StarMap,bif
+placeable,plc_starmap,Star Map,StarMap,103,PLC_StarMap,bif
+placeable,eng_star,Starboard Engine,eng_star,0,PLC_Invis,001EBO_s
+placeable,cmp_star,Starboard Engine Console,cmp_star,167,PLC_InvEb,002EBO_s
+placeable,plc_shpjnklg,Starship junk pile - large,ShpJnkLg,104,PLC_ShpJnkLg,bif
+placeable,plc_shpjnksm,Starship junk pile - small,ShpJnkSm,105,PLC_ShpJnkSm,bif
+placeable,plc_statue2,Statue - Heroic Jedi,Statue2,107,PLC_Statue2,bif
+placeable,plc_statue1,Statue - Roman style figure,Statue1,106,PLC_Statue1,bif
+placeable,plc_statuebl01,Statue Blue Marble01,StatueBlueMarble01,326,PLC_statue,bif
+placeable,plc_statuefire01,Statue Flaming 01,StatueFlaming01,276,PLC_Stat01,bif
+placeable,plc_statue3,Statue with Sword,Statue3,210,PLC_Statue3,bif
+placeable,plc_steamc02,Steam Continual 02,SteamContinual02,238,PLC_StmVentD,bif
+placeable,plc_steamc03,Steam Continual 03,SteamContinual03,239,PLC_StmVentE,bif
+placeable,plc_steamc04,Steam Continual 04,SteamContinual04,240,PLC_StmVentF,bif
+placeable,plc_steamc05,Steam Continual 05,SteamContinual05,241,PLC_StmVentG,bif
+placeable,steamexhaust,Steam Exhaust,SteamExhaust1,108,PLC_StmVentC,104PER_s
+placeable,steamexhaust001,Steam Exhaust,SteamExhaust2,108,PLC_StmVentC,104PER_s
+placeable,plc_stmventc,Steam vent - continual,StmVentC,108,PLC_StmVentC,bif
+placeable,plc_stmventi,Steam vent - intermittent,StmVentI,109,PLC_StmVentI,bif
+placeable,plc_steam_red01,Steam Vent Red 01,SteamVentRed01,277,PLC_StmVentRed,bif
+placeable,steam_red002,Steam Vent Red 01,SteamVentRed01,231,PLC_Stmtrap,001EBO_s
+placeable,gas1,Steam Vent{Gas1},Gas1,281,PLC_StmVntgrn,304NAR_s
+placeable,gas2,Steam Vent{Gas2},Gas2,281,PLC_StmVntgrn,304NAR_s
+placeable,gas3,Steam Vent{Gas3},Gas3,281,PLC_StmVntgrn,304NAR_s
+placeable,gas4,Steam Vent{Gas4},Gas4,281,PLC_StmVntgrn,304NAR_s
+placeable,gasvent2,Steam Vent{Green},GasVent2,281,PLC_StmVntgrn,106PER_s
+placeable,gasvent3,Steam Vent{Green},GasVent3,281,PLC_StmVntgrn,106PER_s
+placeable,gasvent4,Steam Vent{Green},GasVent4,281,PLC_StmVntgrn,106PER_s
+placeable,gasvent5,Steam Vent{Green},GasVent5,281,PLC_StmVntgrn,106PER_s
+placeable,gasvent6,Steam Vent{Green},GasVent6,281,PLC_StmVntgrn,106PER_s
+placeable,gasvent7,Steam Vent{Green},GasVent7,281,PLC_StmVntgrn,106PER_s
+placeable,gasvent8,Steam Vent{Green},GasVent8,281,PLC_StmVntgrn,106PER_s
+placeable,plc_stmventgrn,Steam Vent{Green},SteamVentGreen,281,PLC_StmVntgrn,bif
+placeable,plc_stock,Stock Ticker,StockTicker,221,PLC_EbStrg,bif
+placeable,plc_subdroid2,Sub droid,SubDroid2,216,PLC_subdroid2,bif
+placeable,plc_subdroid,Sub droid - Broken,SubDroidBroken,215,PLC_subdroid,bif
+placeable,g_tresmillow012,Supply Cylinder{Airlock},MilLowPlstcCylin,77,PLC_PlstcCrt,101PER_s
+placeable,plc_swpbike1,Swoop Bike,SwpBike1,110,PLC_SwpBike1,bif
+placeable,swpbike002,Swoop Bike,232_SwpBike,110,PLC_SwpBike1,231TEL_s
+placeable,plc_swpbike2,Swoop Bike 2,SwpBike2,111,PLC_SwpBike2,bif
+placeable,plc_swpengin,Swoop Bike Engine,SwpEngin,112,PLC_SwpEngin,bif
+placeable,plc_swscreen,Swoop Race Monitor,SwScreen,225,PLC_SwScreen,bif
+placeable,plc_swoopmon01,Swoop Track Monitor 01 (Telos),swoopmon01,351,PLC_SwpMon01,bif
+placeable,plc_swoopmon02,Swoop Track Monitor 02 (Nar Shad),swoopmon02,352,PLC_SwpMon02,bif
+placeable,plc_swoopmon03,Swoop Track Monitor 03 (Onderon),swoopmon03,353,PLC_SwpMon03,bif
+placeable,plc_tmat01,T Mat01,TMat01,328,PLC_tMat,bif
+placeable,t3look2,T3 Look 2{Invisible},T3Look2,167,PLC_InvEb,002EBO_s
+placeable,t3look,T3 Look{Invisible},T3Look,167,PLC_InvEb,002EBO_s
+placeable,invisible005,T3Invis,T3Invis,54,PLC_Invis,003EBO_s
+placeable,stmventi001,T3Smoke,T3Smoke,109,PLC_StmVentI,103PER_s
+placeable,plc_tablebwn01,Table Brown01,TableBrown01,327,PLC_table,bif
+placeable,dark_taint,Taint of the Dark Side,dark_taint,278,PLC_DkfrcSmk,411DXN_s
+placeable,talia_look,Talia CS Invis,talia_look,54,PLC_Invis,501OND_s
+placeable,targetdummy,TargetDummy,TargetDummy,0,PLC_Invis,107PER_s
+placeable,tele_comp,Telemetry Computer,tele_comp,23,PLC_CompPnl,403DXN_s
+placeable,tele_comp001,Telemetry Computer,tele_comp,54,PLC_Invis,403DXN_s
+placeable,shuttle,Telos Orbital Shuttle,Shuttle,54,PLC_Invis,232TEL_s
+placeable,plc_tel_shuttle,Telos Shuttle,TelosShuttle,279,PLC_shutdark,bif
+placeable,lever001,Temp Lever,Lever,68,PLC_Lever,207TEL_s
+placeable,tempquest,Temp Quest,TempQuest,77,PLC_PlstcCrt,601DAN_s
+placeable,termzuka,Terminal,termzuka,53,PLC_InfoTerm,403DXN_s
+placeable,termtel009,Terminal{Doors A1},TermDA1,53,PLC_InfoTerm,232TEL_s
+placeable,termtel010,Terminal{Doors A2},TermDA2,53,PLC_InfoTerm,232TEL_s
+placeable,termtel003,Terminal{Doors A},TermDA,53,PLC_InfoTerm,201TEL_s
+placeable,termtel011,Terminal{Doors B1},TermDB1,53,PLC_InfoTerm,232TEL_s
+placeable,termtel012,Terminal{Doors B2},TermDB2,53,PLC_InfoTerm,232TEL_s
+placeable,termtel004,Terminal{Doors B},TermDB,53,PLC_InfoTerm,232TEL_s
+placeable,termtel013,Terminal{Doors C1},TermDC1,53,PLC_InfoTerm,232TEL_s
+placeable,termtel014,Terminal{Doors C2},TermDC2,53,PLC_InfoTerm,232TEL_s
+placeable,termtel006,Terminal{Doors C},TermDC,53,PLC_InfoTerm,232TEL_s
+placeable,termtel007,Terminal{Droid Bay 1},TermB1,53,PLC_InfoTerm,232TEL_s
+placeable,termtel008,Terminal{Droid Bay 2},TermB1a,53,PLC_InfoTerm,232TEL_s
+placeable,termtel001,Terminal{Force Field},TermFF,53,PLC_InfoTerm,232TEL_s
+placeable,comppnl009,Terminal{Med},med_term,23,PLC_CompPnl,204TEL_s
+placeable,termtel002,Terminal{Security},TermSA,53,PLC_InfoTerm,232TEL_s
+placeable,plc_tools01,Tools01,Tools01,329,PLC_tools,bif
+placeable,pazaak003,Tossed Pazaak Cards,TossedPazaak,186,PLC_Pazaak2,301NAR_s
+placeable,plc_pazaak2,Tossed Pazaak Cards,TossedPazaak,186,PLC_Pazaak2,bif
+placeable,k_trans_abort,Transition Abort Object,k_trans_abort,54,PLC_Invis,bif
+placeable,plc_trap,Trap Device,Trap,147,PLC_Trap,bif
+placeable,plc_trashcom,Trash Compacting Ceiling,TrashCom,148,PLC_TrashCom,bif
+placeable,plc_tplants01,Tropical Plants01,TropicalPlants01,330,PLC_troPlantA,bif
+placeable,plc_tplants02,Tropical Plants02,TropicalPlants02,331,PLC_troPlantB,bif
+placeable,202_tsf_pc,TSF Comm Console,202_tsf_pc,23,PLC_CompPnl,202TEL_s
+placeable,g_lockertsf002,TSF Detainee Locker{Inventory},LockerTSFINV,67,PLC_LockerLg,202TEL_s
+placeable,g_lockertsf,TSF Locker,LockerTSF,67,PLC_LockerLg,202TEL_s
+placeable,g_lockertsf001,TSF Locker{Rifle},LockerTSF1,67,PLC_LockerLg,202TEL_s
+placeable,inveb008,Turbolift Console{Fake},DestroyTu,167,PLC_InvEb,105PER_s
+placeable,comp_turret,Turret Control Station,comp_turret,23,PLC_CompPnl,602DAN_s
+placeable,power_gen_backup,Turret Power Generator,power_gen_backup,314,PLC_pgen,410DXN_s
+placeable,plc_ragp,Tuskan Rag Pile,RagPile,178,PLC_RagP,bif
+placeable,plc_twlkcrps,Twi'lek Corpse,TwlkCrps,113,PLC_TwlkCrps,bif
+placeable,g_tresgencorp004,Unconscious Patient,PCPatient,42,PLC_GenCrps,001EBO_s
+placeable,g_tresmilhig008,Unlocked Plasteel Cylinder{Get Tunneler},MilHighPlstcCylin,77,PLC_PlstcCrt,001EBO_s
+placeable,invisible011,Visas Arrives,Visas_Arrives_PC,54,PLC_Invis,003EBO_s
+placeable,invisible012,Visas Away,Visas_Away,54,PLC_Invis,003EBO_s
+placeable,invis_reactio001,Visas Face,VisasFace,54,PLC_Invis,006EBO_s
+placeable,invisible014,VisasInvis,VisasInvis,54,PLC_Invis,003EBO_s
+placeable,203_ith_pc001,Vivarium Control Console,plant_comp,23,PLC_CompPnl,204TEL_s
+placeable,plc_wallhang01,Wall Hanging01,WallHanging01,332,PLC_wallHang,bif
+placeable,plc_wallhang02a,Wall Hanging02a,WallHanging02a,333,PLC_wallHang2a,bif
+placeable,plc_wallhang02b,Wall Hanging02b,WallHanging02b,334,PLC_wallHang2b,bif
+placeable,plc_wallpnl,Wall Panel,WallPnl,114,plc_wallpnl,bif
+placeable,walltex3,Wall Terminal{Exchange 3},walltex3,24,PLC_CompPnl2,208TEL_s
+placeable,walltex,Wall Terminal{Exchange},walltex,24,PLC_CompPnl2,203TEL_s
+placeable,comppnl008,Wall Terminal{Med},wallt_med,23,PLC_CompPnl,204TEL_s
+placeable,plc_wtrlvl,Water Level,Water Level,157,PLC_WtrLvl,bif
+placeable,g_tresrakat001,Wicker Bin,TresRakatBin,81,PLC_RakatBin,bif
+placeable,g_tressndppl001,Wicker Bin,TresSndPplBin,81,PLC_RakatBin,bif
+placeable,plc_rakatbin,Wicker Bin,RakatBin,81,PLC_RakatBin,bif
+placeable,g_tresrakat002,Wicker Footlocker,TresRakatLock,82,PLC_RakatBn2,bif
+placeable,g_tressndppl002,Wicker Footlocker,TresSndPplLock,82,PLC_RakatBn2,bif
+placeable,nadd_reward1,Wicker Footlocker,nadd_reward1,82,PLC_RakatBn2,411DXN_s
+placeable,nadd_reward2,Wicker Footlocker,nadd_reward2,82,PLC_RakatBn2,411DXN_s
+placeable,plc_rakatbn2,Wicker Footlocker,RakatBn2,82,PLC_RakatBn2,bif
+placeable,plc_windmill,Wind Mill,Windmill,117,PLC_WindMil,bif
+placeable,plc_wookcrps,Wookiee Corpse,Wookie Corpse,118,PLC_WookCrps,bif
+placeable,plc_wrktable01,Work Table01,WorkTable01,335,PLC_wrkTable,bif
+placeable,plc_wrktable02,Work Table02,WorkTable02,336,PLC_wrkTable2,bif
+placeable,plc_workb_rep,Workbench,Workbench,169,PLC_RepTab2,bif
+placeable,workbench,Workbench{Normal},000_Workbench,168,PLC_RepTab1,103PER_s
+placeable,workb_rep001,Workbench{Tutorial},Workbench,169,PLC_RepTab2,001EBO_s
+placeable,cont_med005,WP_ELEC_1,WP_ELEC_1,0,PLC_Invis,304NAR_s
+placeable,cont_med006,WP_ELEC_2,WP_ELEC_2,0,PLC_Invis,304NAR_s
+placeable,cont_med007,WP_ELEC_3,WP_ELEC_3,0,PLC_Invis,304NAR_s
+placeable,cont_med008,WP_ELEC_4,WP_ELEC_4,0,PLC_Invis,304NAR_s
+placeable,millowwreckage,Wreckage,MilLowWreckage,163,PLC_Rub2,401DXN_s
+placeable,plc_wreckage01,Wreckage 01,Wreckage01,263,PLC_Wreck01,bif
+placeable,plc_wreckage02,Wreckage 02,Wreckage02,264,PLC_Wreck02,bif
+placeable,plc_wreckage03,Wreckage 03,Wreckage03,265,PLC_Wreck03,bif
+placeable,g_zoncont,Zone Controller,g_zoncont,0,PLC_Invis,bif
+placeable,partpile001,{JDM}Parts pile - organized machine parts on table,PartPile,74,PLC_PartPile,301NAR_s
+placeable,swscreen001,{JDM}Swoop Race Monitor,SwScreen,225,PLC_SwScreen,301NAR_s
+placeable,quest_corpse,{JDM}Twi'lek Corpse,quest_corpse,113,PLC_TwlkCrps,303NAR_s
+placeable,lndspdr003,{kds}Airspeeder,AirTaxi,66,PLC_LndSpdr2,301NAR_s
+placeable,comppnl005,{kds}Pylon 3 Console,ComputerPanel,23,PLC_CompPnl,303NAR_s
+placeable,comp_c7,{MHC}Computer Panel{C7},comp_c7,23,PLC_CompPnl,303NAR_s
+placeable,door_control,{MHC}Door Controls,Door_Controls,14,PLC_BtnPnlHT,303NAR_s
+placeable,wateringurn,{MHC}Watering Urn,WaternUrn,185,PLC_Cjar3,303NAR_s
+placeable-model,,,,8,PLC_noready,2da
+placeable-model,,,,9,PLC_noready,2da
+placeable-model,,AirSpeeder1,,1,PLC_AirSpder1,2da
+placeable-model,,AirSpeeder2,,2,PLC_AirSpder2,2da
+placeable-model,,ArtTest1,,233,PLC_Invis,2da
+placeable-model,,ArtTest2,,234,PLC_Invis,2da
+placeable-model,,ArtTest3,,235,PLC_Invis,2da
+placeable-model,,ArtTest4,,236,PLC_Invis,2da
+placeable-model,,ArtTest5,,237,PLC_Invis,2da
+placeable-model,,CS09Door,,175,PLC_CS09Door,2da
+placeable-model,,CzerkaAdBanner,,223,PLC_Ban,2da
+placeable-model,,FirixaLoop,,46,PLC_FirixaLoop,2da
+placeable-model,,LgWallButton,,69,PLC_WallPnl,2da
+placeable-model,,LightBeam,,70,PLC_LghtBeam,2da
+placeable-model,,MeatPieces,,71,PLC_MeatPces,2da
+placeable-model,,RakataStatue,,84,PLC_RakaStat,2da
+placeable-model,,SithMist02,,258,PLC_SithMist02,2da
+placeable-model,,SithMist03,,259,PLC_SithMist03,2da
+placeable-model,,SithMist04,,260,PLC_SithMist04,2da
+placeable-model,,SithMist05,,261,PLC_SithMist05,2da
+placeable-model,,SittingSelkath,,202,N_selkath,2da
+placeable-model,,White_Box,,161,PLC_WhiteBox,2da
+placeable-model,,Winch,,116,PLC_Winch,2da

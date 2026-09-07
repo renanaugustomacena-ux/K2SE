@@ -359,6 +359,76 @@ float Y(int index) { return ValidIndex(index) ? g_entries[index - 1].y : 0.0f; }
 float Z(int index) { return ValidIndex(index) ? g_entries[index - 1].z : 0.0f; }
 float Facing(int index) { return ValidIndex(index) ? g_entries[index - 1].facing : 0.0f; }
 
+int AddRuntimeEntry(int type, const char* tpl, float x, float y, float z, float facing) {
+    if (!g_installed || !tpl || !*tpl || g_count >= kMaxEntries) return 0;
+    Entry& e = g_entries[g_count];
+    e = Entry();
+    e.type = (type == kTypeCreature) ? kTypeCreature : kTypePlaceable;
+    _snprintf(e.tpl, sizeof(e.tpl), "%s", tpl);
+    e.tpl[sizeof(e.tpl) - 1] = '\0';
+    // An empty Area means "anywhere in this module", which would make the object
+    // follow the player between areas -- never what placing something by hand
+    // means. Pin it to the area it was placed in.
+    _snprintf(e.area, sizeof(e.area), "%s", g_area);
+    e.area[sizeof(e.area) - 1] = '\0';
+    e.x = x;
+    e.y = y;
+    e.z = z;
+    e.facing = facing;
+    ++g_count;
+    // Run the spawn script promptly rather than waiting out the poll interval:
+    // placing something from the console should look immediate.
+    g_pending = 0.0f;
+    log::Writef("spawner: runtime entry %d added: %s %s at (%.2f %.2f %.2f) facing %.0f in %s",
+                g_count, e.type == kTypeCreature ? "creature" : "placeable", e.tpl, x, y, z,
+                facing, g_area);
+    return g_count;
+}
+
+bool RemoveEntry(int index) {
+    if (!ValidIndex(index)) return false;
+    log::Writef("spawner: entry %d (%s) removed from the table; the object already in the "
+                "area stays until the module reloads", index, g_entries[index - 1].tpl);
+    for (int i = index; i < g_count; ++i) g_entries[i - 1] = g_entries[i];
+    --g_count;
+    return true;
+}
+
+// Append every entry to k2se_spawns\<MODULE>.ini, which is the authority after a
+// restart -- this is what makes a console placement permanent.
+int Persist() {
+    if (!g_installed || !g_module[0]) return 0;
+    char path[MAX_PATH];
+    _snprintf(path, sizeof(path), "%sk2se_spawns\\%s.ini", g_gameDir, g_module);
+    path[sizeof(path) - 1] = '\0';
+    HANDLE h = CreateFileA(path, FILE_APPEND_DATA, FILE_SHARE_READ, nullptr, OPEN_ALWAYS,
+                           FILE_ATTRIBUTE_NORMAL, nullptr);
+    if (h == INVALID_HANDLE_VALUE) {
+        log::Writef("spawner: could not open %s to save", path);
+        return 0;
+    }
+    int written = 0;
+    for (int i = 0; i < g_count; ++i) {
+        const Entry& e = g_entries[i];
+        char block[384];
+        _snprintf(block, sizeof(block),
+                  "\r\n; saved from the console\r\n[console%d]\r\nType=%s\r\nTemplate=%s\r\n"
+                  "Area=%s\r\nX=%.3f\r\nY=%.3f\r\nZ=%.3f\r\nFacing=%.1f\r\n",
+                  i + 1, e.type == kTypeCreature ? "creature" : "placeable", e.tpl, e.area,
+                  e.x, e.y, e.z, e.facing);
+        block[sizeof(block) - 1] = '\0';
+        DWORD n = 0;
+        if (WriteFile(h, block, static_cast<DWORD>(strlen(block)), &n, nullptr)) ++written;
+    }
+    CloseHandle(h);
+    log::Writef("spawner: %d entr%s appended to %s", written, written == 1 ? "y" : "ies", path);
+    return written;
+}
+
+int Count() { return g_installed ? g_count : 0; }
+const char* ModuleName() { return g_module; }
+const char* AreaName() { return g_area; }
+
 bool Report(int index, bool ok) {
     if (!ValidIndex(index)) return false;
     Entry& e = g_entries[index - 1];

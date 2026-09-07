@@ -8,6 +8,7 @@
 #include "fov.h"
 #include "camera.h"
 #include "fpcam.h"
+#include "console.h"
 #include "spawner.h"
 #include "npcvariety.h"
 #include "offsets.h"
@@ -65,9 +66,11 @@ void OnAttach(HMODULE self) {
     k2se::fpcam::Install();
     k2se::spawner::Install();
     k2se::npcvariety::Install();
+    k2se::console::Install();
 }
 
 void OnDetach() {
+    k2se::console::Remove();
     k2se::npcvariety::Remove();
     k2se::spawner::Remove();
     k2se::fpcam::Remove();

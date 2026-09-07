@@ -50,5 +50,16 @@ float Z(int index);
 float Facing(int index);
 bool Report(int index, bool ok);
 
+// console.cpp: add an entry for this session without touching the ini, so an
+// object placed from the console appears on the next spawn pass. Returns the
+// 1-based index, or 0 when the table is full. `Persist` appends the current
+// runtime entries to k2se_spawns\<MODULE>.ini so they survive a restart.
+int AddRuntimeEntry(int type, const char* tpl, float x, float y, float z, float facing);
+bool RemoveEntry(int index);
+int Persist();
+int Count();
+const char* ModuleName();
+const char* AreaName();
+
 }  // namespace spawner
 }  // namespace k2se

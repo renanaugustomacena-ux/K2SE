@@ -35,10 +35,10 @@ DEPLOYED_INI = os.path.join(GAME, "k2se_movement.ini")
 SWKOTOR_INI = os.path.join(GAME, "swkotor2.ini")
 
 FEATURES = ("sprint", "crouch", "jump", "roll", "directional", "fov", "camera", "firstperson",
-            "spawner", "npcvariety")
+            "console", "spawner", "npcvariety")
 SECTION_OF = {"sprint": "Sprint", "crouch": "Crouch", "jump": "Jump", "roll": "Roll",
               "directional": "Directional", "fov": "FOV", "camera": "Camera",
-              "firstperson": "FirstPerson",
+              "firstperson": "FirstPerson", "console": "Console",
               "spawner": "Spawner", "npcvariety": "NpcVariety"}
 SPAWN_SCRIPT = "k2se_spawn"
 SPAWN_SCRIPT_SRC = os.path.join(ROOT, "nss", SPAWN_SCRIPT + ".nss")
@@ -218,6 +218,24 @@ def clean():
     return 0
 
 
+def deploy_catalog():
+    """Copy the object catalogue next to the exe -- the console reads it there.
+
+    Built offline by tools/gen_catalog.py from the BIFs, the 246 module archives
+    and dialog.tlk. Without it the console still opens, but `list` finds nothing.
+    """
+    src = os.path.join(ROOT, "data", "k2se_catalog.csv")
+    if not os.path.exists(src):
+        print("  WARNING: data/k2se_catalog.csv missing -- run: python tools/gen_catalog.py")
+        print("           the console will open with an empty object list")
+        return
+    dst = os.path.join(GAME, "k2se_catalog.csv")
+    shutil.copy(src, dst)
+    with open(src, "r", encoding="windows-1252", errors="replace") as fh:
+        rows = sum(1 for _ in fh) - 1
+    print("  k2se_catalog.csv -> %s (%d objects)" % (dst, rows))
+
+
 def deploy_spawn_script():
     """Compile nss/k2se_spawn.nss against nss/nwscript_k2se.nss and put the .ncs in
     override/, plus the k2se_spawns folder (README + example, never overwriting a
@@ -310,6 +328,8 @@ def install(enable, banner):
     print("  features enabled: %s%s" % (", ".join(enable) or "(none)", "  + banner" if banner else ""))
     if "spawner" in enable:
         deploy_spawn_script()
+    if "console" in enable:
+        deploy_catalog()
 
     conflicts = keymap_conflicts()
     if conflicts and any(f in enable for f in ("jump", "crouch", "directional")):

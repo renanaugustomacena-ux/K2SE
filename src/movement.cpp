@@ -11,6 +11,7 @@
 #include "callsite.h"
 #include "camera.h"
 #include "fpcam.h"
+#include "console.h"
 #include "spawner.h"
 #include "config.h"
 #include "input.h"
@@ -663,6 +664,7 @@ int __fastcall HookUpdate(void* self, void* edx, float dt) {
     camera::OnGameplayFrame();   // camera views ride the same gameplay frame
     fpcam::OnGameplayFrame(g_refs, g_dt);   // after camera: it reads the active view
     spawner::OnGameplayFrame(g_refs.serverCreature, g_refsValid, g_dt);
+    console::OnGameplayFrame(g_refs, g_dt);   // drains typed commands on THIS thread
     return g_origUpdate ? g_origUpdate(self, edx, dt) : 0;
 }
 
