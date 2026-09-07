@@ -6,6 +6,7 @@
 
 #include "log.h"
 #include "offsets.h"
+#include "render.h"
 
 namespace k2se {
 namespace glhook {
@@ -156,8 +157,23 @@ void __stdcall Hook_glProgramStringARB(uint32_t target, uint32_t format, int len
                                        const void* str) {
     if (!g_orig.programString) return;  // cannot forward; do nothing rather than fault
     if (target == GL_FRAGMENT_PROGRAM_ARB) {
+        const char* source = static_cast<const char*>(str);
+        // Dump first: the file on disk must be what the engine actually asked
+        // for, not what we then rewrote, or an edited copy would carry our fog
+        // OPTION back in and stack a second one on the next run.
+        render::NoteShaderSeen(source, len);
+
+        // A replacement from disk wins outright. Whoever wrote it can put the
+        // fog option in themselves; silently editing their program would make
+        // the file on disk stop describing what the GPU runs.
+        int replacementLen = 0;
+        if (const char* replacement = render::ReplacementFor(source, len, &replacementLen)) {
+            g_orig.programString(target, format, replacementLen, replacement);
+            return;
+        }
+
         int newLen = 0;
-        if (InjectFogOption(static_cast<const char*>(str), len, &newLen)) {
+        if (InjectFogOption(source, len, &newLen)) {
             ++g_patchedPrograms;
             g_status |= kShaderPatched;
             if (!g_loggedFirstProgram) {
@@ -230,13 +246,19 @@ bool MarkerPresent() {
 }  // namespace
 
 bool Install() {
-    if (!MarkerPresent()) {
-        log::Write("fog support: off (no k2se_fog.txt next to the game exe)");
+    // Two independent reasons to patch these imports: the fog override (opted
+    // into with a marker file beside the exe) and the shader dump/replace layer
+    // (opted into in the ini). Either one alone is enough.
+    const bool wantFog = MarkerPresent();
+    const bool wantShaders = render::WantShaderDump() || render::WantShaderReplace();
+    if (!wantFog && !wantShaders) {
+        log::Write("GL hook: off (no k2se_fog.txt, and no shader dump or replace in the ini)");
         g_status = kDisabled;
         return false;
     }
 
-    log::Write("fog support: marker found, patching GL imports");
+    log::Writef("GL hook: patching GL imports (fog %s, shaders %s)",
+                wantFog ? "on" : "off", wantShaders ? "on" : "off");
 
     void* prev = nullptr;
     bool ok = PatchSlot("wglGetProcAddress", kIatWglGetProcAddress,

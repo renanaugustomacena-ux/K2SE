@@ -69,6 +69,29 @@ struct State {
 };
 State g_st;
 
+// ShowWindow is the one USER32 function this module wants, and linking it would
+// break the rule tools/check_dll.py enforces: K2SE imports KERNEL32 and nothing
+// else, so that the proxy DLL can never fail to load because of a dependency.
+// Resolved by hand instead; if user32 is somehow absent the window simply stays
+// as the console host left it, which is harmless.
+using ShowWindowFn = int(__stdcall*)(HWND, int);
+ShowWindowFn g_showWindow = nullptr;
+
+void ShowConsoleWindow(int how) {
+    if (!g_showWindow) {
+        HMODULE user32 = GetModuleHandleA("user32.dll");
+        if (!user32) user32 = LoadLibraryA("user32.dll");
+        if (user32)
+            g_showWindow = reinterpret_cast<ShowWindowFn>(GetProcAddress(user32, "ShowWindow"));
+        if (!g_showWindow) {
+            log::Write("console: user32!ShowWindow unavailable -- the window cannot be hidden");
+            return;
+        }
+    }
+    HWND hwnd = GetConsoleWindow();
+    if (hwnd) g_showWindow(hwnd, how);
+}
+
 // --- output -------------------------------------------------------------------
 void Out(const char* fmt, ...) {
     char line[1024];
@@ -388,8 +411,7 @@ void OpenWindow() {
     // freopen is avoided on purpose: the log module explains why this DLL keeps
     // clear of the CRT's stdio, and WriteConsoleA/ReadConsoleA need no plumbing.
     g_st.visible = true;
-    HWND hwnd = GetConsoleWindow();
-    if (hwnd) ShowWindow(hwnd, SW_SHOW);
+    ShowConsoleWindow(SW_SHOW);
 
     Out("");
     Out("K2SE object console -- %d objects catalogued", g_rowCount);
@@ -408,8 +430,7 @@ void OpenWindow() {
 
 void HideWindow() {
     if (!g_st.visible) return;
-    HWND hwnd = GetConsoleWindow();
-    if (hwnd) ShowWindow(hwnd, SW_HIDE);
+    ShowConsoleWindow(SW_HIDE);
     g_st.visible = false;
     log::Write("console: window hidden");
 }

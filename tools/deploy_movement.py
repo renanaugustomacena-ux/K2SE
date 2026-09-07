@@ -35,10 +35,10 @@ DEPLOYED_INI = os.path.join(GAME, "k2se_movement.ini")
 SWKOTOR_INI = os.path.join(GAME, "swkotor2.ini")
 
 FEATURES = ("sprint", "crouch", "jump", "roll", "directional", "fov", "camera", "firstperson",
-            "console", "spawner", "npcvariety")
+            "console", "render", "spawner", "npcvariety")
 SECTION_OF = {"sprint": "Sprint", "crouch": "Crouch", "jump": "Jump", "roll": "Roll",
               "directional": "Directional", "fov": "FOV", "camera": "Camera",
-              "firstperson": "FirstPerson", "console": "Console",
+              "firstperson": "FirstPerson", "console": "Console", "render": "Render",
               "spawner": "Spawner", "npcvariety": "NpcVariety"}
 SPAWN_SCRIPT = "k2se_spawn"
 SPAWN_SCRIPT_SRC = os.path.join(ROOT, "nss", SPAWN_SCRIPT + ".nss")

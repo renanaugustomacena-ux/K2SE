@@ -52,6 +52,7 @@ add_library(k2se SHARED
     src/camera.cpp
     src/fpcam.cpp
     src/console.cpp
+    src/render.cpp
     src/spawner.cpp
     src/npcvariety.cpp
     "${GENERATED_PROXY}"

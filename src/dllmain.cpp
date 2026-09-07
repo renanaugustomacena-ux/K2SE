@@ -9,6 +9,7 @@
 #include "camera.h"
 #include "fpcam.h"
 #include "console.h"
+#include "render.h"
 #include "spawner.h"
 #include "npcvariety.h"
 #include "offsets.h"
@@ -42,6 +43,12 @@ void OnAttach(HMODULE self) {
     k2se::log::Write("fingerprint OK");
     k2se::routines::Init();
 
+    // Parsed here rather than further down because glhook and render both
+    // decide whether to patch anything from the ini, and they run next.
+    k2se::config::Load();
+    k2se::config::LogAll();
+    k2se::render::Install();
+
     // Opt-in and self-contained: if fog support refuses to install, the VM hook
     // is unaffected and K2SE still loads. It is deliberately attempted after the
     // fingerprint has passed, so it never touches an unrecognised binary.
@@ -58,8 +65,6 @@ void OnAttach(HMODULE self) {
     // k2se_movement.ini next to the exe: no file, no redirected call sites.
     // Installed last, after the VM hook is in, so a refusal here leaves a fully
     // working K2SE 0.1 behind it.
-    k2se::config::Load();
-    k2se::config::LogAll();
     k2se::movement::Install();
     k2se::fov::Install();
     k2se::camera::Install();
@@ -78,6 +83,7 @@ void OnDetach() {
     k2se::fov::Remove();
     k2se::movement::Remove();
     k2se::glhook::Remove();
+    k2se::render::Remove();
     k2se::vm::RemoveHook();
     k2se::log::Shutdown();
 }
