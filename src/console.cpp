@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <cstring>
 
+#include "anim.h"
 #include "camera.h"
 #include "config.h"
 #include "fpcam.h"
@@ -201,6 +202,7 @@ void CmdHelp() {
     Out("  undo                 drop the last placement from the table");
     Out("  save                 append the placements to k2se_spawns\\<MODULE>.ini");
     Out("  eyes                 the measured eye point of your character");
+    Out("  anim <row>           play an animations.2da row on your character");
     Out("  view <0-3>           camera view: 0 game, 1 near, 2 far, 3 first person");
     Out("  help                 this");
     Out("");
@@ -309,6 +311,32 @@ void CmdEyes() {
             static_cast<int>(live[1] * 1000.0f), static_cast<int>(live[2] * 1000.0f));
 }
 
+// The engine addresses animations by animations.2da row, and the game ships 571
+// of them -- plus the 40 the k2-animations override recovers, which exist in the
+// supermodels but had no row. Trying one is the only way to know what it looks
+// like, so the console plays it directly rather than making that a rebuild.
+void CmdAnim(const player::Refs& refs, const char* arg) {
+    if (!arg || !*arg) {
+        Out("  anim <row> -- e.g. 2 run, 5 stealth, 23 kneel, 567 diveroll.");
+        Out("  With the k2-animations override installed, 571 is walkback.");
+        return;
+    }
+    const int row = atoi(arg);
+    if (row < 0 || row > 2000) {
+        Out("  row must be 0..2000");
+        return;
+    }
+    if (!player::LooksLikePointer(refs.clientCreature)) {
+        Out("  no client creature right now -- are you in a loaded area?");
+        return;
+    }
+    Out(anim::PlayRow(refs.clientCreature, static_cast<uint16_t>(row), 1)
+            ? "  played animation row %d"
+            : "  row %d could not be played (no such row, or the anim base was "
+              "not reachable)",
+        row);
+}
+
 void Execute(const player::Refs& refs, char* line) {
     while (*line == ' ' || *line == '\t') ++line;
     char* end = line + strlen(line);
@@ -347,6 +375,8 @@ void Execute(const player::Refs& refs, char* line) {
             spawner::ModuleName());
     } else if (_stricmp(line, "eyes") == 0) {
         CmdEyes();
+    } else if (_stricmp(line, "anim") == 0) {
+        CmdAnim(refs, arg);
     } else if (_stricmp(line, "view") == 0) {
         const int v = arg ? atoi(arg) : -1;
         Out(camera::SetView(v) ? "  camera view %d" : "  view must be 0..3 and the camera "
