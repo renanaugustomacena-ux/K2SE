@@ -38,11 +38,19 @@ bool IsDown(int vk);        // held right now (as of BeginFrame)
 bool Pressed(int vk);       // went down this frame
 bool Released(int vk);      // went up this frame
 
-// Text entry for the in-game console. Track() is capped at kMaxKeys because the
-// movement features only ever bind a handful; typing needs the whole keyboard,
-// so this keeps its own edge state over the printable range and is only sampled
-// while the console is actually open. Returns the ASCII character typed this
-// frame, 8 for backspace, 13 for enter, or 0 for nothing.
+// Edge detection for keys that were never Track()ed. Track() is capped at
+// kMaxKeys because the movement features only bind a handful, and the console
+// needs a dozen more; these keep their own state over the whole virtual-key
+// range and are only sampled while the console is open.
+//
+// ResetEdges() samples the current state without reporting anything, so that a
+// key still held from the keystroke that opened the console does not read as a
+// fresh press on the first frame.
+void ResetEdges();
+bool PollEdgeDown(int vk);
+
+// Text entry, for the separate-window console only. Returns the ASCII typed
+// this frame, 8 for backspace, 13 for enter, or 0.
 int PollTypedChar();
 
 }  // namespace input

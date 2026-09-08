@@ -276,20 +276,6 @@ bool ControllerEnabled(void* controller, bool* out) {
     return true;
 }
 
-bool SetControllerEnabled(void* controller, bool on) {
-    if (!LooksLikePointer(controller)) return false;
-    uint32_t current = 0;
-    if (!SafeReadU32(At(controller, kCtrlOffEnabled), &current)) return false;
-    const uint32_t wanted = on ? 1u : 0u;
-    if (current == wanted) return true;
-    __try {
-        *reinterpret_cast<volatile uint32_t*>(AtW(controller, kCtrlOffEnabled)) = wanted;
-        return true;
-    } __except (EXCEPTION_EXECUTE_HANDLER) {
-        return false;
-    }
-}
-
 bool ControllerWalking(void* controller, bool* out) {
     uint32_t v = 0;
     if (!LooksLikePointer(controller) || !SafeReadU32(At(controller, kCtrlOffWalking), &v)) return false;

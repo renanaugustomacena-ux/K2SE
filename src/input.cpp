@@ -58,6 +58,20 @@ bool Init() {
 // opening the console cannot exhaust kMaxKeys.
 bool g_typedPrev[256];
 
+void ResetEdges() {
+    if (!g_getAsyncKeyState) return;
+    for (int vk = 0; vk < 256; ++vk)
+        g_typedPrev[vk] = (g_getAsyncKeyState(vk) & 0x8000) != 0;
+}
+
+bool PollEdgeDown(int vk) {
+    if (!g_getAsyncKeyState || !g_focused || vk <= 0 || vk >= 256) return false;
+    const bool down = (g_getAsyncKeyState(vk) & 0x8000) != 0;
+    const bool was = g_typedPrev[vk];
+    g_typedPrev[vk] = down;
+    return down && !was;
+}
+
 int PollTypedChar() {
     if (!g_getAsyncKeyState || !g_focused) return 0;
 

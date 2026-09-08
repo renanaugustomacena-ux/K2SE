@@ -465,63 +465,219 @@ void Drain(const player::Refs& refs) {
 }
 
 // --- in-game mode -------------------------------------------------------------
+//
+// Driven entirely by the numeric keypad, and it writes nothing to the engine.
+//
+// The first attempt was a text prompt, which needed the player frozen so that
+// typing "spawn" did not also walk the character around. Freezing meant writing
+// 0 into the player controller's enabled flag -- a field K2SE had only ever
+// read -- and that froze movement and area transitions for the whole session.
+// A guess about engine state is not worth a text box.
+//
+// So the overlay browses instead of typing: the catalogue is bucketed into
+// categories, the keypad moves a selection through them, and nothing the game
+// owns is touched. The keypad is used because KOTOR binds almost none of it
+// (Renan's own camera rebind took Numpad4/6, which is why those two are left
+// alone here).
+struct Category {
+    const char* name;
+    const char* needles[4];   // empty first entry = everything
+};
+
+const Category kCategories[] = {
+    {"all",         {"", nullptr, nullptr, nullptr}},
+    {"plants",      {"plant", "tropl", "planter", nullptr}},
+    {"containers",  {"footlker", "crate", "cont", "bin"}},
+    {"furniture",   {"table", "chair", "bench", "bed"}},
+    {"statues",     {"statue", "monument", nullptr, nullptr}},
+    {"lights",      {"light", "lamp", "glow", nullptr}},
+    {"computers",   {"comp", "console", "panel", "term"}},
+    {"doors",       {"door", nullptr, nullptr, nullptr}},
+    {"recoloured",  {"_a", "_b", "_c", "_d"}},
+};
+constexpr int kCategoryCount =
+    static_cast<int>(sizeof(kCategories) / sizeof(kCategories[0]));
+constexpr int kVisibleRows = 10;
+
+int g_category = 1;      // start on plants: the thing most worth adding
+int g_selected = 0;
+int g_matches = 0;
+char g_status[160] = "";
+int g_statusFrames = 0;
+
+bool RowInCategory(const CatalogRow& row, int category) {
+    const Category& c = kCategories[category];
+    if (!c.needles[0] || !*c.needles[0]) return true;
+    for (int i = 0; i < 4; ++i) {
+        if (!c.needles[i]) break;
+        if (ContainsNoCase(row.name, c.needles[i]) ||
+            ContainsNoCase(row.resref, c.needles[i]) ||
+            ContainsNoCase(row.model, c.needles[i]))
+            return true;
+    }
+    return false;
+}
+
+// The catalogue is not copied per category; the nth match is found by walking.
+int IndexOfMatch(int wanted) {
+    int seen = 0;
+    for (int i = 0; i < g_rowCount; ++i) {
+        if (!RowInCategory(g_rows[i], g_category)) continue;
+        if (seen == wanted) return i;
+        ++seen;
+    }
+    return -1;
+}
+
+int CountMatches() {
+    int n = 0;
+    for (int i = 0; i < g_rowCount; ++i)
+        if (RowInCategory(g_rows[i], g_category)) ++n;
+    return n;
+}
+
+void SetStatus(const char* fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+    _vsnprintf(g_status, sizeof(g_status), fmt, args);
+    va_end(args);
+    g_status[sizeof(g_status) - 1] = '\0';
+    g_statusFrames = 180;
+}
+
+void Recount() {
+    g_matches = CountMatches();
+    if (g_selected >= g_matches) g_selected = g_matches > 0 ? g_matches - 1 : 0;
+    if (g_selected < 0) g_selected = 0;
+}
+
 void OpenOverlay() {
     if (g_st.visible) return;
     g_st.visible = true;
-    g_scrollCount = 0;
-    g_inputLen = 0;
-    g_input[0] = '\0';
-    Out("K2SE console -- %d objects. Type and press Enter. F10 closes.", g_rowCount);
-    Out("try:  list plant     spawn #1     here     anim 2     help");
-    if (spawner::Status() == 0)
-        Out("WARNING: [Spawner] is off in the ini, so nothing can be placed.");
-    log::Write("console: overlay opened");
+    input::ResetEdges();
+    Recount();
+    g_status[0] = '\0';
+    g_statusFrames = 0;
+    log::Writef("console: overlay opened (%d objects, category %s)", g_rowCount,
+                kCategories[g_category].name);
 }
 
-void CloseOverlay(void* controller) {
+void CloseOverlay() {
     if (!g_st.visible) return;
     g_st.visible = false;
-    // Hand the player back before leaving, or the character stays frozen.
-    if (controller) player::SetControllerEnabled(controller, true);
     log::Write("console: overlay closed");
 }
 
-// Every line, re-posted every frame. AurPostString shows a string for the frame
-// it is posted in whatever its life argument claims -- established in session S1
-// and the reason the spawner re-posts its banner too.
+// Every line is re-posted every frame: AurPostString shows a string only for
+// the frame it is posted in, whatever its life argument claims. That was
+// established in session S1 and is why the spawner re-posts its banner too.
 void DrawOverlay() {
     auto post = reinterpret_cast<AurPostStringFn>(kAurPostString);
     int y = kOverlayTop;
-    for (int i = 0; i < g_scrollCount; ++i) {
-        post(g_scroll[i], kOverlayX, y, kOverlaySize);
+
+    _snprintf(g_render, sizeof(g_render), "== K2SE  [%s]  %d/%d ==",
+              kCategories[g_category].name, g_matches ? g_selected + 1 : 0, g_matches);
+    g_render[sizeof(g_render) - 1] = '\0';
+    post(g_render, kOverlayX, y, kOverlaySize);
+    y += kOverlayStep;
+
+    // Keep the selection in the middle of the window where possible.
+    int first = g_selected - kVisibleRows / 2;
+    if (first > g_matches - kVisibleRows) first = g_matches - kVisibleRows;
+    if (first < 0) first = 0;
+
+    for (int line = 0; line < kVisibleRows; ++line) {
+        const int match = first + line;
+        if (match >= g_matches) break;
+        const int index = IndexOfMatch(match);
+        if (index < 0) break;
+        const CatalogRow& row = g_rows[index];
+        _snprintf(g_render, sizeof(g_render), "%s %-30.30s %-14.14s %s",
+                  match == g_selected ? ">" : " ", row.name,
+                  (row.resref && *row.resref) ? row.resref : "(model only)", row.model);
+        g_render[sizeof(g_render) - 1] = '\0';
+        post(g_render, kOverlayX, y, kOverlaySize);
         y += kOverlayStep;
     }
-    _snprintf(g_render, sizeof(g_render), "k2se> %s_", g_input);
-    g_render[sizeof(g_render) - 1] = '\0';
-    post(g_render, kOverlayX, y + kOverlayStep, kOverlaySize);
+
+    y += kOverlayStep;
+    post("Num8/Num2 scroll   Num7/Num1 page   Num9/Num3 category", kOverlayX, y,
+         kOverlaySize);
+    y += kOverlayStep;
+    post("Num5 place   Num0 save   Num. undo   F10 close", kOverlayX, y, kOverlaySize);
+
+    if (g_statusFrames > 0) {
+        --g_statusFrames;
+        y += kOverlayStep;
+        post(g_status, kOverlayX, y, kOverlaySize);
+    }
 }
 
-// Returns the completed line when Enter was pressed, otherwise null.
-const char* CollectTyping() {
-    const int typed = input::PollTypedChar();
-    if (!typed) return nullptr;
-    if (typed == 13) {
-        if (g_inputLen == 0) return nullptr;
-        static char completed[160];
-        memcpy(completed, g_input, sizeof(completed));
-        g_inputLen = 0;
-        g_input[0] = '\0';
-        return completed;
+void PlaceSelected(const player::Refs& refs) {
+    if (g_matches == 0) {
+        SetStatus("nothing selected");
+        return;
     }
-    if (typed == 8) {
-        if (g_inputLen > 0) g_input[--g_inputLen] = '\0';
-        return nullptr;
+    const int index = IndexOfMatch(g_selected);
+    if (index < 0) return;
+    const CatalogRow& row = g_rows[index];
+    if (!row.resref || !*row.resref) {
+        SetStatus("%s is a model with no blueprint -- cannot be placed", row.name);
+        return;
     }
-    if (g_inputLen < static_cast<int>(sizeof(g_input)) - 1) {
-        g_input[g_inputLen++] = static_cast<char>(typed);
-        g_input[g_inputLen] = '\0';
+    float pos[3] = {0, 0, 0};
+    float facing = 0.0f;
+    if (!PlayerPlacement(refs, pos, &facing)) {
+        SetStatus("cannot read your position right now");
+        return;
     }
-    return nullptr;
+    const int entry = spawner::AddRuntimeEntry(kTypePlaceable, row.resref, pos[0], pos[1],
+                                               pos[2], facing);
+    if (!entry) {
+        SetStatus("could not place it -- is [Spawner] on in the ini?");
+        return;
+    }
+    SetStatus("placing %s (entry %d) -- give it a moment", row.resref, entry);
+}
+
+// Returns true when the console consumed the frame's input.
+void HandleKeys(const player::Refs& refs) {
+    if (input::PollEdgeDown(VK_NUMPAD8)) {
+        if (g_selected > 0) --g_selected;
+    }
+    if (input::PollEdgeDown(VK_NUMPAD2)) {
+        if (g_selected + 1 < g_matches) ++g_selected;
+    }
+    if (input::PollEdgeDown(VK_NUMPAD7)) {
+        g_selected -= kVisibleRows;
+        if (g_selected < 0) g_selected = 0;
+    }
+    if (input::PollEdgeDown(VK_NUMPAD1)) {
+        g_selected += kVisibleRows;
+        if (g_selected >= g_matches) g_selected = g_matches > 0 ? g_matches - 1 : 0;
+    }
+    if (input::PollEdgeDown(VK_NUMPAD9)) {
+        g_category = (g_category + kCategoryCount - 1) % kCategoryCount;
+        g_selected = 0;
+        Recount();
+    }
+    if (input::PollEdgeDown(VK_NUMPAD3)) {
+        g_category = (g_category + 1) % kCategoryCount;
+        g_selected = 0;
+        Recount();
+    }
+    if (input::PollEdgeDown(VK_NUMPAD5)) PlaceSelected(refs);
+    if (input::PollEdgeDown(VK_NUMPAD0)) {
+        const int written = spawner::Persist();
+        SetStatus("%d entr%s saved to k2se_spawns\\%s.ini", written,
+                  written == 1 ? "y" : "ies", spawner::ModuleName());
+    }
+    if (input::PollEdgeDown(VK_DECIMAL)) {
+        const int last = spawner::Count();
+        SetStatus(spawner::RemoveEntry(last)
+                      ? "entry removed (what is already in the area stays until reload)"
+                      : "nothing to undo");
+    }
 }
 
 void OpenWindow() {
@@ -638,7 +794,7 @@ void Toggle() {
     if (!g_st.installed) return;
     if (g_cfg.inGame) {
         if (g_st.visible) {
-            CloseOverlay(nullptr);
+            CloseOverlay();
         } else {
             OpenOverlay();
         }
@@ -660,27 +816,16 @@ void OnGameplayFrame(const player::Refs& refs, float dt) {
     if (g_cfg.inGame) {
         if (input::Pressed(g_cfg.keyToggle)) {
             if (g_st.visible) {
-                CloseOverlay(refs.controller);
+                CloseOverlay();
             } else {
                 OpenOverlay();
             }
         }
         if (!g_st.visible) return;
-        // Typing `list plant` would otherwise also walk the player around,
-        // because the engine reads the keyboard for itself. Clearing the
-        // controller's enabled flag is the state the game already puts itself
-        // in during dialogue, and it is re-asserted every frame because the
-        // engine writes that field too.
-        player::SetControllerEnabled(refs.controller, false);
-        if (const char* line = CollectTyping()) {
-            char buffer[160];
-            _snprintf(buffer, sizeof(buffer), "%s", line);
-            buffer[sizeof(buffer) - 1] = '\0';
-            PushLine("");
-            _snprintf(g_render, sizeof(g_render), "k2se> %s", buffer);
-            PushLine(g_render);
-            Execute(refs, buffer);
-        }
+        // Nothing here writes to the engine. The overlay reads the keypad,
+        // draws text, and adds spawn entries -- the player keeps full control
+        // of the character the whole time.
+        HandleKeys(refs);
         DrawOverlay();
         return;
     }
