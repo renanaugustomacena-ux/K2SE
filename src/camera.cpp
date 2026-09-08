@@ -51,10 +51,19 @@ struct Cfg {
         {"game", 0, 0, 0, 0, 0},
         {"near", 2.2f, 0.6f, 83.0f, 60.0f, 0.0f},
         {"far", 5.5f, 1.4f, 80.0f, 52.0f, 0.0f},
-        // Distance 0: any real distance is what made this read as "third person
-        // extra close". Height is a fallback only -- fpcam.cpp supplies the
-        // measured eye height of the character on screen, minus HeightDrop.
-        {"first person", 0.0f, 1.55f, 90.0f, 75.0f, 0.28f},
+        // Distance must NOT be zero. The chase camera aims with
+        // lookAt(normalize(target - cameraPos)), so a camera exactly on its own
+        // target normalises a zero-length vector and the orientation goes
+        // wherever the arithmetic lands -- which put the camera on the ceiling.
+        // 0.05 is the smallest value that stays well defined.
+        //
+        // Height here is NOT the eye height. Vanilla styles use 0.45 and look
+        // right, so the engine treats this as a modest offset and not as an
+        // absolute height above the feet, whatever reone's reimplementation
+        // does. Writing 1.585 into it put the camera two heads too high. This
+        // preset is only the fallback anyway: fpview.cpp owns the real
+        // first-person camera.
+        {"first person", 0.05f, 1.45f, 90.0f, 75.0f, 0.28f},
     };
 };
 Cfg g_cfg;
@@ -127,11 +136,16 @@ void WriteStyle(float distance, float height, float pitch) {
 // resolves it from the character actually being driven (eye height varies from
 // 1.32 m for a child to 1.71 m, and the ini cannot know which one is on screen).
 // Every other view keeps the configured value.
+// The style's height is used exactly as configured, for every view.
+//
+// It used to be replaced with the measured eye height in first person. That was
+// wrong twice over: the engine does not treat this field as an absolute height
+// above the feet -- vanilla styles use 0.45 and look correct -- so writing 1.585
+// into it put the camera at ceiling height; and the measurement belongs to
+// fpview.cpp, which places the camera itself rather than asking the chase
+// camera to do it.
 float EffectiveHeight(int view, const Preset& p) {
-    if (view != kViewFirstPerson) return p.height;
-    float forward = 0.0f;
-    float height = 0.0f;
-    if (fpcam::EyeOffset(&forward, &height) && height > 0.0f) return height;
+    (void)view;
     return p.height;
 }
 

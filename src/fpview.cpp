@@ -155,33 +155,117 @@ void BuildView(float* m) {
     m[3] = 0.0f;  m[7] = 0.0f;  m[11] = 0.0f;  m[15] = 1.0f;
 }
 
-// Recover the camera position a view matrix encodes: for an orthonormal
-// rotation R and translation t, the camera sits at -(R^T * t). If that is near
-// the player, this matrix is the scene's view and not a GUI or shadow one --
-// a test rather than a guess about which call to intercept.
-bool IsSceneView(const float* m) {
-    if (!m) return false;
-    const float tx = m[12];
-    const float ty = m[13];
-    const float tz = m[14];
-    const float cx = -(m[0] * tx + m[1] * ty + m[2] * tz);
-    const float cy = -(m[4] * tx + m[5] * ty + m[6] * tz);
-    const float cz = -(m[8] * tx + m[9] * ty + m[10] * tz);
-    if (!(cx == cx && cy == cy && cz == cz)) return false;   // NaN
-    const float dx = cx - g_st.eye[0];
-    const float dy = cy - g_st.eye[1];
-    const float dz = cz - g_st.eye[2];
-    const float distanceSquared = dx * dx + dy * dy + dz * dz;
-    if (!g_st.reported && distanceSquared < 100.0f) {
-        g_st.reported = true;
-        log::Writef("fpview: scene view found -- engine camera at (%d %d %d) mm, "
-                    "eye at (%d %d %d) mm", static_cast<int>(cx * 1000.0f),
-                    static_cast<int>(cy * 1000.0f), static_cast<int>(cz * 1000.0f),
-                    static_cast<int>(g_st.eye[0] * 1000.0f),
-                    static_cast<int>(g_st.eye[1] * 1000.0f),
-                    static_cast<int>(g_st.eye[2] * 1000.0f));
+// Which way round the engine hands us its camera matrix is not established, and
+// guessing cost a session: the first attempt assumed a view matrix (world ->
+// camera) and never matched anything, so nothing was ever replaced and the log
+// said only that the hook was installed.
+//
+// So both readings are tested against the same oracle -- the camera position
+// must be near the player's eyes:
+//
+//   view matrix  (world -> camera):  camera = -(R^T * t)
+//   world matrix (camera -> world):  camera = the translation column
+//
+// Whichever lands close is the convention in use; it is recorded once, logged,
+// and the replacement is then built the same way round.
+enum Convention { kUnknown = 0, kViewMatrix, kWorldMatrix };
+Convention g_convention = kUnknown;
+
+// Diagnostics, so a second failure explains itself instead of being silent.
+float g_bestDistance = 1.0e9f;
+float g_bestCamera[3] = {0, 0, 0};
+int g_bestKind = 0;
+uint32_t g_frames = 0;
+
+void CameraFromView(const float* m, float* out) {
+    const float tx = m[12], ty = m[13], tz = m[14];
+    out[0] = -(m[0] * tx + m[1] * ty + m[2] * tz);
+    out[1] = -(m[4] * tx + m[5] * ty + m[6] * tz);
+    out[2] = -(m[8] * tx + m[9] * ty + m[10] * tz);
+}
+
+void CameraFromWorld(const float* m, float* out) {
+    out[0] = m[12];
+    out[1] = m[13];
+    out[2] = m[14];
+}
+
+bool Finite3(const float* v) {
+    return v[0] == v[0] && v[1] == v[1] && v[2] == v[2] &&
+           v[0] > -1.0e6f && v[0] < 1.0e6f && v[1] > -1.0e6f && v[1] < 1.0e6f &&
+           v[2] > -1.0e6f && v[2] < 1.0e6f;
+}
+
+float DistanceToEye(const float* c) {
+    const float dx = c[0] - g_st.eye[0];
+    const float dy = c[1] - g_st.eye[1];
+    const float dz = c[2] - g_st.eye[2];
+    return dx * dx + dy * dy + dz * dz;
+}
+
+// Returns the convention this matrix satisfies, or kUnknown.
+Convention Classify(const float* m) {
+    if (!m) return kUnknown;
+    float camera[3];
+
+    CameraFromView(m, camera);
+    if (Finite3(camera)) {
+        const float d = DistanceToEye(camera);
+        if (d < g_bestDistance) {
+            g_bestDistance = d;
+            g_bestKind = kViewMatrix;
+            for (int i = 0; i < 3; ++i) g_bestCamera[i] = camera[i];
+        }
+        if (d < 100.0f) return kViewMatrix;
     }
-    return distanceSquared < 100.0f;   // within 10 m of the eye point
+
+    CameraFromWorld(m, camera);
+    if (Finite3(camera)) {
+        const float d = DistanceToEye(camera);
+        if (d < g_bestDistance) {
+            g_bestDistance = d;
+            g_bestKind = kWorldMatrix;
+            for (int i = 0; i < 3; ++i) g_bestCamera[i] = camera[i];
+        }
+        if (d < 100.0f) return kWorldMatrix;
+    }
+    return kUnknown;
+}
+
+// The camera-to-world matrix: the same basis, not inverted, with the eye in the
+// translation column.
+void BuildWorld(float* m) {
+    const float cp = cosf(g_st.pitch);
+    const float sp = sinf(g_st.pitch);
+    const float cy = cosf(g_st.yaw);
+    const float sy = sinf(g_st.yaw);
+    const float f[3] = {sy * cp, cy * cp, sp};
+    const float r[3] = {cy, -sy, 0.0f};
+    const float u[3] = {r[1] * f[2] - r[2] * f[1],
+                        r[2] * f[0] - r[0] * f[2],
+                        r[0] * f[1] - r[1] * f[0]};
+    m[0] = r[0];   m[4] = u[0];   m[8]  = -f[0];  m[12] = g_st.eye[0];
+    m[1] = r[1];   m[5] = u[1];   m[9]  = -f[1];  m[13] = g_st.eye[1];
+    m[2] = r[2];   m[6] = u[2];   m[10] = -f[2];  m[14] = g_st.eye[2];
+    m[3] = 0.0f;   m[7] = 0.0f;   m[11] = 0.0f;   m[15] = 1.0f;
+}
+
+void ReportBlind() {
+    if (g_st.reported) return;
+    g_st.reported = true;
+    log::Writef("fpview: no camera matrix recognised in %u first-person frames. "
+                "%u MODELVIEW matrices seen; closest was %s at (%d %d %d) mm, "
+                "%d mm from the eye at (%d %d %d) mm",
+                g_frames, g_st.candidates,
+                g_bestKind == kViewMatrix ? "read as a view matrix"
+                                          : "read as a world matrix",
+                static_cast<int>(g_bestCamera[0] * 1000.0f),
+                static_cast<int>(g_bestCamera[1] * 1000.0f),
+                static_cast<int>(g_bestCamera[2] * 1000.0f),
+                static_cast<int>(sqrtf(g_bestDistance) * 1000.0f),
+                static_cast<int>(g_st.eye[0] * 1000.0f),
+                static_cast<int>(g_st.eye[1] * 1000.0f),
+                static_cast<int>(g_st.eye[2] * 1000.0f));
 }
 
 void __stdcall HookMatrixMode(uint32_t mode) {
@@ -197,15 +281,27 @@ void __stdcall HookLoadIdentity() {
 }
 
 void __stdcall HookMultMatrixf(const float* m) {
-    if (g_st.active && g_st.eyeValid && g_st.armed && g_st.matrixMode == GL_MODELVIEW) {
+    // Every MODELVIEW matrix is a candidate. Requiring a glLoadIdentity first
+    // was an assumption about how the engine builds its view, and assumptions
+    // are what has been failing here.
+    if (g_st.active && g_st.eyeValid && g_st.matrixMode == GL_MODELVIEW) {
         ++g_st.candidates;
-        if (IsSceneView(m)) {
-            g_st.armed = false;          // the view is set once per pass
-            BuildView(g_st.view);
+        const Convention convention =
+            (g_convention != kUnknown) ? (Classify(m) == g_convention ? g_convention : kUnknown)
+                                       : Classify(m);
+        if (convention != kUnknown) {
+            if (g_convention == kUnknown) {
+                g_convention = convention;
+                log::Writef("fpview: the engine hands us a %s -- first person is ours now",
+                            convention == kViewMatrix ? "view matrix (world -> camera)"
+                                                      : "camera world matrix");
+            }
+            if (convention == kViewMatrix) {
+                BuildView(g_st.view);
+            } else {
+                BuildWorld(g_st.view);
+            }
             ++g_st.replaced;
-            if (g_st.replaced == 1)
-                log::Write("fpview: the scene view matrix is now ours -- first person is "
-                           "no longer the chase camera");
             if (g_origMultMatrixf) g_origMultMatrixf(g_st.view);
             return;
         }
@@ -329,6 +425,8 @@ void OnGameplayFrame(bool active, const float worldEye[3], float facingRadians) 
     }
 
     g_st.active = true;
+    ++g_frames;
+    if (g_frames > 200 && g_convention == kUnknown) ReportBlind();
     if (worldEye) {
         for (int i = 0; i < 3; ++i) g_st.eye[i] = worldEye[i];
         g_st.eyeValid = true;
