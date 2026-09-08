@@ -11,6 +11,7 @@
 #include "callsite.h"
 #include "camera.h"
 #include "fpcam.h"
+#include "fpview.h"
 #include "console.h"
 #include "spawner.h"
 #include "config.h"
@@ -663,6 +664,15 @@ int __fastcall HookUpdate(void* self, void* edx, float dt) {
     ApplyKeyboardAxes(self);
     camera::OnGameplayFrame();   // camera views ride the same gameplay frame
     fpcam::OnGameplayFrame(g_refs, g_dt);   // after camera: it reads the active view
+    {
+        // fpview owns the view matrix while first person is selected; fpcam
+        // tells it where the eyes are and which way the character faces.
+        float eye[3];
+        float facing = 0.0f;
+        const bool first = camera::GetView() == camera::kViewFirstPerson;
+        const bool haveEye = fpcam::WorldEye(eye, &facing);
+        fpview::OnGameplayFrame(first && haveEye, haveEye ? eye : nullptr, facing);
+    }
     spawner::OnGameplayFrame(g_refs.serverCreature, g_refsValid, g_dt);
     console::OnGameplayFrame(g_refs, g_dt);   // drains typed commands on THIS thread
     return g_origUpdate ? g_origUpdate(self, edx, dt) : 0;

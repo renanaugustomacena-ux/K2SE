@@ -65,6 +65,14 @@ struct State {
 };
 State g_st;
 
+// Model space -> world space: the eye offset is (0, forward, height) about the
+// model origin, and the character's facing rotates the forward part into the
+// world. fpview.cpp builds its view matrix from these; the facing is handed on
+// so the view starts where the character is already looking.
+float g_worldEye[3] = {0, 0, 0};
+float g_worldFacing = 0.0f;
+bool g_worldEyeValid = false;
+
 // --- guarded memory access ---------------------------------------------------
 bool SafeReadPtr(const void* at, void** out) {
     __try {
@@ -394,6 +402,24 @@ void OnGameplayFrame(const player::Refs& refs, float dt) {
 
     Stabilise(raw, g_st.eye);
 
+    // World-space eye point for fpview.cpp. The height handed over is the same
+    // one the style would get, so both paths agree on where the eyes are.
+    g_worldEyeValid = false;
+    float pos[3];
+    float ori[3];
+    if (player::ServerPosition(refs.serverCreature, pos) &&
+        player::ServerOrientation(refs.serverCreature, ori)) {
+        const float length = sqrtf(ori[0] * ori[0] + ori[1] * ori[1]);
+        const float fx = (length > 0.001f) ? ori[0] / length : 0.0f;
+        const float fy = (length > 0.001f) ? ori[1] / length : 1.0f;
+        const float forward = g_st.eye[1];
+        g_worldEye[0] = pos[0] + fx * forward;
+        g_worldEye[1] = pos[1] + fy * forward;
+        g_worldEye[2] = pos[2] + g_st.eye[2] - g_cfg.heightDrop;
+        g_worldFacing = atan2f(fx, fy);   // 0 = facing +Y, matching fpview
+        g_worldEyeValid = true;
+    }
+
 }
 
 // The camera height handed to the chase-camera style. The measured eye point is
@@ -423,6 +449,13 @@ bool EyeOffset(float* forward, float* height) {
         return true;
     }
     return false;
+}
+
+bool WorldEye(float out[3], float* facingRadians) {
+    if (!g_worldEyeValid || !out) return false;
+    for (int i = 0; i < 3; ++i) out[i] = g_worldEye[i];
+    if (facingRadians) *facingRadians = g_worldFacing;
+    return true;
 }
 
 bool GetEyePosition(float out[3]) {

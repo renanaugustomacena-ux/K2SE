@@ -69,6 +69,11 @@ void OnGameplayFrame(const player::Refs& refs, float dt);
 bool EyeOffset(float* forward, float* height);
 
 
+// The eye point in WORLD space, plus the character's facing in radians, for
+// fpview.cpp which builds the view matrix from them. False when the player
+// cannot be resolved this frame.
+bool WorldEye(float out[3], float* facingRadians);
+
 // Script API: the live eye point, and the bob amount.
 bool GetEyePosition(float out[3]);
 void SetBobScale(float scale);

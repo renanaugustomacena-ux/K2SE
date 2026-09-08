@@ -51,6 +51,7 @@ add_library(k2se SHARED
     src/fov.cpp
     src/camera.cpp
     src/fpcam.cpp
+    src/fpview.cpp
     src/console.cpp
     src/render.cpp
     src/spawner.cpp
