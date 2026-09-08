@@ -7,6 +7,7 @@
 
 #include "camera.h"
 #include "config.h"
+#include "fpview.h"
 #include "input.h"
 #include "log.h"
 #include "movement.h"
@@ -257,6 +258,10 @@ int __fastcall HookApply(void* self, void* edx) {
     }
     g_lastApply = now;
     OnCameraUpdate(self, dt);
+    // The one honest frame boundary for the scene camera: fpview uses it to
+    // know which modelview matrix is the view, instead of inferring it from
+    // the contents and hitting every prop near the player.
+    fpview::OnCameraApply();
     return g_origApply ? g_origApply(self, edx) : 0;
 }
 

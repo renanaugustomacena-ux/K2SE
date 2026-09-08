@@ -38,6 +38,13 @@ int Status();   // bit 0 installed, bit 1 hooked, bit 2 view replaced this sessi
 // point. `active` is true only while the first-person view is selected.
 void OnGameplayFrame(bool active, const float worldEye[3], float facingRadians);
 
+// fov.cpp, from its Camera::ApplyProjection hook -- once per rendered frame,
+// for the scene camera and nothing else. This is the anchor that says which
+// modelview matrix is the view: the first one after it. Guessing from the
+// contents instead matched every prop near the player and replaced 39,488
+// object transforms in one session.
+void OnCameraApply();
+
 // Where the camera is looking, for anything that wants to align with it
 // (movement, aiming). Yaw is radians in the game's facing convention.
 float Yaw();
