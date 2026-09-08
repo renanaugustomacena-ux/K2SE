@@ -68,6 +68,12 @@ void OnGameplayFrame(const player::Refs& refs, float dt);
 // camera.cpp uses this for the first-person preset's height.
 bool EyeOffset(float* forward, float* height);
 
+// True when fpcam is placing the camera itself by intercepting the engine's
+// position call. While that is true the first-person STYLE height must be left
+// alone: the style only determines the direction the engine aims, and pushing
+// the eye height into it tilts that aim back down at the character's feet.
+bool CameraHookActive();
+
 // Script API: the live eye point, and the bob amount.
 bool GetEyePosition(float out[3]);
 void SetBobScale(float scale);
