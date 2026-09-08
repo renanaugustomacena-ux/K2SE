@@ -745,8 +745,14 @@ void ReadConfig() {
     g_cfg.enabled = config::GetBool("Console", "Enabled", false);
     g_cfg.keyToggle = config::GetKey("Console", "KeyToggle", VK_F10);
     g_cfg.openAtStart = config::GetBool("Console", "OpenAtStart", false);
-    log::Writef("console: %s toggle %s openAtStart %d", g_cfg.enabled ? "ON" : "off",
-                config::KeyName(g_cfg.keyToggle), g_cfg.openAtStart ? 1 : 0);
+    // This line went missing when the overlay was rewritten, so InGame in the
+    // ini did nothing at all and the console always drew over the game -- which
+    // looked exactly like F10 being dead. The mode is logged now, so the next
+    // time the setting and the behaviour disagree the log says so.
+    g_cfg.inGame = config::GetBool("Console", "InGame", true);
+    log::Writef("console: %s toggle %s openAtStart %d mode %s", g_cfg.enabled ? "ON" : "off",
+                config::KeyName(g_cfg.keyToggle), g_cfg.openAtStart ? 1 : 0,
+                g_cfg.inGame ? "in-game overlay" : "separate window");
 }
 
 }  // namespace
