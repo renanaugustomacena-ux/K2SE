@@ -1,4 +1,1219 @@
 kind,resref,name,tag,appearance,model,source
+creature,c_drdsentry,,DrdSentry,-1,,bif
+creature,c_drdwar,,DrdWar,-1,,bif
+creature,c_gammorean,,Gammorean,-1,,bif
+creature,n_hk51_01,,HK51,-1,,bif
+creature,toryn,,Toryn,-1,,bif
+creature,npc_128,1B-8D,128,-1,,502OND_s
+creature,c_drdastro001,3C-FD,3CFD,-1,,001EBO_s
+creature,c_drdastro002,3C-FD Transfer Bot,Cheat,-1,,103PER_s
+creature,c_drdastro003,3CFD{Broken},3CFDBroke,-1,,106PER_s
+creature,c_medbaypc,<FullName>,MEDBAY_PC,-1,,001EBO_s
+creature,n_admoff,Administration Officer{hologram},AdmOff,-1,,105PER_s
+creature,rep_gen,Admiral Cede,cede,-1,,201TEL_s
+creature,n_carth001,Admiral Onasi,Carth,-1,,151HAR_s
+creature,p_carth001,Admiral Onasi{Hologram},Carth,-1,,003EBO_s
+creature,201_carth,Admiral Onassi,Carth,-1,,201TEL_s
+creature,221_carth,Admiral Onassi,Carth,-1,,221TEL_s
+creature,222_carth,Admiral Onassi,Carth,-1,,222TEL_s
+creature,carth,Admiral Onassi,Carth,-1,,205TEL_s
+creature,n_admrlsaulkar,Admiral Saul Kar,AdmrlSaulKar,-1,,bif
+creature,npc_adum,Adum Larp,npc_adum,-1,,602DAN_s
+creature,g_merc004,Ahrnell,g_merc_pat,-1,,604DAN_s
+creature,g_merc_dummy,Ahrnell{dummy},g_merc_dummy,-1,,604DAN_s
+creature,npc_akkere,Akkere,npc_akkere,-1,,601DAN_s
+creature,npc_akkere_milit,Akkere,npc_akkere_milit,-1,,602DAN_s
+creature,npc_anda,Anda,g_anda,-1,,502OND_s
+creature,n_walrusman,Aqualish,Walrusman,-1,,bif
+creature,n_walrusman001,Aqualish,Walrusman,-1,,207TEL_s
+creature,bh_thug1,Aqualish Thug,bh_thug1,-1,,512OND_s
+creature,g_thug03,Aqualish Thug,CaloThug,-1,,bif
+creature,n_duros008,Aqualish{Bar Patron 6},BarPat6,-1,,301NAR_s
+creature,c_drdassassin,Assassin Droid,DrdAssassin,-1,,bif
+creature,g_assassindrd01,Assassin Droid,g_assassindrd01,-1,,bif
+creature,c_drdmkone,Assault Droid Mark I,Drdmkone,-1,,bif
+creature,g_assaultdroid01,Assault Droid Mark I,g_assaultdroid01,-1,,bif
+creature,c_drdmktwo,Assault Droid Mark II,Drdmktwo,-1,,bif
+creature,g_assaultdroid02,Assault Droid Mark II,g_assaultdroid02,-1,,bif
+creature,c_drdmkfour,Assault Droid Mark IV,Drdmkfour,-1,,bif
+creature,g_assaultdroid03,Assault Droid Mark IV,g_assaultdroid03,-1,,bif
+creature,n_darthtraya001,Atris,Atris,-1,,262TEL_s
+creature,n_jedicounf001,Atris,Atris,-1,,262TEL_s
+creature,p_atris,Atris,Atris,-1,,bif
+creature,p_atris001,Atris,AtrisTemp,-1,,950COR_s
+creature,atriscut,Atris{Cutscene},AtrisCut,-1,,262TEL_s
+creature,n_darthtraya002,Atris{Handmaiden Fight},Atris,-1,,262TEL_s
+creature,npc_atris002,Atris{Holo},Atris,-1,,003EBO_s
+creature,n_jedicounf002,Atris{Temp},AtrisTemp,-1,,262TEL_s
+creature,atriswindcut,Atris{Window},AtrisWindCut,-1,,262TEL_s
+creature,p_atton,Atton,Atton,-1,,bif
+creature,p_atton001,Atton{CS},Atton,-1,,003EBO_s
+creature,n_commkidf001,Atton{Temp},Atton,-1,,102PER_s
+creature,g_turretbl010,Automated Fire Extinguisher,G_TURRETBL002,-1,,105PER_s
+creature,n_azanti001,Azanti Zhug,Azanti,-1,,301NAR_s
+creature,n_azanti002,Azanti Zhug{Vossk},Vossk_Azanti,-1,,301NAR_s
+creature,merc_leader,Azkul,dan_lead,-1,,221TEL_s
+creature,npc_azkul,Azkul,npc_azkul,-1,,601DAN_s
+creature,n_azkulh,Azkulh,Azkulh,-1,,bif
+creature,b4d4,B-4D4,B4D4,-1,,303NAR_s
+creature,d_201b4d4,B-4D4,201_b4d4,-1,,201TEL_s
+creature,n_b4d4,B-4D4,203_b4d4,-1,,203TEL_s
+creature,b4r5,B-4R5,B4R5,-1,,303NAR_s
+creature,warehouse_droid,B-5D8,B5D8,-1,,303NAR_s
+creature,npc_bahima,Bahima,bahima,-1,,503OND_s
+creature,npc_bakkel,Bakkel,bakkel,-1,,503OND_s
+creature,c_bantha,Bantha,Bantha,-1,,bif
+creature,g_bantha01,Bantha,G_BANTHA01,-1,,bif
+creature,p_baodurf,Bao Dur{FAKE},BaoDur,-1,,232TEL_s
+creature,p_baodur,Bao-Dur,BaoDur,-1,,bif
+creature,p_baodur002,Bao-Dur,BaoDur,-1,,262TEL_s
+creature,p_baodur001,Bao-Dur{Fake},BaoDur,-1,,261TEL_s
+creature,c_drdbar,Bartender Droid,DrdBar,-1,,207TEL_s
+creature,bastila,Bastila,Bastila,-1,,205TEL_s
+creature,n_jedimemm002,Bastila,g_jedi5,-1,,711KOR_s
+creature,p_bastilla,Bastila,Bastila,-1,,bif
+creature,p_bastilla002,Bastila{Dark Side},Bastila,-1,,003EBO_s
+creature,bastila_holo,Bastila{Hologram},bastila_holo,-1,,702KOR_s
+creature,p_bastilla001,Bastila{Hologram},Bastila,-1,,003EBO_s
+creature,203_batono,Batono,203_batono,-1,,202TEL_s
+creature,old_prot_droid,Battered Protocol Droid,olddroid,-1,,601DAN_s
+creature,n_202_rem,Batu Rem,202_rem,-1,,202TEL_s
+creature,n_repsold005,Bay Control,BayControl,-1,,201TEL_s
+creature,n_duros002,Bay Control{Duros},duros_bay,-1,,201TEL_s
+creature,npc_beast_rider,Beast-rider,beast_rider,-1,,501OND_s
+creature,thug_beast,Beast-rider Thug,thug_beast,-1,,512OND_s
+creature,npc_berun,Berun Modrul,npc_berun,-1,,602DAN_s
+creature,n_rodian002,Bik,Bik,-1,,301NAR_s
+creature,n_bith,Bith,Bith,-1,,bif
+creature,202tel_bith4,Bith Musician,207tel_bith4,-1,,207TEL_s
+creature,202tel_bith3,Bith Musician{Clarinet},207tel_bith3,-1,,207TEL_s
+creature,202tel_bith1,Bith Musician{Trombone},207tel_bith1,-1,,207TEL_s
+creature,n_bith001,Bith Scientist,Bithstst,-1,,303NAR_s
+creature,vogga_sullustan,Bith{Outside Vogga},Sullustan_Vogga,-1,,303NAR_s
+creature,g_blkvulkgang02,Black Vulkar Captain,g_blkvulkgang02,-1,,bif
+creature,g_blkvulkgang01,Black Vulkar Thug,g_blkvulkgang01,-1,,bif
+creature,g_turretbl001,Blaster Turret,G_TURRETBL001,-1,,bif
+creature,c_drdbdygrd,Bodyguard Droid,DrdBdyGrd,-1,,208TEL_s
+creature,kreia_body,Body{Kreia},kreia_body,-1,,001EBO_s
+creature,c_boma2,Boma,boma,-1,,410DXN_s
+creature,ds_boma,Boma,ds_boma,-1,,506OND_s
+creature,boma_es,Boma Beast,boma_es,-1,,402DXN_s
+creature,c_boma01,Boma Beast,boma_normal,-1,,bif
+creature,boma_young_bc,Boma{Beast Control},boma_young_bc,-1,,402DXN_s
+creature,boma_puz,Boma{puzzle room},boma_puz,-1,,506OND_s
+creature,boma_train,Boma{Train},boma_train,-1,,411DXN_s
+creature,boma_wrangle,Boma{Wrangle},boma_wrangle,-1,,506OND_s
+creature,maalraas_wrangle,Boma{Wrangle},maalraas_wrangle,-1,,506OND_s
+creature,n_twilekf003,Borna Lys,Borna,-1,,301NAR_s
+creature,npc_bralor,Bralor,npc_bralor,-1,,403DXN_s
+creature,c_brith,Brith,Brith,-1,,bif
+creature,g_brith01,Brith,G_BRITH01,-1,,bif
+creature,g_kataarn02,Bull Katarn,g_kataarn02,-1,,bif
+creature,c_drdprot003,C9-T9,c9t9,-1,,301NAR_s
+creature,g_blkvulkgang005,Cahhmakt,RECapt,-1,,004EBO_s
+creature,n_calonord,Calo Nord,CaloNord,-1,,bif
+creature,p_cand,Canderous,Cand,-1,,bif
+creature,c_cannok01,Cannok,Cannok,-1,,bif
+creature,c_cannok1,Cannok,Cannok,-1,,231TEL_s
+creature,c_cannok_cs,Cannok,Cannok_Scene,-1,,401DXN_s
+creature,cannok_es,Cannok,Cannok_ES,-1,,402DXN_s
+creature,c_cannok002,Cannok{Assembly},cannok_item,-1,,402DXN_s
+creature,c_cannok003,Cannok{Core},cannok_item,-1,,402DXN_s
+creature,c_cannok005,Cannok{Pistol},cannok_item,-1,,402DXN_s
+creature,c_cannok004,Cannok{PS},cannok_item,-1,,402DXN_s
+creature,can_bouncer,Cantina Bouncer,can_bouncer,-1,,512OND_s
+creature,npc_bostuco,Captain Bostuco,bostuco,-1,,502OND_s
+creature,npc_gelesi,Captain Gelesi,gelesi,-1,,502OND_s
+creature,kadron,Captain Kadron,kadron,-1,,506OND_s
+creature,cs_capt,Captain{Cut Scene},cs_capt,-1,,402DXN_s
+creature,p_carth,Carth,Carth,-1,,bif
+creature,p_carth002,Carth Onasi{Hologram},Carth,-1,,003EBO_s
+creature,carth_holo,Carth{Hologram},carth_holo,-1,,602DAN_s
+creature,g_turretbl004,Chain Gun Turret,G_TURRETBL004,-1,,bif
+creature,g_turretbl008,Chain Gun Turret,G_TURRETBL008,-1,,bif
+creature,g_turretbl009,Chain Gun Turret{custom},G_TURRETBL008,-1,,410DXN_s
+creature,g_cheatbot,Cheat Bot,g_probedroid01,-1,,bif
+creature,g_cheatbot001,Cheat Bot,g_probedroid01,-1,,207TEL_s
+creature,npc_cp_guard,Checkpoint Guard,cp_guard,-1,,501OND_s
+creature,n_commkidm001,Child,ter_child2,-1,,502OND_s
+creature,221_chodo,Chodo Habat,chodo,-1,,221TEL_s
+creature,droid_maint001,Cleaning Droid,killer_droid,-1,,303NAR_s
+creature,col_tobin,Colonel Tobin,tobin,-1,,402DXN_s
+creature,n_coltobin,Colonel Tobin,ColonelTobin,-1,,bif
+creature,npc_col_tobin,Colonel Tobin,col_tobin,-1,,503OND_s
+creature,npc_tobin,Colonel Tobin,tobin,-1,,403DXN_s
+creature,tobin,Colonel Tobin,tobin,-1,,502OND_s
+creature,n_commf,Commoner,CommF,-1,,bif
+creature,n_commm,Commoner,CommM,-1,,bif
+creature,n_fatcomf,Commoner,FatComF,-1,,bif
+creature,n_fatcomm,Commoner,FatComM,-1,,bif
+creature,npc_iziz_citizen,Commoner,iziz_citizen,-1,,502OND_s
+creature,vaklu_common,Commoner,vaklu_common,-1,,502OND_s
+creature,ws_commoner,Commoner,ws_commoner,-1,,512OND_s
+creature,n_commm003,Commoner{Nar Shaddaa Male2},CommM2,-1,,301NAR_s
+creature,n_commm005,Commoner{Nar Shaddaa Male3},CommM3,-1,,301NAR_s
+creature,n_commm006,Commoner{Nar Shaddaa MaleS1},CommMS1,-1,,301NAR_s
+creature,n_commm007,Commoner{Nar Shaddaa MaleS2},CommMS2,-1,,301NAR_s
+creature,comm_droid,Communications Droid,Comm_Droid,-1,,303NAR_s
+creature,g_turretc,Concealed Turret,hidden_turret,-1,,208TEL_s
+creature,g_droid_con_boss,Construction Droid Boss,DroidBoss,-1,,bif
+creature,utildroid_mk3,Construction Droid Foreman,utildroid_mk3,-1,,404DXN_s
+creature,g_droid_con_lgt,Construction Droid Light,ConstructionDroidLight,-1,,bif
+creature,utildroid_mk1,Construction Droid Mark I,utildroid_mk1,-1,,404DXN_s
+creature,utildroid_mk2,Construction Droid Mark II,utildroid_mk2,-1,,404DXN_s
+creature,g_droid_con_med,Construction Droid Medium,droid,-1,,bif
+creature,n_minecoorta,Coorta,Coorta,-1,,102PER_s
+creature,n_minefirst001,Coorta Thug 1,CoortaThug1,-1,,102PER_s
+creature,n_minefirst002,Coorta Thug 2,CoortaThug2,-1,,102PER_s
+creature,n_minecoorta002,Coorta{Cutscene 2}{hologram},CoortaCS2,-1,,105PER_s
+creature,n_minecoorta001,Coorta{Cutscene}{hologram},CoortaCS,-1,,105PER_s
+creature,n_corrunfalt,Corrun Falt,JanaLorso,-1,,bif
+creature,mp_crowd,Crowd,mp_crowd,-1,,502OND_s
+creature,mp_crowd001,Crowd{f},mp_crowd,-1,,502OND_s
+creature,mp_crowd002,Crowd{m},mp_crowd,-1,,502OND_s
+creature,npc_crowd_vak001,Crowd{Vak f},mp_crowd_vaklu,-1,,502OND_s
+creature,npc_crowd_vaklu,Crowd{Vak},mp_crowd_vaklu,-1,,502OND_s
+creature,csd1,CSD Officer{1 - Twi'lek},csd1,-1,,207TEL_s
+creature,csd2,CSD Officer{2},csd2,-1,,207TEL_s
+creature,n_czerkac001,Czerka Corpse{1},n_czerkac,-1,,232TEL_s
+creature,n_czerkac002,Czerka Corpse{2},n_czerkac2,-1,,232TEL_s
+creature,czerka_employ001,Czerka Employee{F},czerka_employee,-1,,209TEL_s
+creature,czerka_employee,Czerka Employee{M},czerka_employee,-1,,209TEL_s
+creature,n_czerkaoff,Czerka Officer,CzerkaOff,-1,,bif
+creature,n_czerkaguard003,Czerka Officer{Bay},czerka_bay,-1,,201TEL_s
+creature,n_czerkaguard002,Czerka Officer{Dock},czerka_dock,-1,,201TEL_s
+creature,n_czerkaguard1,Czerka Officer{Guard01},czerkaguard01,-1,,201TEL_s
+creature,n_czerkaguard02,Czerka Officer{Guard02},czerkaguard02,-1,,201TEL_s
+creature,n_czerkatwilek,Czerka Officer{Twi'lek},czerkaleader,-1,,201TEL_s
+creature,n_salvage,Czerka Salvage Crew,Salvage,-1,,232TEL_s
+creature,g_csd,Czerka Security,g_csd,-1,,203TEL_s
+creature,g_csd003,Czerka Security{dead meat 1},dead_duck_1,-1,,209TEL_s
+creature,g_csd004,Czerka Security{dead meat 2},dead_duck_2,-1,,209TEL_s
+creature,g_csd002,Czerka Security{Old White},g_csd002,-1,,203TEL_s
+creature,g_csd001,Czerka Security{Twi'lek},g_csd001,-1,,203TEL_s
+creature,c_drdassassin001,Damaged HK Protocol Droid,drd_hk50,-1,,232TEL_s
+creature,p_damhk47,Damaged HK Unit,DrdParts,-1,,003EBO_s
+creature,g_assassindrd002,Damaged Mining Droid,g_assassindrd01,-1,,101PER_s
+creature,tdroid,Damaged Mining Droid,TDROID,-1,,102PER_s
+creature,g_assassindrd004,Damaged Mining Droid{Corpse},g_assassindrd01,-1,,101PER_s
+creature,g_assassindrd003,Damaged Mining Droid{Loot},g_assassindrd01,-1,,101PER_s
+creature,g_assassindrd005,Damaged Mining Droid{Stealth},g_assassindrd01,-1,,101PER_s
+creature,dancer,Dancer,Dancer,-1,,306NAR_s
+creature,npc_daraala,Daraala,npc_daraala,-1,,605DAN_s
+creature,g_darkjedi005,Dark Jedi,g_bandonlacky,-1,,bif
+creature,g_darkjedi02,Dark Jedi,g_darkjedi02,-1,,bif
+creature,g_darkpc,Dark Jedi,g_darkpc,-1,,711KOR_s
+creature,g_darkpc_male,Dark Jedi,g_darkpc,-1,,711KOR_s
+creature,n_darkjedif,Dark Jedi,DarkJediF,-1,,bif
+creature,n_darkjedif001,Dark Jedi,DarkJediF,-1,,851NIH_s
+creature,n_darkjedim,Dark Jedi,DarkJediM,-1,,bif
+creature,n_darkjedim001,Dark Jedi,DarkJediM,-1,,851NIH_s
+creature,ds_si_jedi_appr,Dark Jedi Apprentice,ds_si_jedi_appr,-1,,506OND_s
+creature,g_darkjedi01,Dark Jedi Apprentice,g_darkjedi01,-1,,bif
+creature,g_darkjedi01_e3,Dark Jedi Apprentice,g_darkjedi01_e3,-1,,411DXN_s
+creature,si_jedi_appr,Dark Jedi Apprentice,si_jedi_appr,-1,,506OND_s
+creature,g_dark_app01f,Dark Jedi Apprentice {Female},DarkJedi,-1,,bif
+creature,g_dark_app01m,Dark Jedi Apprentice {Male},DarkJedi,-1,,bif
+creature,g_dark_app01f001,Dark Jedi Apprentice{Fuel},fuel_sith,-1,,222TEL_s
+creature,g_dark_app01m001,Dark Jedi Apprentice{Male 2},DarkJedi,-1,,903MAL_s
+creature,g_darkjedi03,Dark Jedi Master,g_darkjedi03,-1,,bif
+creature,ritual_follower,Dark Jedi Master,ritual_follower,-1,,411DXN_s
+creature,g_dark_mas01f,Dark Jedi Master {Female},DarkJediMaster,-1,,bif
+creature,g_dark_mas01m,Dark Jedi Master{Male},DarkJediMaster,-1,,bif
+creature,g_dark_jed01f,Dark Jedi{Female},DarkJedi,-1,,bif
+creature,g_dark_jed01f001,Dark Jedi{Female},DarkJedi,-1,,852NIH_s
+creature,g_dark_jed01m,Dark Jedi{Male},DarkJedi,-1,,bif
+creature,g_dark_jed01m001,Dark Jedi{Male},DarkJedi,-1,,852NIH_s
+creature,g_bandon,Darth Bandon,g_bandon,-1,,bif
+creature,n_darthmalak,Darth Malak,DarthMalak,-1,,bif
+creature,n_darthnihilu001,Darth Nihilus,DarthNihilus,-1,,852NIH_s
+creature,n_darthnihilus,Darth Nihilus,DarthNihilus,-1,,bif
+creature,n_darthrevan,Darth Revan,DarthRevan,-1,,bif
+creature,n_darthrevan002,Darth Revan,n_darthrevan002,-1,,bif
+creature,revan_fake,Darth Revan,revan_fake,-1,,711KOR_s
+creature,n_darthsion,Darth Sion,DarthSion,-1,,bif
+creature,n_darthsion002,Darth Sion,DarthSion,-1,,903MAL_s
+creature,n_darthsion001,Darth Sion{cut scene},DarthSion,-1,,152HAR_s
+creature,n_darthtraya,Darth Traya,DarthTraya,-1,,bif
+creature,g_davink,Davin Kotras,g_davink,-1,,bif
+creature,npc_davrel,Davrel,npc_davrel,-1,,402DXN_s
+creature,c_boma003,Dead Boma,boma_young,-1,,402DXN_s
+creature,n_jedicounm002,Dead Jedi,JediCounM,-1,,711KOR_s
+creature,c_maalraas002,Dead Maalraas,Maalraas,-1,,402DXN_s
+creature,dead_mandy,Dead Mandalorian,dead_mandy,-1,,402DXN_s
+creature,g_dead_merc,Dead Mercenary,g_dead_merc,-1,,610DAN_s
+creature,g_dead_merc2,Dead Mercenary{2},g_dead_merc2,-1,,610DAN_s
+creature,dead_royal,Dead Soldier,dead_royal,-1,,506OND_s
+creature,dead_soldier,Dead Soldier,dead_soldier,-1,,511OND_s
+creature,dead_vaklu,Dead Soldier,dead_vaklu,-1,,506OND_s
+creature,c_laigrek_de_kae,Deadly Laigrek,c_laigrek_deadly_kae,-1,,610DAN_s
+creature,c_laigrek_deadly,Deadly Laigrek,c_laigrek_deadly,-1,,610DAN_s
+creature,g_tukata003,Deadly Tuk'ata,g_tukata02,-1,,701KOR_s
+creature,assault_droid,Defense Droid,defense_droid,-1,,602DAN_s
+creature,ds_turret,Defense Turret,ds_turret,-1,,504OND_s
+creature,g_turretbl005,Defense Turret,G_TURRETBL005,-1,,bif
+creature,turret_iziz,Defense Turret,turret_iziz,-1,,502OND_s
+creature,khoonda_turret_1,Defense Turret {1},khoonda_turret_1,-1,,603DAN_s
+creature,khoonda_turret_2,Defense Turret {2},khoonda_turret_2,-1,,603DAN_s
+creature,khoonda_turret_3,Defense Turret {3},khoonda_turret_3,-1,,603DAN_s
+creature,khoonda_turre001,Defense Turret{A},khoonda_turret2,-1,,601DAN_s
+creature,khoonda_turret,Defense Turret{B},khoonda_turret1,-1,,601DAN_s
+creature,khoonda_turre002,Defense Turret{C},khoonda_turret3,-1,,601DAN_s
+creature,n_dendis,Dendis Dobo,Dendis,-1,,202TEL_s
+creature,al_gran,Devaronian,al_gran,-1,,502OND_s
+creature,g_thug007,Devaronian,DevThug,-1,,304NAR_s
+creature,n_devaronian01,Devaronian,Devaronian,-1,,bif
+creature,dev_killer,Devaronian{Killer},dev_killer,-1,,209TEL_s
+creature,devaronian_kille,Devaronian{Killer},dev_killer,-1,,202TEL_s
+creature,c_dewback,Dewback,Dewback,-1,,bif
+creature,g_dewback01,Dewback,G_DEWBACK01,-1,,bif
+creature,npc_dhagon,Dhagon Ghent,dhagon,-1,,512OND_s
+creature,npc_dillan,Dillan,npc_dillan,-1,,601DAN_s
+creature,npc_dillan_milit,Dillan,npc_dillan_milit,-1,,602DAN_s
+creature,g_kataarn03,Dire Katarn,g_kataarn03,-1,,bif
+creature,g_tukata02,Dire Tuk'ata,g_tukata02,-1,,bif
+creature,p_disciple,Disciple,Disciple,-1,,bif
+creature,p_disciple001,Disciple,Disciple,-1,,602DAN_s
+creature,p_disciple002,Disciple,Disciple,-1,,602DAN_s
+creature,n_dockoff,Dock Officer{hologram},DockOff,-1,,105PER_s
+creature,npc_worker,Dock Worker,worker,-1,,501OND_s
+creature,n_dodonna,Dodonna,Dodonna,-1,,bif
+creature,npc_dopak,Dopak,npc_dopak,-1,,602DAN_s
+creature,203_doton,Doton Het,doton,-1,,203TEL_s
+creature,c_drexl01,Drexl,Drexl,-1,,bif
+creature,c_drexl_amb,Drexl,Drexl,-1,,bif
+creature,g_drexl_amb01,Drexl,g_drexl_amb01,-1,,bif
+creature,c_drexl002,Drexl Larva,drexl_boss,-1,,506OND_s
+creature,c_drdprobe001,Droid Lab Assistant,assdrd,-1,,303NAR_s
+creature,n_duros,Duros,Duros,-1,,bif
+creature,n_zhug004,Duros Bounty Hunter{Zhug Cut 2 1},zhugcut2,-1,,306NAR_s
+creature,n_zhug005,Duros Bounty Hunter{Zhug Cut 2},zhugcut2,-1,,306NAR_s
+creature,n_zhug006,Duros Bounty Hunter{Zhug Cut 3},zhugcut3,-1,,306NAR_s
+creature,n_duros003,Duros{Bar Patron 1},BarPat1,-1,,306NAR_s
+creature,n_duros006,Duros{Bar Patron 4},BarPat4,-1,,306NAR_s
+creature,n_duros001,Duros{Dock},dockduros,-1,,201TEL_s
+creature,g_rakatan05,Elder Elite Warrior,g_rakatan05,-1,,bif
+creature,g_rakatan06,Elder Elite Warrior,g_rakatan06,-1,,bif
+creature,g_rakatan07,Elder Elite Warrior,g_rakatan07,-1,,bif
+creature,g_rakatan01,Elder Warrior,g_rakatan01,-1,,bif
+creature,g_rakatan02,Elder Warrior,g_rakatan02,-1,,bif
+creature,g_rakatan03,Elder Warrior,g_rakatan03,-1,,bif
+creature,g_rakatan04,Elder Warrior,g_rakatan04,-1,,bif
+creature,g_assassindrd02,Elite Assassin Droid,g_assassindrd02,-1,,bif
+creature,n_sithappren002,Elite Sith Assassin{short ls},SithAppren,-1,,903MAL_s
+creature,g_tuskenmale02,Elite Warrior,g_tuskenmale02,-1,,bif
+creature,g_selkathmale02,Enraged Selkath,g_selkathmale02,-1,,bif
+creature,g_droid_mine_025,Environment Droid Mark II{Carbonite Blue},g_droid_mine_02,-1,,106PER_s
+creature,g_droid_mine_024,Excavator Droid Mark II{Excacator Red},g_droid_mine_02,-1,,106PER_s
+creature,g_assassindrd006,Excavator Droid Mark I{Burners},g_assassindrd01,-1,,102PER_s
+creature,npc_bhunter2,Exchange Bounty Hunter,bhunter2,-1,,512OND_s
+creature,g_exlt,Exchange Lieutenant{Exchange Lt},201_benok,-1,,201TEL_s
+creature,g_blkvulkgang004,Exchange Thug{1},ExchangeThug1,-1,,301NAR_s
+creature,g_blkvulkgang003,Exchange Thug{2},ExchangeThug2,-1,,301NAR_s
+creature,g_blkvulkgang011,Exchange Thug{3},ExchangeThug3,-1,,301NAR_s
+creature,g_blkvulkgang012,Exchange Thug{4},ExchangeThug4,-1,,301NAR_s
+creature,g_exthga,Exchange Thug{Aqualish},ExThug3,-1,,208TEL_s
+creature,n_exthgd001,Exchange Thug{door1},203_thugd1,-1,,203TEL_s
+creature,n_exthgd002,Exchange Thug{door2},203_thugd2,-1,,203TEL_s
+creature,n_exthgd003,Exchange Thug{door3},203_thugd3,-1,,203TEL_s
+creature,n_exthgd004,Exchange Thug{door4},203_thugd4,-1,,203TEL_s
+creature,g_exthg,Exchange Thug{Human},ExThug1,-1,,203TEL_s
+creature,g_selkathmale03,Fanatical Selkath,g_selkathmale03,-1,,bif
+creature,g_veerkal003,Fassa,Fassa,-1,,303NAR_s
+creature,c_firixa,Firaxa,Firixa,-1,,bif
+creature,g_firixa01,Firaxa,G_FIRIXA01,-1,,bif
+creature,g_floatingmin001,Floating Mine,g_floatingmine,-1,,103PER_s
+creature,g_floatingmin002,Floating Mine,g_floatingmine,-1,,101PER_s
+creature,g_floatingmine,Floating Mine,g_floatingmine,-1,,bif
+creature,n_forcezomb01,Force Zombie,ForceZombie,-1,,bif
+creature,g_droid_foreman,Foreman Droid,ForemanDroid,-1,,bif
+creature,p_g0t0,G0-T0,G0T0,-1,,bif
+creature,gotoholo,G0-T0 Hologram,GotoHolo,-1,,003EBO_s
+creature,p_g0t001,G0-T0{Temp},G0T0Temp,-1,,351NAR_s
+creature,n_commm004,Gambler{Human Female 2},Gamble2,-1,,306NAR_s
+creature,g_gammorean01,Gamorrean,g_gammorean01,-1,,bif
+creature,g_gam_luxa,Gamorrean Bodyguard,g_gam_luxa,-1,,207TEL_s
+creature,gam_enforcer,Gamorrean Bodyguard{Enforcer},gam_enforcer,-1,,203TEL_s
+creature,g_gamluxb,Gamorrean Boss,GamGuardLuxB,-1,,208TEL_s
+creature,g_gamluxb001,Gamorrean Boss{Door},GamGuardLuxDoor,-1,,208TEL_s
+creature,g_gamluxb002,Gamorrean Boss{luxa},GamGuardLuxB,-1,,208TEL_s
+creature,g_gammorean03,Gamorrean Chief,g_gammorean03,-1,,bif
+creature,g_gamlux,Gamorrean Guard,GamGuardLux,-1,,208TEL_s
+creature,g_gamlux001,Gamorrean Guard{luxa},GamGuardLux,-1,,208TEL_s
+creature,g_gammorean02,Gamorrean Warrior,g_gammorean02,-1,,bif
+creature,n_gand,Gand,Gand,-1,,bif
+creature,n_gand001,Gand,Gand,-1,,301NAR_s
+creature,g_thug012,Gand Findsman,GandThug,-1,,304NAR_s
+creature,n_gandfind001,Gand Findsman,GandFind,-1,,301NAR_s
+creature,gandwar,Gand{Ossluk},GandThug,-1,,304NAR_s
+creature,g_thug013,Gand{Speaks},GandThug,-1,,304NAR_s
+creature,n_gand002,Gand{Vossk1},Vossk_Gand1,-1,,301NAR_s
+creature,n_gand003,Gand{Vossk2},Vossk_Gand2,-1,,301NAR_s
+creature,n_gand004,Gand{Vossk3},Vossk_Gand3,-1,,301NAR_s
+creature,g_thug003,Geeda,Geeda,-1,,301NAR_s
+creature,npc_gegorran,Gegorran,gegorran,-1,,502OND_s
+creature,npc_vaklu,General Vaklu,vaklu,-1,,504OND_s
+creature,vaklu,General Vaklu,vaklu,-1,,502OND_s
+creature,g_sennivek001,Geredi,Geredi,-1,,306NAR_s
+creature,npc_gerevick,Gerevick,npc_gerevick,-1,,602DAN_s
+creature,n_fatcomm010,Geriel,Geriel,-1,,302NAR_s
+creature,c_gizka,Gizka,Gizka,-1,,bif
+creature,g_gizka01,Gizka,g_gizka01,-1,,bif
+creature,npc_gormo,Gormo,npc_gormo,-1,,503OND_s
+creature,command_center,Goto Central Commander,g0t0droid,-1,,351NAR_s
+creature,c_drdmkone002,Goto Droid Heavy Guardian,g0t0droid,-1,,351NAR_s
+creature,c_drdmkone004,Goto Droid Heavy Guardian{no shield},g0t0droid,-1,,351NAR_s
+creature,command_left,Goto Port Commander,g0t0droid,-1,,351NAR_s
+creature,command_right,Goto Starboard Commander,g0t0droid,-1,,351NAR_s
+creature,n_calonord002,Goto{Hologram [Arrival Cut Scene]},GotoHolo,-1,,351NAR_s
+creature,n_calonord001,Goto{Hologram},GotoHolo,-1,,351NAR_s
+creature,n_gran,Gran,Gran,-1,,bif
+creature,rod_jekk,Gran,Rod_Jekk,-1,,303NAR_s
+creature,c_stormbeast003,Greater Storm Beast,StormBeastG,-1,,902MAL_s
+creature,c_stormbeast02,Greater Storm Beast,StormBeastG,-1,,bif
+creature,c_stormbeast004,Greater Storm Beast{Boss Fight},StormBeastGBoss,-1,,902MAL_s
+creature,n_duros010,Guron,guron,-1,,301NAR_s
+creature,p_handmaiden,Handmaiden,Handmaiden,-1,,bif
+creature,p_handmaiden008,Handmaiden,Handmaiden,-1,,262TEL_s
+creature,p_handmaiden003,Handmaiden Sister{1},Sister1,-1,,262TEL_s
+creature,sister1cut,Handmaiden Sister{1}{Cutscene},Sister1Cut,-1,,262TEL_s
+creature,p_handmaiden012,Handmaiden Sister{1}{Fight},Sister1,-1,,262TEL_s
+creature,sister1wind,Handmaiden Sister{1}{Window},Sister1Wind,-1,,262TEL_s
+creature,p_handmaiden004,Handmaiden Sister{2},Sister2,-1,,262TEL_s
+creature,sister2cut,Handmaiden Sister{2}{Cutscene},Sister2Cut,-1,,262TEL_s
+creature,p_handmaiden013,Handmaiden Sister{2}{Fight},Sister2,-1,,262TEL_s
+creature,sister2wind,Handmaiden Sister{2}{Window},Sister2Wind,-1,,262TEL_s
+creature,p_handmaiden005,Handmaiden Sister{3},Sister3,-1,,262TEL_s
+creature,p_handmaiden007,Handmaiden Sister{4},Sister4,-1,,262TEL_s
+creature,p_handmaiden006,Handmaiden Sister{5},Sister5,-1,,262TEL_s
+creature,p_handmaiden009,Handmaiden Sister{Battle Dojo Master},SisterDojo,-1,,262TEL_s
+creature,p_handmaiden010,Handmaiden Sister{Dojo},Dojo,-1,,262TEL_s
+creature,p_handmaiden014,Handmaiden Sister{Fight},SisterFight,-1,,262TEL_s
+creature,p_handmaiden001,Handmaiden{CS},Handmaiden,-1,,003EBO_s
+creature,p_handmaiden011,Handmaiden{Neutral},Handmaiden,-1,,262TEL_s
+creature,p_sister2,Handmaiden{Sister 2 Temp},Sister2,-1,,650DAN_s
+creature,p_sister,Handmaiden{Sister Temp},Sister1,-1,,650DAN_s
+creature,p_handmaiden002,Handmaiden{Sister2},Sis2,-1,,261TEL_s
+creature,p_hanharr,Hanharr,Hanharr,-1,,bif
+creature,p_zaalbar001,Hanharr,Hanharr,-1,,352NAR_s
+creature,p_hanharr002,Hanharr [Cut Scene: Mira],Hanharr,-1,,303NAR_s
+creature,p_hanharr001,Hanharr{Vossk},Vossk_Hanharr,-1,,301NAR_s
+creature,203_harra,Harra,harra,-1,,203TEL_s
+creature,g_turretbl002,Heavy Blaster Turret,G_TURRETBL002,-1,,bif
+creature,g_turretbl006,Heavy Defense Turret,G_TURRETBL006,-1,,bif
+creature,g_hidbekgang02,Hidden Bek Captain,g_hidbekgang02,-1,,bif
+creature,g_hidbekgang01,Hidden Bek Thug,g_hidbekgang01,-1,,bif
+creature,n_hitman,Hitman,Hitman,-1,,306NAR_s
+creature,g_kinrath003,Hive Kinrath,g_kinrath02,-1,,604DAN_s
+creature,g_kinrath02,Hive Kinrath,g_kinrath02,-1,,bif
+creature,p_hk048,HK Protocol Droid,HK50,-1,,001EBO_s
+creature,p_hk049,HK Protocol Droid{Ambush},HK50Ambush,-1,,103PER_s
+creature,p_hk050,HK Protocol Droid{Temp},HK50,-1,,103PER_s
+creature,p_hk47,HK-47,HK47,-1,,bif
+creature,303_hk50,HK-50,HK50,-1,,303NAR_s
+creature,n_hk50_01,HK-50,HK50,-1,,bif
+creature,n_hk50,HK-50 Protocol Droid,HK50,-1,,151HAR_s
+creature,232_hk50,HK-50{1},232_hk501,-1,,232TEL_s
+creature,n_hk50_002,HK-50{1},HK501,-1,,261TEL_s
+creature,232_hk051,HK-50{2},232_hk502,-1,,232TEL_s
+creature,n_hk50_003,HK-50{2},HK502,-1,,261TEL_s
+creature,232_hk503,HK-50{3},232_hk503,-1,,232TEL_s
+creature,n_hk50_004,HK-50{3},HK503,-1,,261TEL_s
+creature,c_hologrampc,Hologram,Hologram,-1,,907MAL_s
+creature,g_tuskenmale03,Holy Warrior,g_tuskenmale03,-1,,bif
+creature,c_khoundb,Horn Kath Hound,KhoundB,-1,,bif
+creature,c_khoundb001,Horn Kath Hound,KhoundB,-1,,605DAN_s
+creature,g_kathhound02,Horn Kath Hound,g_kathhound02,-1,,bif
+creature,c_hssiss,Hssiss,Hssiss,-1,,bif
+creature,hssiss,Hssiss,Hssiss,-1,,701KOR_s
+creature,g_wraid02,Hulak Wraid,g_wraid02,-1,,bif
+creature,n_fatcomm009,Hussef,Hussef,-1,,302NAR_s
+creature,n_hussef,Hussef,Hussef,-1,,bif
+creature,c_hutt,Hutt,Hutt,-1,,bif
+creature,g_hutt01,Hutt,G_HUTT01,-1,,bif
+creature,g_selkathmale01,Insane Selkath,g_selkathmale01,-1,,bif
+creature,g_turretbl007,Ion Defense Turret,G_TURRETBL007,-1,,bif
+creature,g_turretbl003,Ion Turret,G_TURRETBL003,-1,,bif
+creature,c_iriaz,Iriaz,Iriaz,-1,,bif
+creature,g_iriaz01,Iriaz,G_IRIAZ01,-1,,bif
+creature,c_ithorian,Ithorian,Ithorian,-1,,bif
+creature,g_ithorian01,Ithorian,G_ITHORIAN01,-1,,bif
+creature,c_ithorian005,Ithorian Bay Control,ith_bay,-1,,201TEL_s
+creature,c_drdith,Ithorian Droid,DrdIth,-1,,201TEL_s
+creature,c_ithorian002,Ithorian{Bay},201_ith_bay,-1,,201TEL_s
+creature,c_ithorian001,Ithorian{Door},201_ith_door,-1,,201TEL_s
+creature,c_ithorian003,Ithorian{Droid},201_ith_drd,-1,,201TEL_s
+creature,ith_plant,Ithorian{Plant},ith_plant,-1,,204TEL_s
+creature,c_ithorian004,Ithorian{Storage},201_ith_sto,-1,,201TEL_s
+creature,iz01_citizen_f1,Iziz Citizen,ictiz_f1,-1,,501OND_s
+creature,iz_citz_m1,Iziz Citizen,iz_citz_m1,-1,,bif
+creature,iz01_citizen_001,Iziz Citizen{Fem Var 1},ictiz_f1,-1,,502OND_s
+creature,iz01_citizen_002,Iziz Citizen{Male Var 2},ictiz_m1,-1,,502OND_s
+creature,g_jagi,Jagi,g_jagi,-1,,bif
+creature,n_janalorso,Jana Lorso,JanaLorso,-1,,bif
+creature,c_jawa,Jawa,Jawa,-1,,bif
+creature,g_jawa01,Jawa,G_JAWA01,-1,,bif
+creature,n_jedicounf,Jedi,JediCounF,-1,,bif
+creature,n_jedicounm,Jedi,JediCounM,-1,,bif
+creature,n_jedimemf,Jedi,JediMemF,-1,,bif
+creature,n_jedimemm,Jedi,JediMemM,-1,,bif
+creature,p_jolee,Jolee,Jolee,-1,,bif
+creature,g_jordo,Jordo,g_jordo,-1,,bif
+creature,npc_jorran,Jorran,npc_jorran,-1,,605DAN_s
+creature,npc_jorran_milit,Jorran,npc_jorran_milit,-1,,602DAN_s
+creature,p_juhani,Juhani,Juhani,-1,,bif
+creature,n_fatcomm011,Kahranna,Kahranna,-1,,302NAR_s
+creature,c_kataarn,Katarn,Kataarn,-1,,bif
+creature,g_kataarn01,Katarn,g_kataarn01,-1,,bif
+creature,c_khounda,Kath Hound,KhoundA,-1,,bif
+creature,c_khounda004,Kath Hound,KhoundA,-1,,305NAR_s
+creature,g_kathhound002,Kath Hound,g_kathhound01,-1,,605DAN_s
+creature,g_kathhound01,Kath Hound,g_kathhound01,-1,,bif
+creature,c_khounda002,Kath Hound{2},KhoundA2,-1,,305NAR_s
+creature,c_khounda003,Kath Hound{3},KhoundA3,-1,,305NAR_s
+creature,c_khounda005,Kath Hound{Dead},KhoundA,-1,,305NAR_s
+creature,c_khounda001,Kath Hound{Vogga},KathVogga,-1,,303NAR_s
+creature,n_fatcomm008,Kaul,VeteranM,-1,,302NAR_s
+creature,222_kelborn,Kelborn,222_kelborn,-1,,222TEL_s
+creature,npc_kelborn,Kelborn,npc_kelborn,-1,,003EBO_s
+creature,kex,Kex,npc_kex,-1,,403DXN_s
+creature,kex_work,Kex at Work,kex_work,-1,,403DXN_s
+creature,c_kinrath,Kinrath,Kinrath,-1,,bif
+creature,g_kinrath01,Kinrath,g_kinrath01,-1,,bif
+creature,kinrath_hatch,Kinrath Hatchling,kinrath_hatch,-1,,604DAN_s
+creature,g_kinrath_mom,Kinrath Matriarch,g_kinrath_mom,-1,,604DAN_s
+creature,g_kinrath03,Kinrath Stalker,G_KINRATH03,-1,,bif
+creature,c_kinrath001,Kinrath{smelly},Kinrath,-1,,601DAN_s
+creature,kiph,Kiph,kiph,-1,,506OND_s
+creature,npc_kiph,Kiph,kiph,-1,,503OND_s
+creature,militia,Koonda Militia,militia,-1,,221TEL_s
+creature,c_kraytdragon,Krayt Dragon,KraytDragon,-1,,bif
+creature,g_kraytdragon01,Krayt Dragon,g_kraytdragon01,-1,,bif
+creature,p_kreia,Kreia,Kreia,-1,,bif
+creature,p_kreia001,Kreia,Kreia,-1,,101PER_s
+creature,p_kreia_evil,Kreia {Evil},KreiaEvil,-1,,bif
+creature,c_lightsaber004,Kreia's Lightsaber,Lightsaber,-1,,907MAL_s
+creature,p_kreia003,Kreia{Cutscene},Kreia,-1,,650DAN_s
+creature,p_kreia_evil001,Kreia{Evil},KreiaEvil,-1,,711KOR_s
+creature,p_kreiatele,Kreia{telepathy},Kreia,-1,,702KOR_s
+creature,p_kreia002,Kreia{Temp},Kreia,-1,,003EBO_s
+creature,npc_kumus,Kumus,kumus,-1,,402DXN_s
+creature,c_laigrek,Laigrek,c_laigrek,-1,,610DAN_s
+creature,c_laigrek_002,Laigrek,Laigrek,-1,,610DAN_s
+creature,c_laigrek_01,Laigrek,Laigrek,-1,,bif
+creature,g_lena,Lena,g_lena,-1,,bif
+creature,grenn,Lieutenant Grenn,Grenn,-1,,205TEL_s
+creature,n_tsfcmdr001,Lieutenant Grenn,221_grenn,-1,,221TEL_s
+creature,n_repsold003,Lieutenant Yima,Yima,-1,,201TEL_s
+creature,c_lightsaber,Lightsaber Floating,LightsaberFloat,-1,,bif
+creature,c_lightsaber001,Lightsaber Floating{1},LightsaberFloat,-1,,904MAL_s
+creature,c_lightsaber002,Lightsaber Floating{2},LightsaberFloat,-1,,904MAL_s
+creature,c_lightsaber003,Lightsaber Floating{3},LightsaberFloat,-1,,904MAL_s
+creature,n_slusk,Loppak Slusk,203_Slusk,-1,,208TEL_s
+creature,g_thug009,Lunar Shadow Captain,RedCaptain,-1,,304NAR_s
+creature,n_twilekm001,Lupo Shar,Lupo,-1,,301NAR_s
+creature,lalah,Luxa,207_Luxa,-1,,207TEL_s
+creature,n_203_luxa,Luxa,203_Luxa,-1,,208TEL_s
+creature,c_maalraas1,Maalraas,Maalraas,-1,,401DXN_s
+creature,c_maalraas_cs,Maalraas,Maalraas_Scene,-1,,401DXN_s
+creature,maalraas_es,Maalraas,Maalraas_ES,-1,,402DXN_s
+creature,c_maalrass01,Maalrass,KhoundB,-1,,bif
+creature,droid_maint,Maintenance Droid,Droid_Maint,-1,,303NAR_s
+creature,g_assassindrd009,Maintenance Droid,g_assassindrd01,-1,,102PER_s
+creature,c_drdmouse01,Maintenance Droid{1},MouseDroid,-1,,bif
+creature,c_drdmouse02,Maintenance Droid{2},MouseDroid,-1,,bif
+creature,c_drdmouse03,Maintenance Droid{3},MouseDroid,-1,,bif
+creature,n_czerkaoff001,Maintenance Officer,MainOff,-1,,103PER_s
+creature,major,Major,major,-1,,502OND_s
+creature,221_riiken,Major Riiken,ond_lead,-1,,221TEL_s
+creature,g_rancor002,Malachor Storm Beast,g_rancor01,-1,,903MAL_s
+creature,n_jedimalek,Malak,JediMalek,-1,,bif
+creature,npc_v_malak,Malak,npc_v_malak,-1,,711KOR_s
+creature,g_malare,Malare,g_malare,-1,,bif
+creature,g_mandalore,Mandalore,g_mandalore,-1,,403DXN_s
+creature,p_mand,Mandalore,Mand,-1,,bif
+creature,p_mand001,Mandalore [Temp],Mand,-1,,851NIH_s
+creature,g_mand_first,Mandalorian,g_mand_first,-1,,711KOR_s
+creature,g_mandalor003,Mandalorian,mand_merc,-1,,605DAN_s
+creature,mand,Mandalorian,mandalorian,-1,,303NAR_s
+creature,n_mandalorian,Mandalorian,Mandalorian,-1,,bif
+creature,n_mandalorian003,Mandalorian,Mandalorian,-1,,851NIH_s
+creature,n_mandalorian_fr,Mandalorian,mandalorian_fr,-1,,402DXN_s
+creature,g_mandalor03,Mandalorian Captain,g_mandalor03,-1,,bif
+creature,g_mandalor02,Mandalorian Elite,g_mandalor02,-1,,bif
+creature,g_mand_guide,Mandalorian Escort,g_mand_guide,-1,,403DXN_s
+creature,g_gate_guard001,Mandalorian Gate Guard,GATEGUARDPACE,-1,,403DXN_s
+creature,n_mandalorian002,Mandalorian Guard,Mandalorian,-1,,403DXN_s
+creature,g_gate_guard,Mandalorian Guard Captain,g_gate_guard,-1,,403DXN_s
+creature,f_man_guide,Mandalorian Guide,man_guide,-1,,401DXN_s
+creature,n_mand_train002,Mandalorian Recruit,TrainingMandalorian,-1,,403DXN_s
+creature,n_mand_train003,Mandalorian Recruit,CircleMandalorian,-1,,403DXN_s
+creature,mand_sentry2,Mandalorian Sentry,mand_sentry2,-1,,402DXN_s
+creature,npc_mandy_sarge,Mandalorian Sergeant,npc_mandy_sarge,-1,,403DXN_s
+creature,g_mandalor01,Mandalorian Warrior,g_mandalor01,-1,,bif
+creature,mand_lead,Mandalorian{Leader},mand_lead,-1,,303NAR_s
+creature,c_seabeast,Mannan Seabeast,SeaBeast,-1,,bif
+creature,g_seabeast01,Mannan Seabeast,g_seabeast01,-1,,bif
+creature,npc_margar,Margar,margar,-1,,501OND_s
+creature,npc_kavar,Master Kavar,kavar,-1,,501OND_s
+creature,npc_vrook004,Master Kavar{Holo},JediMaster3,-1,,003EBO_s
+creature,vash,Master Lonna Vash,vash,-1,,702KOR_s
+creature,npc_vrook003,Master Vash{Holo},JediMaster1,-1,,003EBO_s
+creature,npc_vrook,Master Vrook{Holo},JediMaster2,-1,,003EBO_s
+creature,npc_vrook002,Master Zez-Kai Ell{Holo},JediMaster4,-1,,003EBO_s
+creature,g_exthgr,Matu{Exchange Thug},202_matu,-1,,202TEL_s
+creature,n_mebla,Mebla Dule,Mebla,-1,,207TEL_s
+creature,med_droid,Medical Droid,med_droid,-1,,411DXN_s
+creature,medic_droid,Medical Droid,medic_droid,-1,,602DAN_s
+creature,n_minefirst003,Medical Officer{hologram},MedOff,-1,,105PER_s
+creature,g_merc,Mercenary,g_merc,-1,,604DAN_s
+creature,g_merc001,Mercenary,g_merc,-1,,604DAN_s
+creature,g_merc002,Mercenary,g_merc,-1,,604DAN_s
+creature,mercenary,Mercenary,militia,-1,,221TEL_s
+creature,g_merc_capt,Mercenary Captain,g_merc_capt,-1,,604DAN_s
+creature,g_mandalor006,Mercenary Commander,233_mercc,-1,,233TEL_s
+creature,g_mandalor010,Mercenary Droidmaster,233_mercdm,-1,,233TEL_s
+creature,merc1_batono,Mercenary{Blasters - Batono},merc1_batono,-1,,203TEL_s
+creature,203_merc01,Mercenary{Blasters},merc01,-1,,202TEL_s
+creature,merc_bguard1,Mercenary{Bodyguard 1},merc_bguard1,-1,,204TEL_s
+creature,merc_bguard2,Mercenary{Bodyguard 2},merc_bguard2,-1,,204TEL_s
+creature,g_mandalor012,Mercenary{Grunt 01 A},233_merc01a,-1,,233TEL_s
+creature,g_mandalor002,Mercenary{Grunt 01},231_merc01,-1,,231TEL_s
+creature,g_mandalor014,Mercenary{Grunt 01},233_merc01,-1,,233TEL_s
+creature,g_mandalor013,Mercenary{Gunner A},233_merc03a,-1,,233TEL_s
+creature,mercgun,Mercenary{Gunner East},g_merc_east,-1,,601DAN_s
+creature,mercgun001,Mercenary{Gunner West},g_merc_west,-1,,601DAN_s
+creature,g_mandalor004,Mercenary{Gunner},231_cmerc03,-1,,231TEL_s
+creature,g_mandalor015,Mercenary{Gunner},233_merc03,-1,,233TEL_s
+creature,mercgun002,Mercenary{Gunner},g_merc_gun2,-1,,603DAN_s
+creature,mercgun003,Mercenary{Gunner},g_merc_gun3,-1,,603DAN_s
+creature,mercgun004,Mercenary{Gunner},g_merc_gun4,-1,,603DAN_s
+creature,mercgun005,Mercenary{Gunner},g_merc_gun5,-1,,603DAN_s
+creature,mercgun006,Mercenary{Gunner},g_merc_gun6,-1,,603DAN_s
+creature,mercgun007,Mercenary{Gunner},g_merc_gun7,-1,,603DAN_s
+creature,203_merc005,Mercenary{Leader},merc_leader,-1,,204TEL_s
+creature,g_merc_az,Mercenary{Melee East},g_merc_east,-1,,601DAN_s
+creature,g_merc_az001,Mercenary{Melee West},g_merc_west,-1,,601DAN_s
+creature,g_merc_az003,Mercenary{Melee},g_merc_melee1,-1,,603DAN_s
+creature,g_merc_az004,Mercenary{Melee},g_merc_melee2,-1,,603DAN_s
+creature,g_merc_az005,Mercenary{Melee},g_merc_melee3,-1,,603DAN_s
+creature,g_merc_az006,Mercenary{Melee},g_merc_melee4,-1,,603DAN_s
+creature,g_merc_az007,Mercenary{Melee},g_merc_melee5,-1,,603DAN_s
+creature,g_merc_az008,Mercenary{Melee},g_merc_melee6,-1,,603DAN_s
+creature,g_merc_az009,Mercenary{Melee},g_merc_melee7,-1,,603DAN_s
+creature,merc_rep1,Mercenary{Replacement 1},merc_rep1,-1,,231TEL_s
+creature,merc_rep2,Mercenary{Replacement 2},merc_rep2,-1,,231TEL_s
+creature,merc_rep3,Mercenary{Replacement 3},merc_rep3,-1,,231TEL_s
+creature,merc2_batono,Mercenary{Rifle - Batono},merc2_batono,-1,,203TEL_s
+creature,203_merc004,Mercenary{Rifle 2},merc01,-1,,204TEL_s
+creature,203_merc002,Mercenary{Rifle},merc01,-1,,202TEL_s
+creature,g_merc005,Mercenary{walrus},g_merc,-1,,604DAN_s
+creature,203_merc1,Mercenary{Wander 1},203_merc1,-1,,209TEL_s
+creature,203_merc2,Mercenary{Wander 2},203_merc2,-1,,209TEL_s
+creature,203_merc3,Mercenary{Wander 3},203_merc3,-1,,209TEL_s
+creature,merc_winner,Mercenary{winner},merc_winner,-1,,601DAN_s
+creature,ds_mil_droid_mk1,Military Droid Mk I,ds_mil_droid_mk1,-1,,506OND_s
+creature,mil_droid_mk1,Military Droid Mk I,mil_droid_mk1,-1,,506OND_s
+creature,mil_droid_mk2,Military Droid Mk II,mil_droid_mk2,-1,,506OND_s
+creature,mil_droid_mk2_nr,Military Droid Mk II{No ray},mil_droid_mk2_nr,-1,,506OND_s
+creature,g_militia,Militia,g_militia,-1,,602DAN_s
+creature,g_militia006,Militia{Average},g_militia4,-1,,601DAN_s
+creature,g_militia005,Militia{Easy},g_militia2,-1,,601DAN_s
+creature,g_militia004,Militia{Hard},g_militia,-1,,601DAN_s
+creature,g_militia002,Militia{Main Door Guard},g_militia3,-1,,601DAN_s
+creature,g_militia_sec,Militia{Security Door Guard},g_militia_sec,-1,,601DAN_s
+creature,terena_guard,Militia{terena's guard},terena_guard,-1,,602DAN_s
+creature,militia_winner,Militia{winner},militia_winner,-1,,601DAN_s
+creature,g_merc_az002,Minefield Merc,mine_merc,-1,,603DAN_s
+creature,n_minefirst,Miner 1st Class{hologram},MineFirst,-1,,105PER_s
+creature,n_minethird,Miner 3rd Class{hologram},MineThird,-1,,105PER_s
+creature,n_minefirst004,Miner{Gas Death 1}{hologram},MineGas1,-1,,105PER_s
+creature,n_minefirst006,Miner{Gas Death 2}{hologram},MineGas2,-1,,105PER_s
+creature,n_minefirst005,Miner{Gas Death 3}{hologram},MineGas3,-1,,105PER_s
+creature,n_minefirst007,Miner{Gas Death 4}{hologram},MineGas4,-1,,105PER_s
+creature,n_minefirst008,Miner{Gas Death 5}{hologram},MineGas5,-1,,105PER_s
+creature,g_assassindrd007,Mining Droid Mark I,g_assassindrd01,-1,,102PER_s
+creature,g_droid_mine_01,Mining Droid Mark I,g_droid_mine_01,-1,,bif
+creature,c_drdspyder001,Mining Droid Mark II,DrdSpyder,-1,,102PER_s
+creature,g_droid_mine_02,Mining Droid Mark II,g_droid_mine_02,-1,,bif
+creature,g_droid_mine_023,Mining Droid Mark II{Blue},g_droid_mine_02,-1,,bif
+creature,g_droid_mine_003,Mining Droid Mark II{Cut 1},Mk2Droid1,-1,,103PER_s
+creature,g_droid_mine_004,Mining Droid Mark II{Cut 2},Mk2Droid2,-1,,103PER_s
+creature,g_droid_mine_005,Mining Droid Mark II{No Block},g_droid_mine_02,-1,,103PER_s
+creature,g_droid_mine_022,Mining Droid Mark II{Red},g_droid_mine_02,-1,,bif
+creature,g_droid_mine_006,Mining Droid Mark II{},g_droid_mine_02,-1,,103PER_s
+creature,g_droid_mine_013,Mining Droid Mark I{Blue},g_droid_mine_01,-1,,bif
+creature,g_assassindrd010,Mining Droid Mark I{Door CS},DroidOpenDoor,-1,,102PER_s
+creature,holo1,Mining Droid Mark I{Holo 1},Holo1,-1,,106PER_s
+creature,holo2,Mining Droid Mark I{Holo 2},Holo2,-1,,106PER_s
+creature,holo3,Mining Droid Mark I{Holo 3},Holo3,-1,,106PER_s
+creature,g_droid_mine_012,Mining Droid Mark I{Red},g_droid_mine_01,-1,,bif
+creature,g_assassindrd008,Mining Droid Mark I{Skirmisher},g_assassindrd01,-1,,102PER_s
+creature,n_mineforeman,Mining Foreman{hologram},MineFor,-1,,105PER_s
+creature,p_mira,Mira,Mira,-1,,bif
+creature,p_mira002,Mira [Cut Scene: Apartment],Mira,-1,,303NAR_s
+creature,p_mira001,Mira{Vossk},Vossk_Mira,-1,,301NAR_s
+creature,p_mission,Mission,Mission,-1,,bif
+creature,n_walrusman002,Modo So,Modo,-1,,301NAR_s
+creature,c_drdmover01,Mover Droid{1},MoverDroid,-1,,bif
+creature,c_drdmover02,Mover Droid{2},MoverDroid,-1,,bif
+creature,203_moza,Moza,203_Moza,-1,,203TEL_s
+creature,221_moza,Moza,moza,-1,,221TEL_s
+creature,moza,Moza,Moza,-1,,201TEL_s
+creature,c_mykal,Mykal,Mykal,-1,,bif
+creature,g_veerkal03,Mykal,G_VEERKAL03,-1,,bif
+creature,n_fatcomm007,Nadaa,Nadaa,-1,,302NAR_s
+creature,g_exlta,Nahata{Exchange Lt},202_nahata,-1,,202TEL_s
+creature,npc_nallek,Nallek,npc_nallek,-1,,605DAN_s
+creature,npc_nikko,Nikko,npc_nikko,-1,,502OND_s
+creature,n_jedimemf001,Nisotsa,g_jedi3,-1,,711KOR_s
+creature,n_rodian003,Nodobo,Rodian,-1,,301NAR_s
+creature,n_smuggler002,Odis,Odis,-1,,302NAR_s
+creature,ond_dip,Onderon Diplomat,ond_dip,-1,,204TEL_s
+creature,talia_lead,Onderon Leader,ond_lead,-1,,221TEL_s
+creature,ds_mil_droid,Onderon Military Droid,ds_mil_droid,-1,,504OND_s
+creature,npc_gen_soldier,Onderon Soldier,ond_soldier,-1,,501OND_s
+creature,npc_ond_soldier,Onderon Soldier,ond_soldier,-1,,221TEL_s
+creature,rep_sold001,Onderon Soldier,ond_sold,-1,,207TEL_s
+creature,talia_sold,Onderon Soldier,ond_sold,-1,,222TEL_s
+creature,npc_gsoldier,Onderon Soldier{Geg},mp_gsoldier,-1,,502OND_s
+creature,npc_psoldier,Onderon Soldier{Ponlar},mp_psoldier,-1,,502OND_s
+creature,npc_cp_replace,Onderon Soldier{Replacement},cp_replace,-1,,502OND_s
+creature,ond_soldier_ri,Onderon Soldier{Riiken},ond_soldier_ri,-1,,502OND_s
+creature,npc_ond_soldi001,Onderon Soldier{Riot Police},ond_soldier_riot,-1,,502OND_s
+creature,ond_soldier_nter,Onderon Soldier{Term North},ond_soldier_nter,-1,,502OND_s
+creature,ond_soldier_ster,Onderon Soldier{Term South},ond_soldier_ster,-1,,502OND_s
+creature,talia_door,Onderon Soldier{TSF Door},ond_door,-1,,222TEL_s
+creature,talia_wound,Onderon Soldier{Wounded},wound_sold,-1,,222TEL_s
+creature,201_chano,Opo Chano,chano,-1,,201TEL_s
+creature,chano,Opo Chano,chano,-1,,303NAR_s
+creature,n_opochanno,Opo Chano,OpoChano,-1,,bif
+creature,npc_thug,Panar,npc_panar,-1,,503OND_s
+creature,npc_pato,Pato Ado,npc_pato,-1,,601DAN_s
+creature,n_gran002,Patron,Granp,-1,,306NAR_s
+creature,n_quarren003,Patron,Quarrenp,-1,,306NAR_s
+creature,n_quarren004,Patron,Quarrenp2,-1,,306NAR_s
+creature,n_weequay003,Patron,Weequayp,-1,,306NAR_s
+creature,npc_gen_patron,Patron,FatComM,-1,,503OND_s
+creature,n_commf002,Peragus Administration Officer,AdmOff,-1,,101PER_s
+creature,n_commf004,Peragus Maintenance Officer,MainOf,-1,,101PER_s
+creature,n_commf001,Peragus Medical Officer,MedOff,-1,,101PER_s
+creature,n_commf003,Peragus Security Officer,SecOff,-1,,101PER_s
+creature,npc_ponlar,Ponlar,ponlar,-1,,502OND_s
+creature,npc_port_master,Port Master,port_master,-1,,501OND_s
+creature,c_drdprobe,Probe Droid,DrdProbe,-1,,bif
+creature,g_probedroid01,Probe Droid,g_probedroid01,-1,,bif
+creature,c_drdprot,Protocol Droid,DrdProt,-1,,bif
+creature,c_drdprot002,Protocol Droid,DrdProt,-1,,201TEL_s
+creature,protdroid1,Protocol Droid{1},protdroid1,-1,,610DAN_s
+creature,c_drdprot001,Protocol Droid{Broken},DrdProt,-1,,152HAR_s
+creature,n_quarren01,Quarren,Quarren,-1,,bif
+creature,npc_talia,Queen Talia,talia,-1,,501OND_s
+creature,n_twilekm003,Quello,Quello,-1,,301NAR_s
+creature,n_swpmc,Race Master,SwoopMC,-1,,207TEL_s
+creature,n_rakata,Rakata,Rakata,-1,,bif
+creature,g_brakatan04,Rakatan Elite Warrior,g_brakatan04,-1,,bif
+creature,g_brakatan05,Rakatan Elite Warrior,g_brakatan05,-1,,bif
+creature,g_brakatan06,Rakatan Elite Warrior,g_brakatan06,-1,,bif
+creature,g_brakatan01,Rakatan Warrior,g_brakatan01,-1,,bif
+creature,g_brakatan02,Rakatan Warrior,g_brakatan02,-1,,bif
+creature,g_brakatan03,Rakatan Warrior,g_brakatan03,-1,,bif
+creature,g_brakatan07,Rakatan Warrior,g_brakatan07,-1,,bif
+creature,c_rakghoul,Rakghoul,Rakghoul,-1,,bif
+creature,g_rakghoul01,Rakghoul,g_rakghoul01,-1,,bif
+creature,g_rakghoul02,Rakghoul Fiend,g_rakghoul02,-1,,bif
+creature,npc_ralon,Ralon,npc_ralon,-1,,605DAN_s
+creature,203_ramana,Ramana,ramana,-1,,203TEL_s
+creature,c_rancor,Rancor,Rancor,-1,,bif
+creature,g_rancor01,Rancor,g_rancor01,-1,,bif
+creature,n_smuggler001,Ratrin Vhek,Ratrin,-1,,004EBO_s
+creature,c_drdreact,Reactor Droid,drdreact,-1,,232TEL_s
+creature,602_receptionist,Receptionist,602_receptionist,-1,,602DAN_s
+creature,g_blkvulkgang002,Red Eclipse Slaver,REThug1,-1,,301NAR_s
+creature,g_blkvulkgang010,Red Eclipse Slaver{1},REThug1,-1,,301NAR_s
+creature,g_blkvulkgang006,Red Eclipse Slaver{2},REThug2,-1,,301NAR_s
+creature,g_blkvulkgang007,Red Eclipse Slaver{3},REThug3,-1,,301NAR_s
+creature,g_blkvulkgang008,Red Eclipse Slaver{Blade},REThug4,-1,,004EBO_s
+creature,g_blkvulkgang009,Red Eclipse Slaver{Blaster},REThug5,-1,,004EBO_s
+creature,g_blkvulkgang014,Red Eclipse Slaver{Contact},REThugCon,-1,,301NAR_s
+creature,refugee4,Refugee{4},Refugee4,-1,,301NAR_s
+creature,n_fatcomm013,Refugee{Female02},RefugeeF02,-1,,302NAR_s
+creature,n_fatcomm003,Refugee{Female},RefugeeF,-1,,302NAR_s
+creature,n_fatcomm012,Refugee{Man02},RefugeeM,-1,,302NAR_s
+creature,n_fatcomm019,Refugee{Man03},RefugeeM,-1,,302NAR_s
+creature,n_fatcomm020,Refugee{Man04},RefugeeM,-1,,302NAR_s
+creature,n_fatcomm021,Refugee{Man05},RefugeeM,-1,,302NAR_s
+creature,n_fatcomm016,Refugee{Old Man02},RefugeeM,-1,,302NAR_s
+creature,n_fatcomm017,Refugee{Old Man03},RefugeeM,-1,,302NAR_s
+creature,n_fatcomm005,Refugee{Old Man},RefugeeM,-1,,302NAR_s
+creature,p_remote,Remote,Remote,-1,,bif
+creature,tdroid2,Remote Droid,TDROID2,-1,,401DXN_s
+creature,tdroid3,Remote Droid,TDROID3,-1,,401DXN_s
+creature,reporter,Reporter,reporter,-1,,501OND_s
+creature,g_repsold_capt,Republic Captain,g_repsold_capt,-1,,711KOR_s
+creature,n_repoff002,Republic Captain,RepCapt,-1,,151HAR_s
+creature,n_repcap01,Republic Captain {White Male},RepCap,-1,,bif
+creature,n_repdoc,Republic Doctor,RepDoc,-1,,151HAR_s
+creature,n_repoff001,Republic General,RepGen,-1,,151HAR_s
+creature,n_czerkaoff002,Republic Medical Officer{sion cut},doc,-1,,152HAR_s
+creature,n_navoff,Republic Navigator,NavOff,-1,,151HAR_s
+creature,rep_nav,Republic Navigator,Navigator,-1,,222TEL_s
+creature,202_rep_off,Republic Officer,202_rep_off,-1,,202TEL_s
+creature,n_repoff,Republic Officer,RepOff,-1,,bif
+creature,n_tsfcmdr,Republic Officer,TSFCmdr,-1,,bif
+creature,rep_nav003,Republic Officer,Officer,-1,,222TEL_s
+creature,rep_nav004,Republic Officer,Officer,-1,,222TEL_s
+creature,tsfm001,Republic Officer,Republic_Officer,-1,,205TEL_s
+creature,tsfm002,Republic Officer{Grenn Escort},Republic_Grenn,-1,,205TEL_s
+creature,g_repsold,Republic Soldier,g_repsold,-1,,711KOR_s
+creature,n_repsold,Republic Soldier,RepSold,-1,,bif
+creature,n_repsold001,Republic Soldier,RepSold,-1,,151HAR_s
+creature,n_tsfoff,Republic Soldier,TSFOfficer,-1,,bif
+creature,rep_sold,Republic Soldier,rep_sold,-1,,207TEL_s
+creature,n_repsold_bh01,Republic Soldier {Blk Male w/ Helmet},RepSold,-1,,bif
+creature,rep_officer,Republic Weapons Officer,WeaponsOfficer,-1,,222TEL_s
+creature,n_rodian,Rodian,Rodian,-1,,bif
+creature,n_rodian_bh,Rodian Bounty Hunter,bh_rodian,-1,,203TEL_s
+creature,g_thug002,Rodian Crony,G_THUG002,-1,,bif
+creature,th_lead,Rodian Mercenary,th_lead,-1,,512OND_s
+creature,bh_thug2,Rodian Thug,rodianthug,-1,,512OND_s
+creature,g_thug01,Rodian Thug,CaloThug,-1,,bif
+creature,rod_killer,Rodian{Killer},rod_killer,-1,,209TEL_s
+creature,rodian_killer,Rodian{Killer},rod_killer,-1,,202TEL_s
+creature,c_ronto,Ronto,Ronto,-1,,bif
+creature,g_ronto01,Ronto,G_RONTO01,-1,,bif
+creature,va_tcpt,Royalist Captain{Turret},va_tcpt,-1,,504OND_s
+creature,royal_corporal,Royalist Corporal,royal_corporal,-1,,506OND_s
+creature,ro_sold_gun,Royalist Elite Gunner,ro_sold_gun,-1,,506OND_s
+creature,ro_sold_gun001,Royalist Elite Gunner{Throne},ro_sold_gunThrone,-1,,506OND_s
+creature,ds_roy_grenade,Royalist Grenadier,ds_roy_grenade,-1,,504OND_s
+creature,ro_sold_gren,Royalist Grenadier,ro_sold_gren,-1,,506OND_s
+creature,ds_ro_sold_gun,Royalist Gunner,ds_ro_sold_gun,-1,,504OND_s
+creature,ro_sold_hvy,Royalist Heavy Soldier,ro_sold_hvy,-1,,506OND_s
+creature,ro_sold_hvy001,Royalist Heavy Soldier{Throne},ro_sold_hvyThrone,-1,,506OND_s
+creature,ro_officer,Royalist Officer,ro_officer,-1,,506OND_s
+creature,ds_ro_sold_sarge,Royalist Sergeant,ds_ro_sold_sarge,-1,,504OND_s
+creature,ds_ro_sold,Royalist Soldier,ds_ro_sold,-1,,504OND_s
+creature,ro_troop,Royalist Soldier,ro_troop,-1,,506OND_s
+creature,roy_sold,Royalist Soldier,roy_sold,-1,,504OND_s
+creature,roy_sold_pc,Royalist Soldier,roy_sold_pc,-1,,504OND_s
+creature,roy_soldier,Royalist Soldier,ds_roy_soldier,-1,,511OND_s
+creature,ds_ro_sold_sp1,Royalist Soldier{1},ds_ro_sold_sp1,-1,,504OND_s
+creature,ds_ro_sold_sp2,Royalist Soldier{2},ds_ro_sold_sp2,-1,,504OND_s
+creature,ds_ro_sold_sp3,Royalist Soldier{3},ds_ro_sold_sp3,-1,,504OND_s
+creature,ds_ro_sold_cow,Royalist Soldier{Coward},ds_ro_sold_cow,-1,,504OND_s
+creature,roy_soldier001,Royalist Soldier{Melee},ds_roy_soldier,-1,,511OND_s
+creature,roy_sold_noncom,Royalist Soldier{Non-Combat},roy_sold_noncom,-1,,506OND_s
+creature,ond_soldier_n001,Royalist Soldier{Term North},ond_soldier_nter,-1,,511OND_s
+creature,npc_saedhe,Saedhe,npc_saedhe,-1,,601DAN_s
+creature,npc_sakarie,Sakarie,npc_sakarie,-1,,503OND_s
+creature,g_salvager,Salvager,g_salvager,-1,,605DAN_s
+creature,g_salvager_tae2,Salvager,g_salvager_tae2,-1,,605DAN_s
+creature,ws_salvager,Salvager,ws_salvager,-1,,512OND_s
+creature,g_salvager_tae,Salvager{Taepalae 1},g_salvager_tae,-1,,605DAN_s
+creature,g_salvager_ta001,Salvager{Taepalae 2},g_salvager_tae2,-1,,605DAN_s
+creature,n_samhan,Samhan Dobo,Samhan,-1,,201TEL_s
+creature,n_tuskenf01,Sand People Peasant,n_tuskenf01,-1,,bif
+creature,g_tuskenmale01,Sand People Warrior,g_tuskenmale01,-1,,bif
+creature,n_tusken,Sand People Warrior,Tusken,-1,,bif
+creature,g_thug006,Saquesh,Overseer,-1,,302NAR_s
+creature,n_swoopgang001,Saquesh Personal Guard{1},personal_guard1,-1,,302NAR_s
+creature,n_swoopgang002,Saquesh Personal Guard{2},personal_guard2,-1,,302NAR_s
+creature,npc_2scout2,Scout,om_2scout2,-1,,402DXN_s
+creature,npc_scout1,Scout,om_scout1,-1,,402DXN_s
+creature,npc_scout2,Scout,om_scout2,-1,,402DXN_s
+creature,npc_2scout1,Scout Lieutenant,om_2scout1,-1,,402DXN_s
+creature,npc_2scout002,Scout{dead},om_scout_dead,-1,,402DXN_s
+creature,n_selkath,Selkath,Selkath,-1,,bif
+creature,g_sennivek,Senni Vek,SenniVek,-1,,bif
+creature,c_sensorball,Sensor Ball,SensorBall,-1,,102PER_s
+creature,sensor_droid,Sensor Droid,sensor_droid,-1,,001EBO_s
+creature,g_combatdroid01,Sentry Droid Mark I,g_combatdroid01,-1,,bif
+creature,c_drdsentry001,Sentry Droid Mark I{1},g0t0droids,-1,,351NAR_s
+creature,c_drdsentry002,Sentry Droid Mark I{2},g0t0droids,-1,,351NAR_s
+creature,c_231drds001,Sentry Droid{B},231_D_SentryB,-1,,231TEL_s
+creature,c_231drds_c,Sentry Droid{Cutscene},231_D_SentryCut,-1,,231TEL_s
+creature,c_231drds003,Sentry Droid{D},233_D_SentryD,-1,,233TEL_s
+creature,g_hidbekgang004,Serroco Leader,SerrocoLeader,-1,,302NAR_s
+creature,g_hidbekgang002,Serroco Thug,SerrocoThug1,-1,,302NAR_s
+creature,g_hidbekgang003,Serroco Thug{Common},SerrocoThugCommon,-1,,302NAR_s
+creature,g_hidbekgang005,Serroco Veteran,SerrocoThugVeteran,-1,,302NAR_s
+creature,dan_ctz_f1,Settler,dan_ctz_f1,-1,,602DAN_s
+creature,dan_ctz_f2,Settler,dan_ctz_f2,-1,,602DAN_s
+creature,dan_ctz_male,Settler,dan_ctz_male,-1,,602DAN_s
+creature,g_shyrack,Shyrack,g_shyrack,-1,,701KOR_s
+creature,g_veerkal02,Shyrack,g_veerkal02,-1,,bif
+creature,shyrack_brood,Shyrack Brood,shyrack_brood,-1,,711KOR_s
+creature,g_veerkal04,Shyrack Wyrm,g_veerkal04,-1,,bif
+creature,shyrack_wyrm,Shyrack Wyrm,shyrack_wyrm,-1,,711KOR_s
+creature,n_sithappren,Sith Apprentice,SithAppren,-1,,bif
+creature,n_sithappren001,Sith Apprentice,SithAppren,-1,,504OND_s
+creature,g_sithass01,Sith Assassin,SithAssassin,-1,,bif
+creature,n_sithsoldier001,Sith Assassin,SithAssassin,-1,,101PER_s
+creature,sith_ass,Sith Assassin,sith_ass,-1,,702KOR_s
+creature,sith_ass_403,Sith Assassin,sith_ass_403,-1,,403DXN_s
+creature,sithassassin,Sith Assassin,SithAssassin,-1,,702KOR_s
+creature,g_sithass004,Sith Assassin{A},SithAssassin_A,-1,,221TEL_s
+creature,g_sithass003,Sith Assassin{B},SithAssassin_B,-1,,221TEL_s
+creature,sith_ass_405,Sith Assassin{CS 2},sith_ass_405,-1,,403DXN_s
+creature,sith_ass_406,Sith Assassin{CS 3},sith_ass_406,-1,,403DXN_s
+creature,sith_ass_404,Sith Assassin{CS},sith_ass_403,-1,,403DXN_s
+creature,sithasscut1,Sith Assassin{Cutscene1},SithAssassinCut1,-1,,903MAL_s
+creature,sithasscut2,Sith Assassin{Cutscene2},SithAssassinCut2,-1,,903MAL_s
+creature,sithasscut3,Sith Assassin{Cutscene3},SithAssassinCut3,-1,,903MAL_s
+creature,sithasscut4,Sith Assassin{Cutscene4},SithAssassinCut4,-1,,903MAL_s
+creature,sithasscut5,Sith Assassin{Cutscene5},SithAssassinCut5,-1,,903MAL_s
+creature,sithasscut6,Sith Assassin{Cutscene6},SithAssassinCut6,-1,,903MAL_s
+creature,sithasscut,Sith Assassin{Cutscene},SithAssassinCut,-1,,903MAL_s
+creature,g_sithass005,Sith Assassin{C},SithAssassin_C,-1,,221TEL_s
+creature,g_sithass006,Sith Assassin{D},SithAssassin_D,-1,,221TEL_s
+creature,sith_flanker1,Sith Assassin{Flanker},SithFlanker1,-1,,902MAL_s
+creature,sith_flanker10,Sith Assassin{Flanker},SithFlanker10,-1,,902MAL_s
+creature,sith_flanker2,Sith Assassin{Flanker},SithFlanker2,-1,,902MAL_s
+creature,sith_flanker3,Sith Assassin{Flanker},SithFlanker3,-1,,902MAL_s
+creature,sith_flanker4,Sith Assassin{Flanker},SithFlanker4,-1,,902MAL_s
+creature,sith_flanker5,Sith Assassin{Flanker},SithFlanker5,-1,,902MAL_s
+creature,sith_flanker6,Sith Assassin{Flanker},SithFlanker6,-1,,902MAL_s
+creature,sith_flanker7,Sith Assassin{Flanker},SithFlanker7,-1,,902MAL_s
+creature,sith_flanker8,Sith Assassin{Flanker},SithFlanker8,-1,,902MAL_s
+creature,sith_flanker9,Sith Assassin{Flanker},SithFlanker9,-1,,902MAL_s
+creature,g_sithass002,Sith Assassin{Lightsaber},SithAssassin,-1,,221TEL_s
+creature,g_sithtroop009,Sith Assault Trooper,ExtraSith,-1,,107PER_s
+creature,g_sithtroop07,Sith Assault Trooper,G_SITHTROOP07,-1,,bif
+creature,g_sithtroop008,Sith Assault Trooper{boarder},sith_boarder,-1,,005EBO_s
+creature,ds_sith_wrangler,Sith Beast Handler,ds_sith_wrangler,-1,,506OND_s
+creature,sith_wrangler,Sith Beast Handler,sith_wrangler,-1,,506OND_s
+creature,sith_wrangle,Sith Beast Handler{Dialogue},sith_wrangle,-1,,506OND_s
+creature,g_sithcomm003,Sith Captain,g_sithcomm02,-1,,411DXN_s
+creature,g_sithcomm02,Sith Captain,g_sithcomm02,-1,,bif
+creature,sith_captain,Sith Captain,sith_captain,-1,,411DXN_s
+creature,holo_captain,Sith Captain{Holo},holo_captain,-1,,410DXN_s
+creature,n_sithcmndo,Sith Commando,SithSoldier,-1,,bif
+creature,n_sithcmndo001,Sith Commando,SithSoldier,-1,,220TEL_s
+creature,n_sithcmndo004,Sith Commando,SithSoldier,-1,,851NIH_s
+creature,n_sithcmndo003,Sith Commando{CS 2},SithCommandoCS2,-1,,851NIH_s
+creature,n_sithcmndo002,Sith Commando{Explosion},SithExplosion,-1,,851NIH_s
+creature,sith_door,Sith Commando{TSF Door},sith_door,-1,,222TEL_s
+creature,n_sithcomf,Sith Commoner,SithComF,-1,,bif
+creature,n_sithcomm,Sith Commoner,SithComM,-1,,bif
+creature,sith_drexl,Sith Drexl Trainer,sith_drexl,-1,,506OND_s
+creature,sith_elite,Sith Elite Soldier,sith_elite,-1,,506OND_s
+creature,sith_soldier_eli,Sith Elite Soldier,sith_soldier_elite,-1,,504OND_s
+creature,ds_sith_elite_sp,Sith Elite Soldier{Speak},ds_sith_elite_sp,-1,,506OND_s
+creature,g_sithtroop004,Sith Elite Trooper,g_sithtroop02,-1,,410DXN_s
+creature,g_sithtroop02,Sith Elite Trooper,g_sithtroop02,-1,,bif
+creature,sith_cs,Sith Elite Trooper,sith_cs,-1,,411DXN_s
+creature,troop_beast_1,Sith Elite Trooper{Beast 1},troop_beast_1,-1,,411DXN_s
+creature,troop_beast_2,Sith Elite Trooper{Beast 2},troop_beast_2,-1,,411DXN_s
+creature,g_elite_ramp_002,Sith Elite Trooper{patrol 2},g_elite_ramp_1,-1,,410DXN_s
+creature,g_elite_ramp_1,Sith Elite Trooper{patrol},g_elite_ramp_1,-1,,410DXN_s
+creature,g_sithtroop003,Sith Elite Trooper{run},selite_run,-1,,410DXN_s
+creature,demo_grenade,Sith Grenadier,demo_grenade,-1,,411DXN_s
+creature,g_sithtroop005,Sith Grenadier,g_sithtroop04,-1,,851NIH_s
+creature,g_sithtroop04,Sith Grenadier,g_sithtroop04,-1,,bif
+creature,g_sithtroop05,Sith Grenadier,g_sithtroop05,-1,,bif
+creature,g_sithtroop06,Sith Grenadier,g_sithtroop06,-1,,bif
+creature,sgren_ramp,Sith Grenadier,sgren_ramp,-1,,410DXN_s
+creature,g_sithtroop060,Sith Grenadier{run},sgren_run,-1,,410DXN_s
+creature,g_sithtroop03,Sith Heavy Trooper,G_SITHTROOP03,-1,,bif
+creature,g_sithcomm002,Sith Lieutenant,g_sithcomm01,-1,,410DXN_s
+creature,g_sithcomm01,Sith Lieutenant,g_sithcomm01,-1,,bif
+creature,g_darkjedi04,Sith Lord,G_DARKJEDI04,-1,,bif
+creature,n_sithsoldier,Sith Soldier,SithSoldier,-1,,bif
+creature,n_sithsoldier002,Sith Soldier,SithSoldier,-1,,410DXN_s
+creature,ond_officer,Sith Soldier,ond_officer,-1,,bif
+creature,ond_soldier,Sith Soldier,ond_soldier,-1,,bif
+creature,sith_soldier,Sith Soldier,sith_soldier,-1,,504OND_s
+creature,tar03_sithpat31,Sith Soldier,SithPatrol031,-1,,232TEL_s
+creature,g_sithtroop002,Sith Trooper,g_sithtroop01,-1,,411DXN_s
+creature,g_sithtroop01,Sith Trooper,g_sithtroop01,-1,,bif
+creature,g_wardroid005,Sith War Droid,wardroid,-1,,410DXN_s
+creature,g_wardroid_sith,Sith War Droid,g_wardroid_sith,-1,,411DXN_s
+creature,g_wardroid006,Sith War Droid{patrol a},wardroid,-1,,410DXN_s
+creature,g_wardroid007,Sith War Droid{patrol b},wardroid,-1,,410DXN_s
+creature,sith_warrior,Sith Warrior,sith_warrior,-1,,411DXN_s
+creature,sith_warrior001,Sith Warrior,sith_warrior,-1,,411DXN_s
+creature,n_smuggler,Smuggler,Smuggler,-1,,bif
+creature,sod3,SOD3,sod3,-1,,503OND_s
+creature,n_twilekm002,Squik,Squik,-1,,301NAR_s
+creature,g_staff_f,Staff,g_staff_f,-1,,602DAN_s
+creature,caged_tukata,Starving Tuk'ata{Caged},caged_tukata,-1,,702KOR_s
+creature,c_stormbeast002,Storm Beast,StormBeast,-1,,901MAL_s
+creature,c_stormbeast01,Storm Beast,StormBeast,-1,,bif
+creature,n_stuntsaber01,Stunt Saber,StuntSaber,-1,,bif
+creature,sullio_body,Sullio's Body,sullio_body,-1,,503OND_s
+creature,n_sullustan002,Sullustan,Sullustan,-1,,304NAR_s
+creature,n_sullustan01,Sullustan,Sullustan,-1,,bif
+creature,sullustan,Sullustan,sullustan,-1,,202TEL_s
+creature,npc_suulru,Suulru,npc_suulru,-1,,602DAN_s
+creature,npc_suulru_milit,Suulru,npc_suulru_milit,-1,,602DAN_s
+creature,n_swoopgang,Swoop Gang,Swoopgang,-1,,bif
+creature,d_201t1n1,T1-N1,201_t1n1,-1,,201TEL_s
+creature,n_203_t1n1,T1-N1,203_t1n1,-1,,209TEL_s
+creature,t1n1,T1-N1,T1N1,-1,,303NAR_s
+creature,p_t3m005,T3-M4,T3M4,-1,,001EBO_s
+creature,p_t3m4,T3-M4,T3M4,-1,,bif
+creature,c_tach,Tach,Tach,-1,,bif
+creature,g_tach01,Tach,g_tach01,-1,,bif
+creature,npc_taepalae,Taepalae,npc_taepalae,-1,,605DAN_s
+creature,npc_tagren,Tagren,npc_tagren,-1,,403DXN_s
+creature,n_jedicounm001,Talvon Esan,g_jedi2,-1,,711KOR_s
+creature,c_tame_boma1,Tame Boma,boma,-1,,501OND_s
+creature,c_boma_fr,Tame Boma{Frenzy},boma_frenzy,-1,,501OND_s
+creature,c_cannok_tame,Tame Cannok,c_cannok_tame,-1,,501OND_s
+creature,c_drdmkfour001,Tank Droid,DrdTank,-1,,232TEL_s
+creature,g_droid_tank,Tank Droid,TankDroid,-1,,bif
+creature,per_miner_002,Taris Citizen,commoner,-1,,201TEL_s
+creature,per_miner_01,Taris Citizen,PeragusMiner,-1,,bif
+creature,mechanic,Tarn,Mechanic,-1,,601DAN_s
+creature,iz01_citizen_m1,Technician,tech,-1,,201TEL_s
+creature,g_trttel003,Telos Ion Turret,g_trttel003,-1,,232TEL_s
+creature,g_trttel007,Telos Ion Turret{Inactive a2},TurretA2,-1,,232TEL_s
+creature,g_trttel008,Telos Ion Turret{Inactive a3},TurretA3,-1,,232TEL_s
+creature,g_trttel004,Telos Ion Turret{Shielded},g_trttel004,-1,,232TEL_s
+creature,g_drdtelmil,Telos Military Droid,g_drdtelmil,-1,,bif
+creature,g_drdtelmil001,Telos Military Droid,g_drdtelmil,-1,,232TEL_s
+creature,g_drdtelmil005,Telos Military Droid{Destroyed},g_drdtelmild,-1,,232TEL_s
+creature,g_drdtelmil002,Telos Military Droid{Flamer},g_drdtelmil2,-1,,232TEL_s
+creature,g_drdtelmil004,Telos Military Droid{Inactive},g_drd_inact,-1,,232TEL_s
+creature,tdroid002,Telos Military Droid{OFF2},TDROID2,-1,,232TEL_s
+creature,tdroid001,Telos Military Droid{OFF},TDROID,-1,,232TEL_s
+creature,g_drdtelmil003,Telos Military Droid{Shielded},g_drdtelmil3,-1,,232TEL_s
+creature,g_drdtelsentr001,Telos Sentry Droid,g_drdtelsentry,-1,,232TEL_s
+creature,g_drdtelsentry,Telos Sentry Droid,g_drdtelsentry,-1,,bif
+creature,g_trttel001,Telos Turret,g_trttel001,-1,,232TEL_s
+creature,g_trttel006,Telos Turret{Inactive a1},TurretA1,-1,,232TEL_s
+creature,g_trttel009,Telos Turret{Inactive a4},TurretA4,-1,,232TEL_s
+creature,g_trttel010,Telos Turret{Inactive},TurretI,-1,,232TEL_s
+creature,g_trttel002,Telos Turret{Shielded},g_trttel002,-1,,232TEL_s
+creature,n_fatcomm001,Telosian,FatComM,-1,,207TEL_s
+creature,n_fatcomm002,Telosian,FatComM,-1,,207TEL_s
+creature,203_civrobbed,Telosian{Civilian Robbed},civrobbed,-1,,203TEL_s
+creature,n_telf01s,Telosian{F01s},TelF01s,-1,,203TEL_s
+creature,n_telf01,Telosian{F01},TelF01,-1,,202TEL_s
+creature,n_telf02s,Telosian{F02s},TelF02s,-1,,203TEL_s
+creature,n_telf02,Telosian{F02},common,-1,,203TEL_s
+creature,n_telf03,Telosian{F03},common,-1,,203TEL_s
+creature,n_telm01s,Telosian{M01s},TelM01s,-1,,202TEL_s
+creature,n_telm01,Telosian{M01},common,-1,,203TEL_s
+creature,n_telm02s,Telosian{M02s},TelM02s,-1,,203TEL_s
+creature,n_telm03s,Telosian{M03s},TelM03s,-1,,207TEL_s
+creature,n_telm03,Telosian{M03},common,-1,,203TEL_s
+creature,npc_tempman,Temp Man,tempman,-1,,201TEL_s
+creature,n_mandalorian001,Temp Man Plus,tempman,-1,,204TEL_s
+creature,npc_terena,Terena Adare,npc_terena,-1,,602DAN_s
+creature,npc_terlyn,Terlyn,terlyn,-1,,502OND_s
+creature,killer,The Killer,killer,-1,,503OND_s
+creature,g_201thug,Thug,g_201thug1,-1,,201TEL_s
+creature,g_201thug001,Thug,g_201thug3,-1,,201TEL_s
+creature,n_gran001,Thug,GranThug,-1,,301NAR_s
+creature,n_trandobrn001,Thug,TranThug,-1,,301NAR_s
+creature,npc_bthug,Thug,npc_bthug,-1,,503OND_s
+creature,npc_goon,Thug,npc_goon,-1,,610DAN_s
+creature,npc_iziz_thug,Thug,iziz_thug,-1,,501OND_s
+creature,thug,Thug,thug,-1,,512OND_s
+creature,n_weequay002,Thug Boss,ThugBoss,-1,,301NAR_s
+creature,thug_grenade,Thug Grenadier{Hostile},thug_grenade,-1,,512OND_s
+creature,npc_bthug002,Thug{CS},thugcs,-1,,503OND_s
+creature,npc_dhagon_thug,Thug{Dhagon},npc_dhagon_thug,-1,,512OND_s
+creature,g_201thug003,Thug{Gun},g_201thug4,-1,,201TEL_s
+creature,g_201thug004,Thug{Gun},g_201thug5,-1,,201TEL_s
+creature,g_201thug2,Thug{Gun},g_201thug2,-1,,201TEL_s
+creature,thug_gun,Thug{Hostile},thug_gun,-1,,512OND_s
+creature,thug_melee,Thug{Hostile},thug_melee,-1,,512OND_s
+creature,npc_bthug001,Thug{M},npc_bthug,-1,,503OND_s
+creature,npc_tolas,Tolas,tolas,-1,,502OND_s
+creature,n_trandoshan_bh,Trandoshan Bounty Hunter,bh_trandoshan,-1,,203TEL_s
+creature,g_thug010,Trandoshan Thug{2},TranThug,-1,,304NAR_s
+creature,n_trandobrn,Trandoshan {Brown},N_TrandoBrn,-1,,bif
+creature,n_trandogrn,Trandoshan {Green},N_TrandoGrn,-1,,bif
+creature,tran_jekk,Trandoshan{Brown},Tran_Jekk,-1,,303NAR_s
+creature,n_fatcomf002,Traveler{F1; Mobile},commoner,-1,,201TEL_s
+creature,n_travf001,Traveler{F1; Sit},travf,-1,,201TEL_s
+creature,n_travg001,Traveler{G; Sit},travg,-1,,201TEL_s
+creature,n_travg,Traveler{G},travg,-1,,201TEL_s
+creature,n_fatcomf001,Traveler{M1; Mobile},commoner,-1,,201TEL_s
+creature,n_travm,Traveler{M1},travm,-1,,201TEL_s
+creature,n_tsflt,TSF Lieutenant,221_tsflt,-1,,221TEL_s
+creature,n_repsold006,TSF Lieutenant{Smuggling},tsf_smuggling,-1,,201TEL_s
+creature,tsf_med,TSF Officer,tsf_med,-1,,204TEL_s
+creature,n_tsfoff001,TSF Officer{1},203_TSF1,-1,,203TEL_s
+creature,n_tsfoff003,TSF Officer{2a},203_TSF2a,-1,,203TEL_s
+creature,n_repoff003,TSF Officer{2},202_TSF2,-1,,202TEL_s
+creature,n_repsold002,TSF Officer{Bay},TSFb,-1,,201TEL_s
+creature,n_tsfoff002,TSF Officer{Dock Guard},TSFDockGuard2,-1,,201TEL_s
+creature,tsf_sold001,TSF Officer{Female},tsf_sold,-1,,220TEL_s
+creature,tsff,TSF Officer{Female},TSF_Officer,-1,,205TEL_s
+creature,n_tsfgf,TSF Officer{Generic Female},guard,-1,,202TEL_s
+creature,n_tsfgm,TSF Officer{Generic Male},guard,-1,,202TEL_s
+creature,201_tsf_ith,TSF Officer{Ithorian Guard},201_tsf_ith,-1,,201TEL_s
+creature,tsf_sold,TSF Officer{Leader},tsf_lead,-1,,220TEL_s
+creature,tsf_sold002,TSF Officer{Male},tsf_sold,-1,,220TEL_s
+creature,tsfm,TSF Officer{Male},TSF_Officer,-1,,205TEL_s
+creature,n_repsold004,TSF Officer{Passage},TSFb,-1,,201TEL_s
+creature,c_tukata,Tuk'ata,Tukata,-1,,bif
+creature,g_tukata01,Tuk'ata,g_tukata01,-1,,bif
+creature,g_tukata_dead,Tuk'ata{Dead},g_tukata_dead,-1,,701KOR_s
+creature,al_twilek,Twi'lek,al_twilek,-1,,502OND_s
+creature,n_commm001,Twi'lek,CommM,-1,,207TEL_s
+creature,n_commm002,Twi'lek,CommM,-1,,207TEL_s
+creature,n_twilekf,Twi'lek,TwilekF,-1,,bif
+creature,n_twilekm,Twi'lek,TwilekM,-1,,bif
+creature,npc_bhunter1,Twi'lek Bounty Hunter,bhunter1,-1,,512OND_s
+creature,tar02_musictwi21,Twi'lek Dancer,MusicRoomT021,-1,,207TEL_s
+creature,twilekdancer,Twi'lek Dancer,Dancer,-1,,306NAR_s
+creature,tar02_musictw001,Twi'lek Dancer{2},MusicRoomT021,-1,,207TEL_s
+creature,twilekdancer2,Twi'lek Dancer{2},Dancer,-1,,306NAR_s
+creature,twilekdomo,Twi'lek Domo,TwilekDomo,-1,,303NAR_s
+creature,twi_servant,Twi'lek Servant,Twilek_Servant,-1,,303NAR_s
+creature,g_thug02,Twi'lek Thug,G_THUG02,-1,,bif
+creature,g_thug011,Twi'lek Thug{2},AquaThug,-1,,304NAR_s
+creature,anda_mess,Twi'lek Trader,anda_mess,-1,,502OND_s
+creature,n_twilekf001,Twi'lek{Atton01},TwilekAtton01,-1,,302NAR_s
+creature,n_twilekf002,Twi'lek{Atton02},TwilekAtton02,-1,,302NAR_s
+creature,g_blkvulkgang015,Twik'gar,twik,-1,,306NAR_s
+creature,n_trandogrn001,Twik's Thug,tt_1,-1,,306NAR_s
+creature,n_trandogrn002,Twik's Thug,tt_2,-1,,306NAR_s
+creature,n_twilekf004,Twin Suns{Number 1},TwinSun1,-1,,301NAR_s
+creature,n_twilekf005,Twin Suns{Number 2},TwinSun2,-1,,301NAR_s
+creature,n_twilekf006,Twin Suns{Vossk1},Vossk_TwinSun1,-1,,301NAR_s
+creature,n_twilekf007,Twin Suns{Vossk2},Vossk_TwinSun2,-1,,301NAR_s
+creature,c_twohead,Two Head,TwoHead,-1,,bif
+creature,g_darkjedi002,Ubese Bounty Hunter,GenoDisc,-1,,305NAR_s
+creature,g_darkjedi003,Ubese Bounty Hunter{305Alarm1},UBH305Alarm1,-1,,305NAR_s
+creature,g_darkjedi004,Ubese Bounty Hunter{305Alarm2},UBH305Alarm2,-1,,305NAR_s
+creature,g_darkjedi006,Ubese Bounty Hunter{305Alarm3},UBH305Alarm3,-1,,305NAR_s
+creature,g_darkjedi007,Ubese Bounty Hunter{305Alarm4},UBH305Alarm4,-1,,305NAR_s
+creature,g_darkjedi008,Ubese Bounty Hunter{305Alarm5},UBH305Alarm5,-1,,305NAR_s
+creature,g_darkjedi009,Ubese Bounty Hunter{305Alarm6},UBH305Alarm6,-1,,305NAR_s
+creature,g_darkjedi010,Ubese Bounty Hunter{Cheat},GenoDisc,-1,,305NAR_s
+creature,g_darkjedi011,Ubese Bounty Hunter{Dead},GenoDead,-1,,305NAR_s
+creature,c_drdastro,Utility Droid,DrdAstro,-1,,bif
+creature,c_drdspyder,Utility Droid,DrdSpyder,-1,,bif
+creature,vaklu_capt,Vaklu Captain,vaklu_capt,-1,,504OND_s
+creature,vaklu_captain,Vaklu Captain,vaklu_captain,-1,,506OND_s
+creature,va_sold_gren,Vaklu Grenadier,va_sold_gren,-1,,506OND_s
+creature,va_sold_gren001,Vaklu Grenadier{CS},va_sold_grenCS,-1,,506OND_s
+creature,n_vgunner,Vaklu Gunner,Vaklu_Gunner,-1,,504OND_s
+creature,n_vgunner001,Vaklu Gunner{CS},Vaklu_GunnerCS,-1,,504OND_s
+creature,va_sold_gun,Vaklu Heavy Gunner,va_sold_gun,-1,,506OND_s
+creature,va_sold_gun001,Vaklu Heavy Gunner{CS},va_sold_gunCS,-1,,506OND_s
+creature,va_sold_gun002,Vaklu Heavy Gunner{Throne},va_sold_gunThrone,-1,,506OND_s
+creature,va_speaker_002,Vaklu Heavy Soldier,va_sold_hvy,-1,,506OND_s
+creature,va_speaker_003,Vaklu Heavy Soldier{CS},va_sold_hvyCS,-1,,506OND_s
+creature,va_speaker_005,Vaklu Heavy Soldier{Throne 2},va_sold_hvyThrone2,-1,,506OND_s
+creature,va_speaker_004,Vaklu Heavy Soldier{Throne},va_sold_hvyThrone,-1,,506OND_s
+creature,vaklu_lead,Vaklu Leader,ond_lead,-1,,221TEL_s
+creature,vaklu_lt,Vaklu Lieutenant{2},vaklu_lt,-1,,504OND_s
+creature,va_officer,Vaklu Officer,va_officer,-1,,504OND_s
+creature,va_sergeant,Vaklu Sergeant,va_sergeant,-1,,506OND_s
+creature,ds_va_speaker_1,Vaklu Sergeant{1},va_speaker_1,-1,,506OND_s
+creature,vaklu_sergeant,Vaklu Sergeant{1},vaklu_sergeant,-1,,504OND_s
+creature,vaklu_sergean001,Vaklu Sergeant{3},vaklu_sergeant3,-1,,504OND_s
+creature,va_speaker_1,Vaklu Sergeant{CS},va_speaker_1,-1,,506OND_s
+creature,ds_v_troop,Vaklu Soldier,ds_v_troop,-1,,506OND_s
+creature,vak_soldier,Vaklu Soldier,vak_soldier,-1,,511OND_s
+creature,vak_soldier001,Vaklu Soldier,ds_vak_soldier,-1,,511OND_s
+creature,vaklu_captain001,Vaklu Soldier,v_troop,-1,,506OND_s
+creature,vaklu_troop002,Vaklu Soldier{Interrogator 2},vaklu_troop_cs2,-1,,502OND_s
+creature,vaklu_troop001,Vaklu Soldier{Interrogator},vaklu_troop_cs,-1,,502OND_s
+creature,vak_soldier_m001,Vaklu Soldier{Melee},ds_vak_soldier_melee,-1,,511OND_s
+creature,vak_soldier_mele,Vaklu Soldier{Melee},vak_soldier_melee,-1,,511OND_s
+creature,soldier_salute,Vaklu Soldier{Salute},soldier_salute,-1,,511OND_s
+creature,ds_v_troop_tob,Vaklu Soldier{Tobin's guard},ds_v_troop_tob,-1,,506OND_s
+creature,ds_va_troop,Vaklu Trooper,ds_va_troop,-1,,504OND_s
+creature,n_vsoldier,Vaklu Trooper,SithSoldier,-1,,504OND_s
+creature,vaklu_sold,Vaklu Trooper,ond_sold,-1,,222TEL_s
+creature,vaklu_troop,Vaklu Trooper,vaklu_troop,-1,,221TEL_s
+creature,va_troop_coward,Vaklu Trooper{Coward},va_troop_coward,-1,,504OND_s
+creature,vaklu_door,Vaklu Trooper{TSF Door},ond_door,-1,,222TEL_s
+creature,vaklu_wound,Vaklu Trooper{Wounded},wound_sold,-1,,222TEL_s
+creature,n_yoda,Vandar,Yoda,-1,,bif
+creature,vandar_holo,Vandar{Hologram},vandar_holo,-1,,601DAN_s
+creature,c_verkaal,Verkaal,Verkaal,-1,,bif
+creature,g_veerkal01,Verkaal,g_verkaal01,-1,,bif
+creature,g_mandalor007,Veteran Mercenary{Assault},231_merce03,-1,,231TEL_s
+creature,g_mandalor011,Veteran Mercenary{Grenadier A},233_merc02a,-1,,233TEL_s
+creature,g_mandalor008,Veteran Mercenary{Grenadier},231_merce02,-1,,231TEL_s
+creature,g_mandalor016,Veteran Mercenary{Grenadier},233_merc02,-1,,233TEL_s
+creature,n_fatcomm006,Veteran{Man},VeteranM,-1,,302NAR_s
+creature,g_kinrath04,Viper Kinrath,g_kinrath04,-1,,bif
+creature,g_kinrath005,Viper Kinrath{smelly},g_kinrath04,-1,,601DAN_s
+creature,g_kinrath006,Viper Kinrath{smelly},g_kinrath04,-1,,604DAN_s
+creature,p_visas,Visas,VisasMarr,-1,,bif
+creature,p_visas001,Visas,VisasMarr,-1,,303NAR_s
+creature,p_visas002,Visas [At Cell Door],VisasMarr,-1,,851NIH_s
+creature,p_visas003,Visas [Meditation Sequence],VisasMarr,-1,,851NIH_s
+creature,visascut,Visas{Arrival Cutscene},VisasCut,-1,,003EBO_s
+creature,visasbed,Visas{Med Bay},VisasBed,-1,,003EBO_s
+creature,g_thug004,Visquis,Visquis,-1,,301NAR_s
+creature,n_quarren002,Visquis,Visquis,-1,,304NAR_s
+creature,n_rodian001,Vix,vix,-1,,503OND_s
+creature,c_hutt001,Vogga,Vogga,-1,,303NAR_s
+creature,g_blkvulkgang013,Vogga Thug{1},VoggaThug1,-1,,301NAR_s
+creature,n_duros009,Vogga Thug{2},VoggaThug2,-1,,301NAR_s
+creature,vogga_enforcer,Vogga's Enforcer,Vogga_Enforcer,-1,,303NAR_s
+creature,vogga_enforcer2,Vogga's Enforcer{Weeqay},Vogga_Enforcer,-1,,303NAR_s
+creature,g_thug005,Vossk,Vossk,-1,,301NAR_s
+creature,vrook_holo,Vrook{Hologram},vrook_holo,-1,,601DAN_s
+creature,g_exrep,Vula,Vula,-1,,208TEL_s
+creature,npc_waitress,Waitress,waitress,-1,,503OND_s
+creature,g_wardroid01,War Droid Mark I,g_wardroid01,-1,,bif
+creature,g_wardroid02,War Droid Mark III,g_wardroid02,-1,,bif
+creature,g_wardroid03,War Droid Mark IV,g_wardroid03,-1,,bif
+creature,g_wardroid04,War Droid Mark V,g_wardroid04,-1,,bif
+creature,203_merc003,War Droid{Czerka},merc_droid,-1,,204TEL_s
+creature,g_assassindrd019,Warbot,233_warbot,-1,,233TEL_s
+creature,g_assassindrd020,Warbot{Grenadier},233_warbot2,-1,,233TEL_s
+creature,n_weequay01,Weequay,Weequay,-1,,bif
+creature,g_thug008,Weequays Thug,WeeqThug,-1,,304NAR_s
+creature,g_thug014,Weequay{2},WeeqThug,-1,,304NAR_s
+creature,n_wookief,Wookie,WookieF,-1,,bif
+creature,n_wookiem,Wookie,WookieM,-1,,bif
+creature,g_wookiefemale02,Wookiee Elite Warrior,g_wookiefemale02,-1,,bif
+creature,g_wookiemale02,Wookiee Elite Warrior,g_wookiemale02,-1,,bif
+creature,g_wookiefemale01,Wookiee Warrior,g_wookiefemale01,-1,,bif
+creature,g_wookiemale01,Wookiee Warrior,g_wookiemale01,-1,,bif
+creature,g_militia007,Wounded Militia{A},g_militia_a,-1,,602DAN_s
+creature,g_militia009,Wounded Militia{B},g_militia_b,-1,,602DAN_s
+creature,g_militia003,Wounded Militia{C},g_militia_c,-1,,602DAN_s
+creature,g_militia008,Wounded Militia{D},g_militia_d,-1,,602DAN_s
+creature,c_wraid,Wraid,Wraid,-1,,bif
+creature,g_wraid01,Wraid,g_wraid01,-1,,bif
+creature,npc_xaart,Xaart,npc_xaart,-1,,503OND_s
+creature,npc_xarga,Xarga,xarga,-1,,403DXN_s
+creature,n_jedimemm001,Xaset Terep,g_jedi4,-1,,711KOR_s
+creature,g_xor,Xor,g_xor,-1,,bif
+creature,boma_young_es,Young Boma,boma_young_es,-1,,402DXN_s
+creature,c_boma1,Young Boma,boma_young,-1,,401DXN_s
+creature,c_boma_sm01,Young Boma,boma_young,-1,,bif
+creature,scout_boma,Young Boma,scout_boma,-1,,402DXN_s
+creature,c_boma002,Young Boma{Quest},boma_young_qu,-1,,402DXN_s
+creature,n_commkidf,Young Commoner,CommKidF,-1,,bif
+creature,n_commkidm,Young Commoner,CommKidM,-1,,bif
+creature,g_rancor02,Young Rancor,g_rancor02,-1,,bif
+creature,p_zaalbar,Zaalbar,Zaalbar,-1,,bif
+creature,c_zakkeg002,Zakkeg,zakkeg,-1,,402DXN_s
+creature,c_zakkeg01,Zakkeg,boma_normal,-1,,bif
+creature,zez,Zez-Kai Ell,zez,-1,,305NAR_s
+creature,221_zherron,Zherron,dan_lead,-1,,221TEL_s
+creature,npc_zherron,Zherron,npc_zherron,-1,,601DAN_s
+creature,n_zhug008,Zhug Bounty Hunter{Vossk1},Vossk_Zhug1,-1,,301NAR_s
+creature,n_zhug009,Zhug Bounty Hunter{Vossk2},Vossk_Zhug2,-1,,301NAR_s
+creature,n_zhug010,Zhug Bounty Hunter{Vossk3},Vossk_Zhug3,-1,,301NAR_s
+creature,n_zhug011,Zhug Bounty Hunter{Vossk4},Vossk_Zhug4,-1,,301NAR_s
+creature,n_zhug012,Zhug Bounty Hunter{Vossk5},Vossk_Zhug5,-1,,301NAR_s
+creature,n_zhug013,Zhug Bounty Hunter{Vossk6},Vossk_Zhug6,-1,,301NAR_s
+creature,n_zhug014,Zhug Bounty Hunter{Vossk7},Vossk_Zhug7,-1,,301NAR_s
+creature,n_zhug015,Zhug Bounty Hunter{Vossk8},Vossk_Zhug8,-1,,301NAR_s
+creature,n_zhug016,Zhug Bounty Hunter{Vossk9},Vossk_Zhug9,-1,,301NAR_s
+creature,n_zhug002,Zhug Bounty Hunter{Zhug 1},zthug1,-1,,301NAR_s
+creature,n_zhug003,Zhug Bounty Hunter{Zhug 2},zthug2,-1,,301NAR_s
+creature,n_zhug001,Zhug Bounty Hunter{Zhug},duros_bh,-1,,301NAR_s
+creature,n_zhug007,Zhug Veteran,zhug_v,-1,,301NAR_s
+creature,g_ziagrom,Ziagrom,g_Ziagrom,-1,,bif
+creature,222_zuka,Zuka,222_zuka,-1,,222TEL_s
+creature,zuka,Zuka,zuka,-1,,403DXN_s
 door,sw_door_per014,Airlock Inner Door {104PER},AirlockInnerDoor_103PER,0,T_DOOR01,103PER_s
 door,sw_door_201_001,Airlock {Generic},Airlock,0,T_DOOR01,201TEL_s
 door,d_203_a1,Apartment A1,door_a1,0,T_DOOR01,203TEL_s
@@ -113,6 +1328,7 @@ door,sw_door_hhead2,Door{Hammer Head  - Broken},Hammer Head Door 2,0,T_DOOR01,bi
 door,sw_door_hhead1,Door{Hammerhead Door 1},Hammerhead 1,0,T_DOOR01,bif
 door,door_har03,Door{Harbinger Engine},HarbingerEngineDoor,0,T_DOOR01,bif
 door,sw_door_per025,Door{HK50 Open Door},HK50Door2,0,T_DOOR01,103PER_s
+door,inner_door,Door{Inner Warehouse},Inner_Door,0,T_DOOR01,303NAR_s
 door,interiordoor,Door{Interior},NarShaddaaDoor01,0,T_DOOR01,305NAR_s
 door,door_kor08,Door{Korriban Door 08},KorribanDoor08,0,T_DOOR01,bif
 door,door_kor09,Door{Korriban Door 09},KorribanDoor09,0,T_DOOR01,bif
@@ -132,6 +1348,7 @@ door,door_locked_dif,Door{Locked Difficult},door_locked_dif,0,T_DOOR01,702KOR_s
 door,711_lock_door,Door{Locked; Bashable},711_lock_door,0,T_DOOR01,711KOR_s
 door,152lockeddoor,Door{Locked},Hammerhead1,0,T_DOOR01,152HAR_s
 door,door_locked,Door{Locked},door_locked,0,T_DOOR01,702KOR_s
+door,door_narshad010,Door{Locked},NarShaddaaDoor01,0,T_DOOR01,303NAR_s
 door,door_loot,Door{Loot},door_loot,0,T_DOOR01,506OND_s
 door,door_mal01,Door{Malachor Door 01},MalachorDoor01,0,T_DOOR01,bif
 door,door_mal003,Door{Malachor Door 02},MalachorDoor02,0,T_DOOR01,903MAL_s
@@ -170,9 +1387,12 @@ door,door_per04,Door{Peragus Door 4},PeragusDoor4,0,T_DOOR01,bif
 door,door_per05,Door{Peragus Door 5},PeragusDoor5,0,T_DOOR01,bif
 door,prisondoor,Door{Prison},PrisonDoor,0,T_DOOR01,262TEL_s
 door,door_puzzle,Door{Puzzle},door_puzzle,0,T_DOOR01,506OND_s
+door,door_pylon3,Door{Pylon 3},pylon3,0,T_DOOR01,303NAR_s
 door,sw_door_rakata4,Door{Rakata 4},Rakata Door 4,0,T_DOOR01,bif
 door,door_nih01,Door{Ravager Door 01},RavagerDoor01,0,T_DOOR01,bif
 door,d_refugee3,Door{Refugee3},d_refugee3,0,T_DOOR01,301NAR_s
+door,door_flophouse_s,Door{Secret},Flophouse_Secret,0,T_DOOR01,303NAR_s
+door,secret_door,Door{Secret},Secret_Door,0,T_DOOR01,303NAR_s
 door,sw_door_sith5,Door{Sith 5},Sith Door 5,0,T_DOOR01,bif
 door,door_ass,Door{Sith Assassin Attack},door_ass,0,T_DOOR01,702KOR_s
 door,door_secnorth001,Door{SouthSecurity},door_secsouth,0,T_DOOR01,506OND_s
@@ -206,6 +1426,7 @@ door,door_terena,Door{Terena},Door_Terena,0,T_DOOR01,602DAN_s
 door,door_thorium,Door{Thorium Charges},door_thorium,0,T_DOOR01,702KOR_s
 door,door_torture,Door{Torture Room},door_torture,0,T_DOOR01,702KOR_s
 door,door_training,Door{Training Room},door_training,0,T_DOOR01,702KOR_s
+door,door_narshad008,Door{Twin Sun Prop},TwinDoor,0,T_DOOR01,301NAR_s
 door,zherron_door,Door{Zherron},zherron_door,0,T_DOOR01,602DAN_s
 door,dxuncachedoor,Dxun Cache Door,DxunCacheDoor,0,T_DOOR01,404DXN_s
 door,dxuncache,Dxun Cache Door{Blow up},DxunCache,0,T_DOOR01,402DXN_s
@@ -244,6 +1465,7 @@ door,sealed_door1,Inner Garage Door,sealed_door1,0,T_DOOR01,001EBO_s
 door,iziz_door002,Iziz Door,iziz_door1,0,T_DOOR01,502OND_s
 door,iziz_door1,Iziz Door,iziz_door1,0,T_DOOR01,501OND_s
 door,dhagon_door,Iziz Door{Dhagon Ghent},dhagon_door,0,T_DOOR01,512OND_s
+door,to304nar,Jekk'Jekk Tarr,TO_304NAR,0,T_DOOR01,303NAR_s
 door,sw_door_kash1,Kashyyyk Door 1,Kashyyyk Door 1,0,T_DOOR01,bif
 door,sw_door_kash2,Kashyyyk Door 2,Kashyyyk Door 2,0,T_DOOR01,bif
 door,sw_door_kash3,Kashyyyk Door 3,Kashyyyk Door 3,0,T_DOOR01,bif
@@ -285,6 +1507,7 @@ door,sw_door_rakata1,Rakata Door 1,Rakata Door 1,0,T_DOOR01,bif
 door,sw_door_rakata2,Rakata Door 2,Rakata Door 2,0,T_DOOR01,bif
 door,sw_door_rakata3,Rakata Door 3,Rakata Door 3,0,T_DOOR01,bif
 door,door_dan002,Sealed Door,SealedDoor,0,T_DOOR01,004EBO_s
+door,sealeddoor,Sealed Door,Sealed_Door,0,T_DOOR01,303NAR_s
 door,door_narshad009,Sealed Hatch,SealedHatch,0,T_DOOR01,351NAR_s
 door,d_222doorsealed,Sealed Module Door,d_doorsealed,0,T_DOOR01,222TEL_s
 door,d_sealed221,Sealed Module Door,d_sealed,0,T_DOOR01,220TEL_s
@@ -307,6 +1530,7 @@ door,locked_door,Security Door{Mandalore},locked_door,0,T_DOOR01,403DXN_s
 door,ff_outer,Security Door{Outer},ff_outer,0,T_DOOR01,506OND_s
 door,k2doors001,Security Door{Saquesh},saquesh_door,0,T_DOOR01,302NAR_s
 door,door_serroco,Security Door{tough lock},SerrocoLocked,0,T_DOOR01,302NAR_s
+door,d_vogga,Security Door{Vogga},Vogga_Door,0,T_DOOR01,303NAR_s
 door,sw_door_221,Shuttle Door {Suburban Red},d_Suburban,0,T_DOOR01,222TEL_s
 door,sw_door_202_001,Shuttle Door {Suburban},d_Suburban,0,T_DOOR01,202TEL_s
 door,sw_door_202_002,Shuttle Door{Docks},d_Docks,0,T_DOOR01,202TEL_s
@@ -347,18 +1571,9 @@ door,sw_door_per003,Turbolift{103PER},PERDoor103,0,T_DOOR01,101PER_s
 door,sw_door_per002,Turbolift{105PER},PERDoor105,0,T_DOOR01,101PER_s
 door,sw_door_unnamed1,Unnamed World Door 1,Unnamed World Door 1,0,T_DOOR01,bif
 door,sw_door_telos009,Vivarium{Ithorian Plant},d_ith_plant,0,T_DOOR01,204TEL_s
+door,ct96635,Warehouse{Inner},Door_Warehouse_Inner,0,T_DOOR01,303NAR_s
+door,door_warehouse,Warehouse{Outer},Door_Warehouse_Outer,0,T_DOOR01,303NAR_s
 door,sw_door_test,Wood_strong,TestDoor,0,T_DOOR01,bif
-door,door_flophouse_s,{CA}Door{Secret},Flophouse_Secret,0,T_DOOR01,303NAR_s
-door,door_narshad010,{CFA}Door{Locked},NarShaddaaDoor01,0,T_DOOR01,303NAR_s
-door,to304nar,{CFA}Jekk'Jekk Tarr,TO_304NAR,0,T_DOOR01,303NAR_s
-door,door_pylon3,{JDM}Door{Pylon 3},pylon3,0,T_DOOR01,303NAR_s
-door,door_narshad008,{kds}Door{Twin Sun Prop},TwinDoor,0,T_DOOR01,301NAR_s
-door,inner_door,{MHC}Door{Inner Warehouse},Inner_Door,0,T_DOOR01,303NAR_s
-door,secret_door,{MHC}Door{Secret},Secret_Door,0,T_DOOR01,303NAR_s
-door,sealeddoor,{MHC}Sealed Door,Sealed_Door,0,T_DOOR01,303NAR_s
-door,d_vogga,{MHC}Security Door{Vogga},Vogga_Door,0,T_DOOR01,303NAR_s
-door,ct96635,{MHC}Warehouse{Inner},Door_Warehouse_Inner,0,T_DOOR01,303NAR_s
-door,door_warehouse,{MHC}Warehouse{Outer},Door_Warehouse_Outer,0,T_DOOR01,303NAR_s
 door-model,,BrokenDoor,,58,DOR_HAR02,2da
 door-model,,CzerkaDoor1,,33,DOR_LZA01,2da
 door-model,,DantooineDoor1,,27,DOR_LDA01,2da
@@ -496,6 +1711,7 @@ placeable,termal005,Airlock Terminal{2a},TermAirlock2a,23,PLC_CompPnl,201TEL_s
 placeable,termal2,Airlock Terminal{2},TermAirlock2,23,PLC_CompPnl,201TEL_s
 placeable,termal006,Airlock Terminal{3a},TermAirlock3a,23,PLC_CompPnl,201TEL_s
 placeable,termal004,Airlock Terminal{3},TermAirlock3,23,PLC_CompPnl,201TEL_s
+placeable,lndspdr003,Airspeeder,AirTaxi,66,PLC_LndSpdr2,301NAR_s
 placeable,beer001,Alien Pale Ale,AlienPaleAle,187,PLC_Beer,301NAR_s
 placeable,plc_beer,Alien Pale Ale,AlienPaleAle,187,PLC_Beer,bif
 placeable,anc_box_se,Ancient Box{SE},anc_box_se,285,PLC_barrel1,411DXN_s
@@ -606,6 +1822,7 @@ placeable,plc_companlgrey,Computer Panel - Floor (Dark Grey),CompPanelGrey,347,P
 placeable,plc_comppnl,Computer Panel - Floor Mount,ComputerPanel,23,PLC_CompPnl,bif
 placeable,plc_comwallgrey,Computer Panel - Wall (Dark Grey),CompWallGrey,348,PLC_CompPnl2_b,bif
 placeable,plc_comppnl2,Computer Panel - Wall Mount,ComputerPanel,24,PLC_CompPnl2,bif
+placeable,comp_c7,Computer Panel{C7},comp_c7,23,PLC_CompPnl,303NAR_s
 placeable,comp_cond,Computer Panel{Conductor},comp_cond,23,PLC_CompPnl,610DAN_s
 placeable,computer_library,Computer Panel{Library},computer_library,23,PLC_CompPnl,702KOR_s
 placeable,comp_main,Computer Panel{Main},comp_main,23,PLC_CompPnl,602DAN_s
@@ -681,6 +1898,7 @@ placeable,plc_desk2,Desk - Fancy Office,Desk2,28,PLC_Desk2,bif
 placeable,desk_off,Desk{deactivated},desk_off,296,PLC_exDesk,610DAN_s
 placeable,invisible006,Disc4Invis,Disc4Invis,54,PLC_Invis,003EBO_s
 placeable,invisible007,DiscInvis,DiscInvis,54,PLC_Invis,003EBO_s
+placeable,door_control,Door Controls,Door_Controls,14,PLC_BtnPnlHT,303NAR_s
 placeable,doorinvblk001,Door{Invisible Door Blocker},doorinvblk,360,PLC_DBlk,101PER_s
 placeable,plc_doorinvblk,Door{Invisible Door Blocker},doorinvblk,360,PLC_DBlk,bif
 placeable,beer003,Drink,Drink,188,PLC_Beer2,301NAR_s
@@ -960,6 +2178,7 @@ placeable,201_freighter,Orbital Shuttle,201_shuttle,54,PLC_Invis,201TEL_s
 placeable,201_freighter001,Orbital Shuttle{Czerka},shuttle_czerka,54,PLC_Invis,201TEL_s
 placeable,parade_listen,parade_listen,parade_listen,54,PLC_Invis,504OND_s
 placeable,pands,Parts and Spikes,pands,39,PLC_FootLker,401DXN_s
+placeable,partpile001,Parts pile - organized machine parts on table,PartPile,74,PLC_PartPile,301NAR_s
 placeable,plc_partpile,Parts pile - organized machine parts on table,PartPile,74,PLC_PartPile,bif
 placeable,plc_pazaak,Pazaak Cards,PazaakCards,183,PLC_Pazaak,bif
 placeable,pclook,PC Look,PCLook,167,PLC_InvEb,702KOR_s
@@ -1021,6 +2240,7 @@ placeable,debris,Power Surge{Invis},debris,0,PLC_Invis,001EBO_s
 placeable,prologue,Prologue{Invis},Prologue,0,PLC_Invis,001EBO_s
 placeable,inveb001,Proton Missile{Invisible},ProtonMis,167,PLC_InvEb,002EBO_s
 placeable,plc_pulchain,Pull Chain,PulChain,79,PLC_PulChain,bif
+placeable,comppnl005,Pylon 3 Console,ComputerPanel,23,PLC_CompPnl,303NAR_s
 placeable,inveb004,Quadlasers{Invisible},Quad,167,PLC_InvEb,002EBO_s
 placeable,racedialog,racedialog,racedialog,54,PLC_Invis,211TEL_s
 placeable,radar_smoke,radar_smoke,radar_smoke,108,PLC_StmVentC,403DXN_s
@@ -1227,6 +2447,7 @@ placeable,swpbike002,Swoop Bike,232_SwpBike,110,PLC_SwpBike1,231TEL_s
 placeable,plc_swpbike2,Swoop Bike 2,SwpBike2,111,PLC_SwpBike2,bif
 placeable,plc_swpengin,Swoop Bike Engine,SwpEngin,112,PLC_SwpEngin,bif
 placeable,plc_swscreen,Swoop Race Monitor,SwScreen,225,PLC_SwScreen,bif
+placeable,swscreen001,Swoop Race Monitor,SwScreen,225,PLC_SwScreen,301NAR_s
 placeable,plc_swoopmon01,Swoop Track Monitor 01 (Telos),swoopmon01,351,PLC_SwpMon01,bif
 placeable,plc_swoopmon02,Swoop Track Monitor 02 (Nar Shad),swoopmon02,352,PLC_SwpMon02,bif
 placeable,plc_swoopmon03,Swoop Track Monitor 03 (Onderon),swoopmon03,353,PLC_SwpMon03,bif
@@ -1277,6 +2498,7 @@ placeable,comp_turret,Turret Control Station,comp_turret,23,PLC_CompPnl,602DAN_s
 placeable,power_gen_backup,Turret Power Generator,power_gen_backup,314,PLC_pgen,410DXN_s
 placeable,plc_ragp,Tuskan Rag Pile,RagPile,178,PLC_RagP,bif
 placeable,plc_twlkcrps,Twi'lek Corpse,TwlkCrps,113,PLC_TwlkCrps,bif
+placeable,quest_corpse,Twi'lek Corpse,quest_corpse,113,PLC_TwlkCrps,303NAR_s
 placeable,g_tresgencorp004,Unconscious Patient,PCPatient,42,PLC_GenCrps,001EBO_s
 placeable,g_tresmilhig008,Unlocked Plasteel Cylinder{Get Tunneler},MilHighPlstcCylin,77,PLC_PlstcCrt,001EBO_s
 placeable,invisible011,Visas Arrives,Visas_Arrives_PC,54,PLC_Invis,003EBO_s
@@ -1292,6 +2514,7 @@ placeable,walltex3,Wall Terminal{Exchange 3},walltex3,24,PLC_CompPnl2,208TEL_s
 placeable,walltex,Wall Terminal{Exchange},walltex,24,PLC_CompPnl2,203TEL_s
 placeable,comppnl008,Wall Terminal{Med},wallt_med,23,PLC_CompPnl,204TEL_s
 placeable,plc_wtrlvl,Water Level,Water Level,157,PLC_WtrLvl,bif
+placeable,wateringurn,Watering Urn,WaternUrn,185,PLC_Cjar3,303NAR_s
 placeable,g_tresrakat001,Wicker Bin,TresRakatBin,81,PLC_RakatBin,bif
 placeable,g_tressndppl001,Wicker Bin,TresSndPplBin,81,PLC_RakatBin,bif
 placeable,plc_rakatbin,Wicker Bin,RakatBin,81,PLC_RakatBin,bif
@@ -1316,14 +2539,6 @@ placeable,plc_wreckage01,Wreckage 01,Wreckage01,263,PLC_Wreck01,bif
 placeable,plc_wreckage02,Wreckage 02,Wreckage02,264,PLC_Wreck02,bif
 placeable,plc_wreckage03,Wreckage 03,Wreckage03,265,PLC_Wreck03,bif
 placeable,g_zoncont,Zone Controller,g_zoncont,0,PLC_Invis,bif
-placeable,partpile001,{JDM}Parts pile - organized machine parts on table,PartPile,74,PLC_PartPile,301NAR_s
-placeable,swscreen001,{JDM}Swoop Race Monitor,SwScreen,225,PLC_SwScreen,301NAR_s
-placeable,quest_corpse,{JDM}Twi'lek Corpse,quest_corpse,113,PLC_TwlkCrps,303NAR_s
-placeable,lndspdr003,{kds}Airspeeder,AirTaxi,66,PLC_LndSpdr2,301NAR_s
-placeable,comppnl005,{kds}Pylon 3 Console,ComputerPanel,23,PLC_CompPnl,303NAR_s
-placeable,comp_c7,{MHC}Computer Panel{C7},comp_c7,23,PLC_CompPnl,303NAR_s
-placeable,door_control,{MHC}Door Controls,Door_Controls,14,PLC_BtnPnlHT,303NAR_s
-placeable,wateringurn,{MHC}Watering Urn,WaternUrn,185,PLC_Cjar3,303NAR_s
 placeable-model,,,,8,PLC_noready,2da
 placeable-model,,,,9,PLC_noready,2da
 placeable-model,,AirSpeeder1,,1,PLC_AirSpder1,2da

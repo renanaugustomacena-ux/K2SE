@@ -16,6 +16,7 @@ backed-up edit of swkotor2.ini's [Keymapping] section.
 """
 
 import argparse
+import glob
 import os
 import re
 import shutil
@@ -250,6 +251,11 @@ def deploy_spawn_script():
     with tempfile.TemporaryDirectory() as workdir:
         shutil.copy(header, os.path.join(workdir, "nwscript.nss"))
         shutil.copy(compiler, os.path.join(workdir, "nwnnsscomp.exe"))
+        # Includes have to sit beside the script: the compiler resolves
+        # #include against its own working directory, not against ours.
+        for extra in glob.glob(os.path.join(ROOT, "nss", "k2se_*.nss")):
+            if os.path.basename(extra) != SPAWN_SCRIPT + ".nss":
+                shutil.copy(extra, os.path.join(workdir, os.path.basename(extra)))
         nss = os.path.join(workdir, SPAWN_SCRIPT + ".nss")
         ncs = os.path.join(workdir, SPAWN_SCRIPT + ".ncs")
         shutil.copy(SPAWN_SCRIPT_SRC, nss)

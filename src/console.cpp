@@ -229,10 +229,12 @@ bool ContainsNoCase(const char* hay, const char* needle) {
 // --- commands -----------------------------------------------------------------
 void CmdHelp() {
     Out("");
-    Out("  list <text>          search the object catalogue (%d objects)", g_rowCount);
-    Out("  spawn <resref>       place that object where you are standing");
-    Out("  spawn #<n>           place the nth object from the last list");
-    Out("  npc <resref>         place a creature where you are standing");
+    Out("  list <text>          search by NAME (%d objects, people included)", g_rowCount);
+    Out("                       e.g. list plant | list footlocker | list soldier");
+    Out("  spawn #<n>           place the nth thing from the last list");
+    Out("                       containers get 1-3 of the game's 100 best items;");
+    Out("                       people wander off on their own instead of standing still");
+    Out("  spawn <resref>       same, by file name, if you know it");
     Out("  here                 print the module, area and your position");
     Out("  placed               list what this session has placed");
     Out("  undo                 drop the last placement from the table");
@@ -263,12 +265,13 @@ void CmdList(const char* filter) {
         if (r.resref && *r.resref && g_st.lastListedCount < 16)
             g_st.lastListed[g_st.lastListedCount++] = i;
         const int pick = (r.resref && *r.resref) ? g_st.lastListedCount : 0;
+        // The NAME leads, because that is the only column a person can read.
+        // "Footlocker" is useful; "g_i_footlker003" is not, so the file name is
+        // demoted to a parenthesis for anyone who wants to type it.
         if (pick)
-            Out("  #%-2d %-9s %-18s %-32.32s model %-14s %s", pick, r.kind, r.resref, r.name,
-                r.model, r.source);
+            Out("  #%-2d %-34.34s %-10s (%s)", pick, r.name, r.kind, r.resref);
         else
-            Out("      %-9s %-18s %-32.32s model %-14s %s", r.kind, "(model only)", r.name,
-                r.model, r.source);
+            Out("      %-34.34s %-10s (model %s, no blueprint)", r.name, r.kind, r.model);
         ++shown;
     }
     if (matched == 0) {
@@ -289,9 +292,16 @@ bool PlayerPlacement(const player::Refs& refs, float pos[3], float* facing) {
     return true;
 }
 
+// The kind is in the catalogue, so asking the player to know whether something
+// is a creature or a placeable is asking them to do the computer's job. `type`
+// is only a fallback for a resref typed in full that is not in the catalogue.
+int TypeOfRow(const CatalogRow& r) {
+    return (r.kind && strstr(r.kind, "creature")) ? kTypeCreature : kTypePlaceable;
+}
+
 void CmdSpawn(const player::Refs& refs, const char* what, int type) {
     if (!what || !*what) {
-        Out("  spawn what? Try `list plant` first.");
+        Out("  spawn what? Try `list plant` or `list soldier` first.");
         return;
     }
     const char* resref = what;
@@ -301,7 +311,17 @@ void CmdSpawn(const player::Refs& refs, const char* what, int type) {
             Out("  #%d is not in the last list (%d entries)", pick, g_st.lastListedCount);
             return;
         }
-        resref = g_rows[g_st.lastListed[pick - 1]].resref;
+        const CatalogRow& row = g_rows[g_st.lastListed[pick - 1]];
+        resref = row.resref;
+        type = TypeOfRow(row);
+    }
+    else {
+        for (int i = 0; i < g_rowCount; ++i) {
+            if (g_rows[i].resref && _stricmp(g_rows[i].resref, resref) == 0) {
+                type = TypeOfRow(g_rows[i]);
+                break;
+            }
+        }
     }
     float pos[3] = {0, 0, 0};
     float facing = 0.0f;
@@ -314,8 +334,11 @@ void CmdSpawn(const player::Refs& refs, const char* what, int type) {
         Out("  could not add it: the spawn table is full, or the spawner is off in the ini.");
         return;
     }
-    Out("  placing %s at %.2f %.2f %.2f facing %.0f (entry %d) -- give it a moment", resref,
-        pos[0], pos[1], pos[2], facing, index);
+    Out("  placing %s (%s) at %.2f %.2f %.2f -- give it a moment", resref,
+        type == kTypeCreature ? "npc, it will wander off" : "object", pos[0], pos[1],
+        pos[2]);
+    if (type == kTypePlaceable)
+        Out("  if it is a container it now holds 1-3 of the game's 100 best items");
 }
 
 void CmdHere(const player::Refs& refs) {
@@ -493,6 +516,7 @@ const Category kCategories[] = {
     {"lights",      {"light", "lamp", "glow", nullptr}},
     {"computers",   {"comp", "console", "panel", "term"}},
     {"doors",       {"door", nullptr, nullptr, nullptr}},
+    {"people",      {"soldier", "merc", "civilian", "commoner"}},
     {"recoloured",  {"_a", "_b", "_c", "_d"}},
 };
 constexpr int kCategoryCount =

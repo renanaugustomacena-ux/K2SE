@@ -27,6 +27,7 @@ general GFF reader.
 
 import argparse
 import os
+import re
 import struct
 import sys
 
@@ -41,6 +42,9 @@ RES_2DA = 2017
 RES_UTP = 2044
 RES_UTD = 2042
 RES_UTC = 2027
+
+# Designer bookkeeping that leaks into the shipped strings: "{30}Nomi's Robe".
+TIER_MARKER = re.compile(r"^\{[^}]*\}\s*")
 
 CSV_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                         "data", "k2se_catalog.csv")
@@ -233,15 +237,19 @@ def build(game):
         if not isinstance(appearance, int):
             appearance = -1
         name = ""
-        loc = fields.get("LocName")
-        if isinstance(loc, tuple) and loc[0] == "strref":
-            name = tlk.get(loc[1])
+        for field in ("LocName", "FirstName"):
+            loc = fields.get(field)
+            if isinstance(loc, tuple) and loc[0] == "strref":
+                name = tlk.get(loc[1])
+                if name:
+                    break
+        name = TIER_MARKER.sub("", name).strip()
         label, model = models.get((kind, appearance), ("", ""))
         rows.append(Row(kind, resref, name or label, fields.get("Tag", ""),
                         appearance, model, source))
 
     # Blueprints shipped in the BIFs.
-    wanted = {RES_UTP: "placeable", RES_UTD: "door"}
+    wanted = {RES_UTP: "placeable", RES_UTD: "door", RES_UTC: "creature"}
     for resref, restype, _bif, _idx in entries:
         if restype in wanted:
             blob = kotor_res.extract(bifs, entries, resref, restype)
