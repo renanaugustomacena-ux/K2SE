@@ -282,6 +282,40 @@ int g_positionSlot = -1;   // 29 or 30, decided at runtime by magnitude
 // instance is ever touched.
 void* g_sceneCamera = nullptr;
 
+// What each slot was last handed, and how often. If the position is never
+// identified this is the evidence that says why, without needing another
+// session to find out.
+float g_lastSeen[2][3] = {{0, 0, 0}, {0, 0, 0}};
+uint32_t g_seenCount[2] = {0, 0};
+bool g_reportedBlind = false;
+
+void RecordSeen(int slot, float x, float y, float z) {
+    const int i = (slot == 29) ? 0 : 1;
+    g_lastSeen[i][0] = x;
+    g_lastSeen[i][1] = y;
+    g_lastSeen[i][2] = z;
+    ++g_seenCount[i];
+}
+
+void ReportBlind() {
+    if (g_reportedBlind) return;
+    g_reportedBlind = true;
+    log::Writef("fpcam: still no position slot after 120 first-person frames. "
+                "slot29 x%u last (%d %d %d) mm | slot30 x%u last (%d %d %d) mm | "
+                "eye (%d %d %d) mm",
+                g_seenCount[0], static_cast<int>(g_lastSeen[0][0] * 1000.0f),
+                static_cast<int>(g_lastSeen[0][1] * 1000.0f),
+                static_cast<int>(g_lastSeen[0][2] * 1000.0f), g_seenCount[1],
+                static_cast<int>(g_lastSeen[1][0] * 1000.0f),
+                static_cast<int>(g_lastSeen[1][1] * 1000.0f),
+                static_cast<int>(g_lastSeen[1][2] * 1000.0f),
+                static_cast<int>(g_worldEye[0] * 1000.0f),
+                static_cast<int>(g_worldEye[1] * 1000.0f),
+                static_cast<int>(g_worldEye[2] * 1000.0f));
+}
+
+bool NearPlayer(float x, float y, float z);
+
 bool LooksLikeDirection(float x, float y, float z) {
     const float lengthSquared = x * x + y * y + z * z;
     return lengthSquared > 0.64f && lengthSquared < 1.44f;   // |v| roughly 0.8..1.2
@@ -289,9 +323,16 @@ bool LooksLikeDirection(float x, float y, float z) {
 
 void NoteSlot(int slot, float x, float y, float z) {
     if (g_positionSlot != -1) return;
+    // "Not a unit vector" is too weak on its own: the first run decided from a
+    // (0,0,0) call, which is neither a direction nor a position but an object
+    // being initialised. Require a real world position instead -- non-zero, and
+    // close to where the player actually is, which is only knowable once the
+    // eye point has been computed for this frame.
+    if (!g_worldEyeValid) return;
     if (LooksLikeDirection(x, y, z)) return;
-    // The first non-unit vector to arrive is the position, and the other slot is
-    // the direction by elimination.
+    const float lengthSquared = x * x + y * y + z * z;
+    if (lengthSquared < 0.0001f) return;
+    if (!NearPlayer(x, y, z)) return;
     g_positionSlot = slot;
     log::Writef("fpcam: camera slot %d carries the position (%d %d %d mm); "
                 "slot %d is the direction", slot, static_cast<int>(x * 1000.0f),
@@ -333,6 +374,7 @@ bool OverrideDirection(int slot, void* self, float* x, float* y, float* z) {
 }
 
 void __fastcall HookVecA(void* self, void* edx, float x, float y, float z) {
+    RecordSeen(29, x, y, z);
     NoteSlot(29, x, y, z);
     if (g_positionSlot == 29 && WantOverride(self, x, y, z)) {
         if (!g_overrides++)
@@ -351,6 +393,7 @@ void __fastcall HookVecA(void* self, void* edx, float x, float y, float z) {
 }
 
 void __fastcall HookVecB(void* self, void* edx, float x, float y, float z) {
+    RecordSeen(30, x, y, z);
     NoteSlot(30, x, y, z);
     if (g_positionSlot == 30 && WantOverride(self, x, y, z)) {
         if (!g_overrides++)
@@ -562,6 +605,7 @@ void OnGameplayFrame(const player::Refs& refs, float dt) {
         return;
     }
     ++g_st.frames;
+    if (g_st.frames > 120 && g_positionSlot == -1 && g_cameraHooked) ReportBlind();
 
     Probe(refs.appearance);
 
