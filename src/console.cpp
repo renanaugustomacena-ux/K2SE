@@ -34,6 +34,7 @@ struct CatalogRow {
     const char* kind;
     const char* resref;
     const char* name;
+    const char* tag;      // the fallback when a creature has no localized name
     const char* model;
     const char* source;
 };
@@ -66,8 +67,14 @@ struct State {
     volatile LONG stop = 0;
     char gameDir[MAX_PATH] = "";
     uint32_t commands = 0;
-    int lastListed[16];          // resrefs from the last `list`, for `spawn #n`
+    // Sixteen was the real reason "the console only offers twelve objects":
+    // the catalogue held 2563 rows, the list printed forty, and only the first
+    // sixteen ever got a number you could spawn.
+    static const int kMaxPicks = 200;
+    int lastListed[kMaxPicks];
     int lastListedCount = 0;
+    int lastPage = 0;
+    int lastMatched = 0;
 };
 State g_st;
 
@@ -78,6 +85,46 @@ State g_st;
 // as the console host left it, which is harmless.
 using ShowWindowFn = int(__stdcall*)(HWND, int);
 ShowWindowFn g_showWindow = nullptr;
+
+// Closing an AllocConsole window sends CTRL_CLOSE_EVENT to the HOST process,
+// and Windows then terminates it. That is what killed the game when Renan shut
+// the console: nothing in K2SE asked to exit, the operating system simply took
+// the game down with the window.
+//
+// Two defences, because either alone is leaky. The handler refuses the close
+// signal, and the X is removed from the system menu so the signal is not raised
+// in the first place. F10 is the only way to put the console away.
+BOOL WINAPI ConsoleCtrlHandler(DWORD event) {
+    if (event == CTRL_CLOSE_EVENT || event == CTRL_C_EVENT || event == CTRL_BREAK_EVENT ||
+        event == CTRL_LOGOFF_EVENT || event == CTRL_SHUTDOWN_EVENT) {
+        log::Writef("console: refused console control event %lu -- the game keeps running",
+                    event);
+        return TRUE;   // handled; do not pass it on to the default terminator
+    }
+    return FALSE;
+}
+
+using GetSystemMenuFn = HMENU(__stdcall*)(HWND, BOOL);
+using DeleteMenuFn = BOOL(__stdcall*)(HMENU, UINT, UINT);
+using DrawMenuBarFn = BOOL(__stdcall*)(HWND);
+
+void DisableCloseButton() {
+    HWND hwnd = GetConsoleWindow();
+    if (!hwnd) return;
+    HMODULE user32 = GetModuleHandleA("user32.dll");
+    if (!user32) user32 = LoadLibraryA("user32.dll");
+    if (!user32) return;
+    auto getSystemMenu =
+        reinterpret_cast<GetSystemMenuFn>(GetProcAddress(user32, "GetSystemMenu"));
+    auto deleteMenu = reinterpret_cast<DeleteMenuFn>(GetProcAddress(user32, "DeleteMenu"));
+    auto drawMenuBar = reinterpret_cast<DrawMenuBarFn>(GetProcAddress(user32, "DrawMenuBar"));
+    if (!getSystemMenu || !deleteMenu) return;
+    HMENU menu = getSystemMenu(hwnd, FALSE);
+    if (!menu) return;
+    deleteMenu(menu, SC_CLOSE, MF_BYCOMMAND);
+    if (drawMenuBar) drawMenuBar(hwnd);
+    log::Write("console: close button disabled -- F10 closes it, the X would kill the game");
+}
 
 void ShowConsoleWindow(int how) {
     if (!g_showWindow) {
@@ -201,13 +248,12 @@ bool LoadCatalog() {
     if (*p) ++p;
 
     while (*p && g_rowCount < kMaxRows) {
-        const char* tag = nullptr;
         const char* appearance = nullptr;
         CatalogRow row;
         p = NextField(p, &row.kind);
         p = NextField(p, &row.resref);
         p = NextField(p, &row.name);
-        p = NextField(p, &tag);
+        p = NextField(p, &row.tag);
         p = NextField(p, &appearance);
         p = NextField(p, &row.model);
         p = NextField(p, &row.source);
@@ -216,6 +262,16 @@ bool LoadCatalog() {
     }
     log::Writef("console: catalogue loaded, %d objects from %s", g_rowCount, path);
     return g_rowCount > 0;
+}
+
+// Many creature rows carry no localized name at all -- c_drdsentry parses as
+// name "" with tag "DrdSentry" -- and a list of blank lines is what "only
+// twelve items" looked like. Something readable is always shown.
+const char* Readable(const CatalogRow& r) {
+    if (r.name && *r.name) return r.name;
+    if (r.tag && *r.tag) return r.tag;
+    if (r.resref && *r.resref) return r.resref;
+    return "(unnamed)";
 }
 
 bool ContainsNoCase(const char* hay, const char* needle) {
@@ -252,34 +308,59 @@ void CmdHelp() {
 // thousands of .utc blueprints and almost all of them are one specific scripted
 // NPC, so `npc <resref>` takes a name directly rather than pretending to browse.
 void CmdList(const char* filter) {
+    // `list plant 2` asks for the second page. The filter is everything before
+    // a trailing number, so names with digits in them still work.
+    char text[128] = "";
+    int page = 1;
+    if (filter && *filter) {
+        _snprintf(text, sizeof(text), "%s", filter);
+        text[sizeof(text) - 1] = '\0';
+        char* space = strrchr(text, ' ');
+        if (space && space[1] >= '1' && space[1] <= '9') {
+            page = atoi(space + 1);
+            *space = '\0';
+        }
+    }
+    if (page < 1) page = 1;
+
+    const int perPage = 40;
+    const int skip = (page - 1) * perPage;
+
     g_st.lastListedCount = 0;
-    int shown = 0;
+    g_st.lastPage = page;
     int matched = 0;
+    int shown = 0;
     for (int i = 0; i < g_rowCount; ++i) {
         const CatalogRow& r = g_rows[i];
-        if (!ContainsNoCase(r.name, filter) && !ContainsNoCase(r.resref, filter) &&
-            !ContainsNoCase(r.model, filter))
+        if (!ContainsNoCase(Readable(r), text) && !ContainsNoCase(r.resref, text) &&
+            !ContainsNoCase(r.model, text))
             continue;
         ++matched;
-        if (shown >= 40) continue;
-        if (r.resref && *r.resref && g_st.lastListedCount < 16)
-            g_st.lastListed[g_st.lastListedCount++] = i;
-        const int pick = (r.resref && *r.resref) ? g_st.lastListedCount : 0;
-        // The NAME leads, because that is the only column a person can read.
-        // "Footlocker" is useful; "g_i_footlker003" is not, so the file name is
-        // demoted to a parenthesis for anyone who wants to type it.
+        if (matched <= skip || shown >= perPage) continue;
+
+        int pick = 0;
+        if (r.resref && *r.resref && g_st.lastListedCount < State::kMaxPicks)
+            pick = ++g_st.lastListedCount;
         if (pick)
-            Out("  #%-2d %-34.34s %-10s (%s)", pick, r.name, r.kind, r.resref);
+            g_st.lastListed[pick - 1] = i;
+
+        if (pick)
+            Out("  %-3d %-36.36s %-9s (%s)", pick, Readable(r), r.kind, r.resref);
         else
-            Out("      %-34.34s %-10s (model %s, no blueprint)", r.name, r.kind, r.model);
+            Out("      %-36.36s %-9s (model only, cannot be placed)", Readable(r), r.kind);
         ++shown;
     }
+    g_st.lastMatched = matched;
+
     if (matched == 0) {
-        Out("  nothing matches \"%s\"", filter ? filter : "");
+        Out("  nothing matches \"%s\"", text);
         return;
     }
-    Out("  %d match%s%s. Place one with `spawn <resref>` or `spawn #<n>`.", matched,
-        matched == 1 ? "" : "es", matched > shown ? " (first 40 shown)" : "");
+    const int first = skip + 1;
+    const int last = skip + shown;
+    Out("  showing %d-%d of %d.  place one with `spawn <number>`", first, last, matched);
+    if (last < matched)
+        Out("  more: `list %s %d`", text[0] ? text : "", page + 1);
 }
 
 bool PlayerPlacement(const player::Refs& refs, float pos[3], float* facing) {
@@ -304,25 +385,49 @@ void CmdSpawn(const player::Refs& refs, const char* what, int type) {
         Out("  spawn what? Try `list plant` or `list soldier` first.");
         return;
     }
+
+    // A bare number means the nth row of the last list. Requiring the '#' made
+    // `spawn 1` ask the engine for a template literally called "1", which it
+    // dutifully queued and which of course produced nothing -- that is why
+    // placing appeared to do nothing at all.
+    const char* digits = (what[0] == '#') ? what + 1 : what;
+    bool numeric = *digits != 0;
+    for (const char* c = digits; *c; ++c)
+        if (*c < '0' || *c > '9') numeric = false;
+
     const char* resref = what;
-    if (what[0] == '#') {
-        const int pick = atoi(what + 1);
+    const char* label = what;
+    if (numeric) {
+        const int pick = atoi(digits);
         if (pick < 1 || pick > g_st.lastListedCount) {
-            Out("  #%d is not in the last list (%d entries)", pick, g_st.lastListedCount);
+            Out("  %d is not in the last list (it has %d numbered entries)", pick,
+                g_st.lastListedCount);
             return;
         }
         const CatalogRow& row = g_rows[g_st.lastListed[pick - 1]];
         resref = row.resref;
+        label = Readable(row);
         type = TypeOfRow(row);
-    }
-    else {
+    } else {
+        // A name typed in full is checked against the catalogue before it is
+        // queued, so an unknown one is refused here rather than failing
+        // silently inside the engine four seconds later.
+        const CatalogRow* found = nullptr;
         for (int i = 0; i < g_rowCount; ++i) {
             if (g_rows[i].resref && _stricmp(g_rows[i].resref, resref) == 0) {
-                type = TypeOfRow(g_rows[i]);
+                found = &g_rows[i];
                 break;
             }
         }
+        if (!found) {
+            Out("  no object called \"%s\" -- try `list %s` and spawn it by number",
+                resref, resref);
+            return;
+        }
+        label = Readable(*found);
+        type = TypeOfRow(*found);
     }
+
     float pos[3] = {0, 0, 0};
     float facing = 0.0f;
     if (!PlayerPlacement(refs, pos, &facing)) {
@@ -334,9 +439,8 @@ void CmdSpawn(const player::Refs& refs, const char* what, int type) {
         Out("  could not add it: the spawn table is full, or the spawner is off in the ini.");
         return;
     }
-    Out("  placing %s (%s) at %.2f %.2f %.2f -- give it a moment", resref,
-        type == kTypeCreature ? "npc, it will wander off" : "object", pos[0], pos[1],
-        pos[2]);
+    Out("  placing %s (%s) -- give it a moment", label,
+        type == kTypeCreature ? "npc, it will wander off" : "object");
     if (type == kTypePlaceable)
         Out("  if it is a container it now holds 1-3 of the game's 100 best items");
 }
@@ -534,7 +638,7 @@ bool RowInCategory(const CatalogRow& row, int category) {
     if (!c.needles[0] || !*c.needles[0]) return true;
     for (int i = 0; i < 4; ++i) {
         if (!c.needles[i]) break;
-        if (ContainsNoCase(row.name, c.needles[i]) ||
+        if (ContainsNoCase(Readable(row), c.needles[i]) ||
             ContainsNoCase(row.resref, c.needles[i]) ||
             ContainsNoCase(row.model, c.needles[i]))
             return true;
@@ -617,7 +721,7 @@ void DrawOverlay() {
         if (index < 0) break;
         const CatalogRow& row = g_rows[index];
         _snprintf(g_render, sizeof(g_render), "%s %-30.30s %-14.14s %s",
-                  match == g_selected ? ">" : " ", row.name,
+                  match == g_selected ? ">" : " ", Readable(row),
                   (row.resref && *row.resref) ? row.resref : "(model only)", row.model);
         g_render[sizeof(g_render) - 1] = '\0';
         post(g_render, kOverlayX, y, kOverlaySize);
@@ -646,7 +750,7 @@ void PlaceSelected(const player::Refs& refs) {
     if (index < 0) return;
     const CatalogRow& row = g_rows[index];
     if (!row.resref || !*row.resref) {
-        SetStatus("%s is a model with no blueprint -- cannot be placed", row.name);
+        SetStatus("%s is a model with no blueprint -- cannot be placed", Readable(row));
         return;
     }
     float pos[3] = {0, 0, 0};
@@ -714,6 +818,10 @@ void OpenWindow() {
         g_st.consoleOwned = true;
     }
     SetConsoleTitleA("K2SE object console");
+    // Both of these must happen before the window is ever shown, or the first
+    // click on the X takes the game with it.
+    SetConsoleCtrlHandler(&ConsoleCtrlHandler, TRUE);
+    DisableCloseButton();
     // freopen is avoided on purpose: the log module explains why this DLL keeps
     // clear of the CRT's stdio, and WriteConsoleA/ReadConsoleA need no plumbing.
     g_st.visible = true;
@@ -797,7 +905,11 @@ void Remove() {
         g_st.thread = nullptr;
     }
     if (g_st.consoleOwned) {
-        FreeConsole();
+        // Deliberately NOT FreeConsole(): tearing the console down under a
+        // running game is the same class of problem as the close button. The
+        // handler is removed and the window hidden; the OS reclaims it at exit.
+        SetConsoleCtrlHandler(&ConsoleCtrlHandler, FALSE);
+        ShowConsoleWindow(SW_HIDE);
         g_st.consoleOwned = false;
     }
     if (g_catalog) {
