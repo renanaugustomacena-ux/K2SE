@@ -54,6 +54,39 @@ bool Init() {
     return ok;
 }
 
+// Edge state for the printable keys, kept apart from the tracked-key table so
+// opening the console cannot exhaust kMaxKeys.
+bool g_typedPrev[256];
+
+int PollTypedChar() {
+    if (!g_getAsyncKeyState || !g_focused) return 0;
+
+    const bool shift = (g_getAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
+    int typed = 0;
+    for (int vk = 0; vk < 256; ++vk) {
+        const bool printable = (vk >= 'A' && vk <= 'Z') || (vk >= '0' && vk <= '9') ||
+                               vk == VK_SPACE || vk == VK_BACK || vk == VK_RETURN ||
+                               vk == VK_OEM_MINUS || vk == VK_OEM_PERIOD ||
+                               vk == VK_OEM_1 || vk == VK_OEM_2;
+        if (!printable) continue;
+        const bool down = (g_getAsyncKeyState(vk) & 0x8000) != 0;
+        const bool was = g_typedPrev[vk];
+        g_typedPrev[vk] = down;
+        if (!down || was || typed) continue;   // only the first new press per frame
+
+        if (vk == VK_BACK) typed = 8;
+        else if (vk == VK_RETURN) typed = 13;
+        else if (vk == VK_SPACE) typed = ' ';
+        else if (vk == VK_OEM_MINUS) typed = shift ? '_' : '-';
+        else if (vk == VK_OEM_PERIOD) typed = '.';
+        else if (vk == VK_OEM_1) typed = shift ? ':' : ';';
+        else if (vk == VK_OEM_2) typed = '/';
+        else if (vk >= '0' && vk <= '9') typed = vk;
+        else typed = shift ? vk : (vk - 'A' + 'a');   // resrefs are lower case
+    }
+    return typed;
+}
+
 void Track(int vk) {
     if (vk <= 0 || vk >= 256) return;
     if (Slot(vk) >= 0 || g_count >= kMaxKeys) return;

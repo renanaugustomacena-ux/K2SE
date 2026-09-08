@@ -39,11 +39,18 @@ char* Trim(char* s) {
     return s;
 }
 
-// Strip an inline comment (`; ...` or `# ...`), but only when the marker is
-// preceded by whitespace, so a value like "C:\path#1" survives.
+// Strip an inline comment (`; ...` or `# ...`).
+//
+// This used to require whitespace before the marker, so that a value like
+// "C:\path#1" would survive. That cost a whole play session: an ini written as
+// `Probe=1; comment` -- no space -- parsed as the value "1; comment", which is
+// not "1", so the feature stayed off while the file plainly said it was on.
+// No K2SE value is a path or contains ';' or '#', and a setting that silently
+// means the opposite of what it reads is far worse than a hypothetical path,
+// so the marker now ends the value wherever it appears.
 void StripComment(char* s) {
     for (char* p = s; *p; ++p) {
-        if ((*p == ';' || *p == '#') && (p == s || p[-1] == ' ' || p[-1] == '\t')) {
+        if (*p == ';' || *p == '#') {
             *p = '\0';
             return;
         }

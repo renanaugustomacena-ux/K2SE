@@ -38,5 +38,12 @@ bool IsDown(int vk);        // held right now (as of BeginFrame)
 bool Pressed(int vk);       // went down this frame
 bool Released(int vk);      // went up this frame
 
+// Text entry for the in-game console. Track() is capped at kMaxKeys because the
+// movement features only ever bind a handful; typing needs the whole keyboard,
+// so this keeps its own edge state over the printable range and is only sampled
+// while the console is actually open. Returns the ASCII character typed this
+// frame, 8 for backspace, 13 for enter, or 0 for nothing.
+int PollTypedChar();
+
 }  // namespace input
 }  // namespace k2se

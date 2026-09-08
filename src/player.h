@@ -47,6 +47,12 @@ void* ClientCreatureById(uint32_t id);
 
 // --- guarded field access (all return false if the read faults) ------------
 bool ControllerEnabled(void* controller, bool* out);
+
+// The console writes this while it is open so that typing `list plant` does not
+// also walk the player around. The engine itself clears the same flag during
+// dialogue and cutscenes, so this is the state it already knows how to be in;
+// it is re-asserted every frame and restored when the console closes.
+bool SetControllerEnabled(void* controller, bool on);
 bool ControllerWalking(void* controller, bool* out);
 bool ControllerAxes(void* controller, float* upDown, float* leftRight);
 

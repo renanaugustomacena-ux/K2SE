@@ -54,6 +54,7 @@ struct Cfg {
     bool enabled = false;
     int keyToggle = VK_F10;
     bool openAtStart = false;
+    bool inGame = true;    // draw over the game rather than in a separate window
 };
 Cfg g_cfg;
 
@@ -93,6 +94,36 @@ void ShowConsoleWindow(int how) {
     if (hwnd) g_showWindow(hwnd, how);
 }
 
+// --- the in-game overlay ------------------------------------------------------
+// AurPostString draws one line for the frame it is called in, so an overlay is
+// just every line re-posted every frame. x = 5 and y grows downward; the other
+// modules put their one-line banners at y 55..115, so the console takes the
+// block below them.
+constexpr uint32_t kAurPostString = 0x00474C00;
+using AurPostStringFn = void(__cdecl*)(const char*, int, int, float);
+
+constexpr int kScrollback = 14;
+constexpr int kOverlayX = 5;
+constexpr int kOverlayTop = 140;
+constexpr int kOverlayStep = 16;
+constexpr float kOverlaySize = 0.55f;
+
+char g_scroll[kScrollback][160];
+int g_scrollCount = 0;
+char g_input[160] = "";
+int g_inputLen = 0;
+char g_render[192];
+
+void PushLine(const char* text) {
+    if (g_scrollCount == kScrollback) {
+        for (int i = 1; i < kScrollback; ++i) memcpy(g_scroll[i - 1], g_scroll[i], 160);
+        --g_scrollCount;
+    }
+    _snprintf(g_scroll[g_scrollCount], 160, "%s", text ? text : "");
+    g_scroll[g_scrollCount][159] = '\0';
+    ++g_scrollCount;
+}
+
 // --- output -------------------------------------------------------------------
 void Out(const char* fmt, ...) {
     char line[1024];
@@ -101,6 +132,11 @@ void Out(const char* fmt, ...) {
     _vsnprintf(line, sizeof(line), fmt, args);
     va_end(args);
     line[sizeof(line) - 1] = '\0';
+
+    if (g_cfg.inGame) {
+        PushLine(line);
+        return;
+    }
     DWORD written = 0;
     HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
     if (h && h != INVALID_HANDLE_VALUE) {
@@ -428,6 +464,66 @@ void Drain(const player::Refs& refs) {
     }
 }
 
+// --- in-game mode -------------------------------------------------------------
+void OpenOverlay() {
+    if (g_st.visible) return;
+    g_st.visible = true;
+    g_scrollCount = 0;
+    g_inputLen = 0;
+    g_input[0] = '\0';
+    Out("K2SE console -- %d objects. Type and press Enter. F10 closes.", g_rowCount);
+    Out("try:  list plant     spawn #1     here     anim 2     help");
+    if (spawner::Status() == 0)
+        Out("WARNING: [Spawner] is off in the ini, so nothing can be placed.");
+    log::Write("console: overlay opened");
+}
+
+void CloseOverlay(void* controller) {
+    if (!g_st.visible) return;
+    g_st.visible = false;
+    // Hand the player back before leaving, or the character stays frozen.
+    if (controller) player::SetControllerEnabled(controller, true);
+    log::Write("console: overlay closed");
+}
+
+// Every line, re-posted every frame. AurPostString shows a string for the frame
+// it is posted in whatever its life argument claims -- established in session S1
+// and the reason the spawner re-posts its banner too.
+void DrawOverlay() {
+    auto post = reinterpret_cast<AurPostStringFn>(kAurPostString);
+    int y = kOverlayTop;
+    for (int i = 0; i < g_scrollCount; ++i) {
+        post(g_scroll[i], kOverlayX, y, kOverlaySize);
+        y += kOverlayStep;
+    }
+    _snprintf(g_render, sizeof(g_render), "k2se> %s_", g_input);
+    g_render[sizeof(g_render) - 1] = '\0';
+    post(g_render, kOverlayX, y + kOverlayStep, kOverlaySize);
+}
+
+// Returns the completed line when Enter was pressed, otherwise null.
+const char* CollectTyping() {
+    const int typed = input::PollTypedChar();
+    if (!typed) return nullptr;
+    if (typed == 13) {
+        if (g_inputLen == 0) return nullptr;
+        static char completed[160];
+        memcpy(completed, g_input, sizeof(completed));
+        g_inputLen = 0;
+        g_input[0] = '\0';
+        return completed;
+    }
+    if (typed == 8) {
+        if (g_inputLen > 0) g_input[--g_inputLen] = '\0';
+        return nullptr;
+    }
+    if (g_inputLen < static_cast<int>(sizeof(g_input)) - 1) {
+        g_input[g_inputLen++] = static_cast<char>(typed);
+        g_input[g_inputLen] = '\0';
+    }
+    return nullptr;
+}
+
 void OpenWindow() {
     if (g_st.visible) return;
     if (!GetConsoleWindow()) {
@@ -490,8 +586,15 @@ bool Install() {
     LoadCatalog();
     input::Track(g_cfg.keyToggle);
     g_st.installed = true;
-    log::Writef("console: installed; toggle with %s", config::KeyName(g_cfg.keyToggle));
-    if (g_cfg.openAtStart) OpenWindow();
+    log::Writef("console: installed; toggle with %s (%s)", config::KeyName(g_cfg.keyToggle),
+                g_cfg.inGame ? "drawn over the game" : "separate window");
+    if (g_cfg.openAtStart) {
+        if (g_cfg.inGame) {
+            OpenOverlay();
+        } else {
+            OpenWindow();
+        }
+    }
     return true;
 }
 
@@ -533,6 +636,14 @@ int Status() {
 
 void Toggle() {
     if (!g_st.installed) return;
+    if (g_cfg.inGame) {
+        if (g_st.visible) {
+            CloseOverlay(nullptr);
+        } else {
+            OpenOverlay();
+        }
+        return;
+    }
     if (g_st.visible) {
         HideWindow();
     } else {
@@ -545,6 +656,35 @@ bool Visible() { return g_st.visible; }
 void OnGameplayFrame(const player::Refs& refs, float dt) {
     if (!g_st.installed) return;
     (void)dt;
+
+    if (g_cfg.inGame) {
+        if (input::Pressed(g_cfg.keyToggle)) {
+            if (g_st.visible) {
+                CloseOverlay(refs.controller);
+            } else {
+                OpenOverlay();
+            }
+        }
+        if (!g_st.visible) return;
+        // Typing `list plant` would otherwise also walk the player around,
+        // because the engine reads the keyboard for itself. Clearing the
+        // controller's enabled flag is the state the game already puts itself
+        // in during dialogue, and it is re-asserted every frame because the
+        // engine writes that field too.
+        player::SetControllerEnabled(refs.controller, false);
+        if (const char* line = CollectTyping()) {
+            char buffer[160];
+            _snprintf(buffer, sizeof(buffer), "%s", line);
+            buffer[sizeof(buffer) - 1] = '\0';
+            PushLine("");
+            _snprintf(g_render, sizeof(g_render), "k2se> %s", buffer);
+            PushLine(g_render);
+            Execute(refs, buffer);
+        }
+        DrawOverlay();
+        return;
+    }
+
     if (input::Pressed(g_cfg.keyToggle)) Toggle();
     if (g_st.visible) Drain(refs);
 }

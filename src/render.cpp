@@ -35,6 +35,7 @@ constexpr uint32_t GL_ALL_ATTRIB_BITS = 0x000FFFFF;
 constexpr uint32_t GL_FRAGMENT_PROGRAM_ARB = 0x8804;
 constexpr uint32_t GL_PROGRAM_FORMAT_ASCII_ARB = 0x8875;
 constexpr uint32_t GL_PROGRAM_ERROR_POSITION_ARB = 0x864B;
+constexpr uint32_t GL_PROGRAM_ERROR_STRING_ARB = 0x8874;
 
 // The engine's own GDI32 import slot for SwapBuffers -- the frame boundary.
 // Verified by name against the import directory, as glhook.cpp does.
@@ -66,6 +67,7 @@ using ProgramStringFn = void(__stdcall*)(uint32_t target, uint32_t fmt, int len,
 using ProgramEnvFn = void(__stdcall*)(uint32_t target, uint32_t index, float a, float b,
                                       float c, float d);
 using WglGetProcAddressFn = void*(__stdcall*)(const char* name);
+using GetStringFn = const char*(__stdcall*)(uint32_t name);
 
 struct Gl {
     SwapBuffersFn swapBuffers = nullptr;
@@ -91,6 +93,7 @@ struct Gl {
     VoidFn popAttrib = nullptr;
     ViewportFn viewport = nullptr;
     WglGetProcAddressFn wglGetProcAddress = nullptr;
+    GetStringFn getString = nullptr;
     // ARB_fragment_program, through wglGetProcAddress.
     GenProgramsFn genPrograms = nullptr;
     BindProgramFn bindProgram = nullptr;
@@ -147,26 +150,32 @@ const char kPostProgram[] =
     "PARAM texel = program.env[2];\n"
     "PARAM luma  = {0.2126, 0.7152, 0.0722, 0.0};\n"
     "PARAM half  = {0.5, 0.5, 0.5, 1.0};\n"
-    "TEMP c, n, acc, l, tc;\n"
+    "PARAM five  = {5.0, 5.0, 5.0, 1.0};\n"
+    "PARAM axisx = {1.0, 0.0, 0.0, 0.0};\n"
+    "PARAM axisy = {0.0, 1.0, 0.0, 0.0};\n"
+    "TEMP c, n, acc, l, tc, stepx, stepy, sharp;\n"
     "TEX c, fragment.texcoord[0], texture[0], 2D;\n"
-    // Sharpen: centre*(1+4a) - 4 neighbours*a. With a = 0 this is exactly the
-    // centre sample, so the sharpen path costs nothing visually when disabled.
-    "ADD tc, fragment.texcoord[0], {1.0, 0.0, 0.0, 0.0} * texel.xxxx;\n"
+    // ARB assembly has no expressions: an operand is a register, a constant or
+    // a swizzle of one, and nothing else. Writing `{1,0,0,0} * texel.xxxx`
+    // inline is GLSL, and the driver rejected the whole program for it. The
+    // step vectors are therefore built with real MUL instructions first.
+    "MUL stepx, texel, axisx;\n"
+    "MUL stepy, texel, axisy;\n"
+    // Sharpen: centre*5 - the four neighbours, blended back by the amount.
+    "ADD tc, fragment.texcoord[0], stepx;\n"
     "TEX n, tc, texture[0], 2D;\n"
     "MOV acc, n;\n"
-    "SUB tc, fragment.texcoord[0], {1.0, 0.0, 0.0, 0.0} * texel.xxxx;\n"
+    "SUB tc, fragment.texcoord[0], stepx;\n"
     "TEX n, tc, texture[0], 2D;\n"
     "ADD acc, acc, n;\n"
-    "ADD tc, fragment.texcoord[0], {0.0, 1.0, 0.0, 0.0} * texel.yyyy;\n"
+    "ADD tc, fragment.texcoord[0], stepy;\n"
     "TEX n, tc, texture[0], 2D;\n"
     "ADD acc, acc, n;\n"
-    "SUB tc, fragment.texcoord[0], {0.0, 1.0, 0.0, 0.0} * texel.yyyy;\n"
+    "SUB tc, fragment.texcoord[0], stepy;\n"
     "TEX n, tc, texture[0], 2D;\n"
     "ADD acc, acc, n;\n"
-    "MAD c, c, {5.0, 5.0, 5.0, 1.0}, -acc;\n"   // centre*5 - sum(4 neighbours)
-    "TEMP sharp;\n"
-    "TEX sharp, fragment.texcoord[0], texture[0], 2D;\n"
-    "LRP c, tint.wwww, c, sharp;\n"             // blend by the sharpen amount
+    "MAD sharp, c, five, -acc;\n"
+    "LRP c, tint.wwww, sharp, c;\n"   // amount 0 leaves the centre sample intact
     // Grade.
     "DP3 l, c, luma;\n"
     "LRP c.rgb, grade.zzzz, c, l;\n"            // saturation
@@ -218,6 +227,7 @@ bool ResolveCore() {
     ok &= Resolve(gl, "glPopAttrib", &g_gl.popAttrib);
     ok &= Resolve(gl, "glViewport", &g_gl.viewport);
     ok &= Resolve(gl, "wglGetProcAddress", &g_gl.wglGetProcAddress);
+    ok &= Resolve(gl, "glGetString", &g_gl.getString);
     return ok;
 }
 
@@ -257,8 +267,27 @@ bool EnsureResources(int w, int h) {
         int errorPos = -1;
         g_gl.getIntegerv(GL_PROGRAM_ERROR_POSITION_ARB, &errorPos);
         if (errorPos != -1) {
-            log::Writef("render: the post-process program was REJECTED at character %d "
-                        "-- post-processing stays off", errorPos);
+            // A character offset alone cost a whole play session: it said the
+            // program was wrong but not why. The driver spells it out in
+            // GL_PROGRAM_ERROR_STRING_ARB, and the offending line is worth
+            // printing next to it.
+            const char* why = g_gl.getString ? g_gl.getString(GL_PROGRAM_ERROR_STRING_ARB)
+                                             : nullptr;
+            int lineStart = errorPos;
+            while (lineStart > 0 && kPostProgram[lineStart - 1] != '\n') --lineStart;
+            int lineEnd = errorPos;
+            const int total = static_cast<int>(sizeof(kPostProgram) - 1);
+            while (lineEnd < total && kPostProgram[lineEnd] != '\n') ++lineEnd;
+            char snippet[160];
+            int length = lineEnd - lineStart;
+            if (length > static_cast<int>(sizeof(snippet)) - 1)
+                length = static_cast<int>(sizeof(snippet)) - 1;
+            if (length < 0) length = 0;
+            memcpy(snippet, kPostProgram + lineStart, static_cast<size_t>(length));
+            snippet[length] = '\0';
+            log::Writef("render: the post-process program was REJECTED at character %d: %s",
+                        errorPos, why ? why : "(driver gave no message)");
+            log::Writef("render:   offending line: %s", snippet);
             g_st.postFailed = true;
             return false;
         }
