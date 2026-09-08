@@ -51,14 +51,10 @@ struct Cfg {
         {"game", 0, 0, 0, 0, 0},
         {"near", 2.2f, 0.6f, 83.0f, 60.0f, 0.0f},
         {"far", 5.5f, 1.4f, 80.0f, 52.0f, 0.0f},
-        // distance 2.0 / height 0.0 is deliberate and is NOT where the camera
-        // ends up: fpcam.cpp overrides the position with the measured eye point.
-        // What these two values buy is the DIRECTION. reone shows the engine
-        // aims from the style position at the character's feet, so a camera
-        // 5 cm behind and 1.67 m up was aiming almost straight down -- which is
-        // what first person actually looked like. At the same height as the
-        // feet and two metres back, that aim is level.
-        {"first person", 2.0f, 0.0f, 90.0f, 75.0f, 0.35f},
+        // Distance 0: any real distance is what made this read as "third person
+        // extra close". Height is a fallback only -- fpcam.cpp supplies the
+        // measured eye height of the character on screen, minus HeightDrop.
+        {"first person", 0.0f, 1.55f, 90.0f, 75.0f, 0.28f},
     };
 };
 Cfg g_cfg;
@@ -133,11 +129,6 @@ void WriteStyle(float distance, float height, float pitch) {
 // Every other view keeps the configured value.
 float EffectiveHeight(int view, const Preset& p) {
     if (view != kViewFirstPerson) return p.height;
-    // When fpcam is placing the camera itself, the style is only steering the
-    // direction the engine aims, so its height must stay as configured. Writing
-    // the eye height here instead was the old behaviour: it moved the camera by
-    // two centimetres and left the view aimed at the floor.
-    if (fpcam::CameraHookActive()) return p.height;
     float forward = 0.0f;
     float height = 0.0f;
     if (fpcam::EyeOffset(&forward, &height) && height > 0.0f) return height;

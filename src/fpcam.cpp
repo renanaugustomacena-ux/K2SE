@@ -40,16 +40,10 @@ struct Cfg {
     float forwardOffset = 0.0f;
     float heightOverride = 0.0f;
     bool probe = false;
-    // The engine derives the view direction from the chase camera's own
-    // geometry. With the camera five centimetres behind the character and 1.67 m
-    // up, that direction points almost straight down at the feet -- which is
-    // what "first person" looked like. Two independent remedies, because which
-    // one is needed depends on whether the engine computes the direction before
-    // or after the position it is handed, and that is not established:
-    //   - the preset now uses distance 2.0 / height 0.0, so the direction the
-    //     engine computes is horizontal, and only the position is overridden;
-    //   - LockDirection forces the direction to the character's facing outright.
-    bool lockDirection = false;
+    // Eye level exactly was "too high off the ground". The camera sits this far
+    // below the measured eye point; the measurement stays the anchor, it is just
+    // not treated as sacred.
+    float heightDrop = 0.10f;
 };
 Cfg g_cfg;
 
@@ -235,248 +229,18 @@ void Probe(void* appearance) {
     }
 }
 
-// --- putting the camera at the eyes -------------------------------------------
+// --- where the first-person camera sits ---------------------------------------
 //
-// The measured eye height alone changed nothing visible, and it was never going
-// to. reone's ThirdPersonCamera spells out what the style fields mean:
+// An earlier build hooked Camera vtable slots 29 and 30 (the two methods taking
+// three floats) hoping one carried the position. The log settled it: slot 29 was
+// called four times, slot 30 never, and both only ever received (0,0,0). They are
+// initialisation, not the per-frame position, so that hook is gone.
 //
-//     cameraPos  = targetPosition + distance * dir
-//     cameraPos.z += height
-//
-// so `height` really is absolute height above the character's feet, and 1.670
-// instead of 1.650 moves the camera two centimetres. Adjusting a chase camera's
-// parameters cannot produce a first-person view; the camera has to be placed at
-// the eye point instead.
-//
-// Camera (vtable 0x0098C45C) has two methods taking three floats -- slot 29
-// (+0x74) and slot 30 (+0x78), both `ret 12`. One is the position, the other a
-// direction. Rather than reverse two SEH-wrapped forwarding chains to find out
-// which, they are told apart at runtime by their magnitude: a direction is a
-// unit vector, a world position in KOTOR is metres from the area origin and
-// essentially never has length near 1. The discriminator is logged the first
-// time it fires, so the guess is visible and checkable rather than assumed.
-//
-// Only the position is replaced. The direction is left exactly as the engine
-// computed it, so looking around keeps working through the game's own camera
-// controls -- this changes where the camera IS, not where it points.
-constexpr uint32_t kCameraVtable = 0x0098C45C;
-constexpr uint32_t kSlotVecA = kCameraVtable + 29 * 4;   // +0x74
-constexpr uint32_t kSlotVecB = kCameraVtable + 30 * 4;   // +0x78
-
-using CameraVec3Fn = void(__fastcall*)(void* self, void* edx, float x, float y, float z);
-
-CameraVec3Fn g_origVecA = nullptr;
-CameraVec3Fn g_origVecB = nullptr;
-bool g_cameraHooked = false;
-
-// The eye point in world space, recomputed each gameplay frame.
-float g_worldEye[3] = {0, 0, 0};
-float g_worldFacing[3] = {0, 1, 0};
-bool g_worldEyeValid = false;
-uint32_t g_overrides = 0;
-int g_positionSlot = -1;   // 29 or 30, decided at runtime by magnitude
-// GUI cameras share this vtable, and moving one would wreck a menu. The scene
-// camera is identified by the only thing that distinguishes it from here: its
-// position tracks the player. The first instance seen within a few metres of
-// the character while first person is active is locked in, and no other
-// instance is ever touched.
-void* g_sceneCamera = nullptr;
-
-// What each slot was last handed, and how often. If the position is never
-// identified this is the evidence that says why, without needing another
-// session to find out.
-float g_lastSeen[2][3] = {{0, 0, 0}, {0, 0, 0}};
-uint32_t g_seenCount[2] = {0, 0};
-bool g_reportedBlind = false;
-
-void RecordSeen(int slot, float x, float y, float z) {
-    const int i = (slot == 29) ? 0 : 1;
-    g_lastSeen[i][0] = x;
-    g_lastSeen[i][1] = y;
-    g_lastSeen[i][2] = z;
-    ++g_seenCount[i];
-}
-
-void ReportBlind() {
-    if (g_reportedBlind) return;
-    g_reportedBlind = true;
-    log::Writef("fpcam: still no position slot after 120 first-person frames. "
-                "slot29 x%u last (%d %d %d) mm | slot30 x%u last (%d %d %d) mm | "
-                "eye (%d %d %d) mm",
-                g_seenCount[0], static_cast<int>(g_lastSeen[0][0] * 1000.0f),
-                static_cast<int>(g_lastSeen[0][1] * 1000.0f),
-                static_cast<int>(g_lastSeen[0][2] * 1000.0f), g_seenCount[1],
-                static_cast<int>(g_lastSeen[1][0] * 1000.0f),
-                static_cast<int>(g_lastSeen[1][1] * 1000.0f),
-                static_cast<int>(g_lastSeen[1][2] * 1000.0f),
-                static_cast<int>(g_worldEye[0] * 1000.0f),
-                static_cast<int>(g_worldEye[1] * 1000.0f),
-                static_cast<int>(g_worldEye[2] * 1000.0f));
-}
-
-bool NearPlayer(float x, float y, float z);
-
-bool LooksLikeDirection(float x, float y, float z) {
-    const float lengthSquared = x * x + y * y + z * z;
-    return lengthSquared > 0.64f && lengthSquared < 1.44f;   // |v| roughly 0.8..1.2
-}
-
-void NoteSlot(int slot, float x, float y, float z) {
-    if (g_positionSlot != -1) return;
-    // "Not a unit vector" is too weak on its own: the first run decided from a
-    // (0,0,0) call, which is neither a direction nor a position but an object
-    // being initialised. Require a real world position instead -- non-zero, and
-    // close to where the player actually is, which is only knowable once the
-    // eye point has been computed for this frame.
-    if (!g_worldEyeValid) return;
-    if (LooksLikeDirection(x, y, z)) return;
-    const float lengthSquared = x * x + y * y + z * z;
-    if (lengthSquared < 0.0001f) return;
-    if (!NearPlayer(x, y, z)) return;
-    g_positionSlot = slot;
-    log::Writef("fpcam: camera slot %d carries the position (%d %d %d mm); "
-                "slot %d is the direction", slot, static_cast<int>(x * 1000.0f),
-                static_cast<int>(y * 1000.0f), static_cast<int>(z * 1000.0f),
-                slot == 29 ? 30 : 29);
-}
-
-bool NearPlayer(float x, float y, float z) {
-    const float dx = x - g_worldEye[0];
-    const float dy = y - g_worldEye[1];
-    const float dz = z - g_worldEye[2];
-    return (dx * dx + dy * dy + dz * dz) < 25.0f;   // within 5 m
-}
-
-bool WantOverride(void* self, float x, float y, float z) {
-    if (!g_st.installed || !g_cfg.enabled || !g_worldEyeValid) return false;
-    if (camera::GetView() != camera::kViewFirstPerson) return false;
-    if (g_sceneCamera == nullptr) {
-        if (!NearPlayer(x, y, z)) return false;   // not the gameplay camera
-        g_sceneCamera = self;
-        log::Writef("fpcam: scene camera locked to 0x%08X", reinterpret_cast<uint32_t>(self));
-    }
-    return self == g_sceneCamera;
-}
-
-
-// The slot that is not the position carries the direction. Replacing it with the
-// character's facing gives a level first-person view; it costs the ability to
-// look up and down, which is why it is opt-in.
-bool OverrideDirection(int slot, void* self, float* x, float* y, float* z) {
-    if (!g_cfg.lockDirection || g_positionSlot == -1 || slot == g_positionSlot) return false;
-    if (!g_st.installed || !g_cfg.enabled || !g_worldEyeValid) return false;
-    if (camera::GetView() != camera::kViewFirstPerson) return false;
-    if (g_sceneCamera == nullptr || self != g_sceneCamera) return false;
-    *x = g_worldFacing[0];
-    *y = g_worldFacing[1];
-    *z = g_worldFacing[2];
-    return true;
-}
-
-void __fastcall HookVecA(void* self, void* edx, float x, float y, float z) {
-    RecordSeen(29, x, y, z);
-    NoteSlot(29, x, y, z);
-    if (g_positionSlot == 29 && WantOverride(self, x, y, z)) {
-        if (!g_overrides++)
-            log::Writef("fpcam: first-person camera moved from (%d %d %d) to the eye point "
-                        "(%d %d %d) mm", static_cast<int>(x * 1000.0f),
-                        static_cast<int>(y * 1000.0f), static_cast<int>(z * 1000.0f),
-                        static_cast<int>(g_worldEye[0] * 1000.0f),
-                        static_cast<int>(g_worldEye[1] * 1000.0f),
-                        static_cast<int>(g_worldEye[2] * 1000.0f));
-        x = g_worldEye[0];
-        y = g_worldEye[1];
-        z = g_worldEye[2];
-    }
-    OverrideDirection(29, self, &x, &y, &z);
-    if (g_origVecA) g_origVecA(self, edx, x, y, z);
-}
-
-void __fastcall HookVecB(void* self, void* edx, float x, float y, float z) {
-    RecordSeen(30, x, y, z);
-    NoteSlot(30, x, y, z);
-    if (g_positionSlot == 30 && WantOverride(self, x, y, z)) {
-        if (!g_overrides++)
-            log::Writef("fpcam: first-person camera moved from (%d %d %d) to the eye point "
-                        "(%d %d %d) mm", static_cast<int>(x * 1000.0f),
-                        static_cast<int>(y * 1000.0f), static_cast<int>(z * 1000.0f),
-                        static_cast<int>(g_worldEye[0] * 1000.0f),
-                        static_cast<int>(g_worldEye[1] * 1000.0f),
-                        static_cast<int>(g_worldEye[2] * 1000.0f));
-        x = g_worldEye[0];
-        y = g_worldEye[1];
-        z = g_worldEye[2];
-    }
-    OverrideDirection(30, self, &x, &y, &z);
-    if (g_origVecB) g_origVecB(self, edx, x, y, z);
-}
-
-bool SwapSlot(uint32_t slotVa, void* replacement, CameraVec3Fn* original) {
-    auto* slot = reinterpret_cast<CameraVec3Fn*>(slotVa);
-    CameraVec3Fn current = nullptr;
-    __try {
-        current = *slot;
-    } __except (EXCEPTION_EXECUTE_HANDLER) {
-        log::Writef("fpcam: camera vtable slot 0x%08X unreadable -> refused", slotVa);
-        return false;
-    }
-    if (!player::LooksLikePointer(reinterpret_cast<void*>(current))) {
-        log::Writef("fpcam: camera vtable slot 0x%08X holds 0x%08X, not a function -> refused",
-                    slotVa, reinterpret_cast<uint32_t>(current));
-        return false;
-    }
-    DWORD old = 0;
-    if (!VirtualProtect(slot, sizeof(void*), PAGE_READWRITE, &old)) {
-        log::Writef("fpcam: VirtualProtect failed on 0x%08X (%lu)", slotVa, GetLastError());
-        return false;
-    }
-    *original = current;
-    *slot = reinterpret_cast<CameraVec3Fn>(replacement);
-    DWORD restored = 0;
-    VirtualProtect(slot, sizeof(void*), old, &restored);
-    log::Writef("fpcam: camera vtable [0x%08X] 0x%08X -> hook", slotVa,
-                reinterpret_cast<uint32_t>(current));
-    return true;
-}
-
-void RestoreSlot(uint32_t slotVa, CameraVec3Fn original) {
-    if (!original) return;
-    auto* slot = reinterpret_cast<CameraVec3Fn*>(slotVa);
-    DWORD old = 0;
-    if (VirtualProtect(slot, sizeof(void*), PAGE_READWRITE, &old)) {
-        *slot = original;
-        DWORD restored = 0;
-        VirtualProtect(slot, sizeof(void*), old, &restored);
-    }
-}
-
-// Model space -> world space. The measured eye point is (0, forward, height)
-// relative to the model origin, and the character's facing rotates the forward
-// part into the world.
-void UpdateWorldEye(void* serverCreature, float forward, float height) {
-    float pos[3];
-    float ori[3];
-    g_worldEyeValid = false;
-    if (!player::ServerPosition(serverCreature, pos) ||
-        !player::ServerOrientation(serverCreature, ori))
-        return;
-    // Orientation is a facing vector in the XY plane; normalise it so a stale or
-    // zero-length one cannot throw the camera across the map.
-    const float length = sqrtf(ori[0] * ori[0] + ori[1] * ori[1]);
-    float fx = 0.0f;
-    float fy = 1.0f;
-    if (length > 0.001f) {
-        fx = ori[0] / length;
-        fy = ori[1] / length;
-    }
-    g_worldEye[0] = pos[0] + fx * forward;
-    g_worldEye[1] = pos[1] + fy * forward;
-    g_worldEye[2] = pos[2] + height;
-    g_worldFacing[0] = fx;
-    g_worldFacing[1] = fy;
-    g_worldFacing[2] = 0.0f;   // level: first person should not stare at the floor
-    g_worldEyeValid = true;
-}
+// What works is the chase camera's own style height, which reone shows is
+// absolute height above the character's feet. The camera therefore sits at the
+// eye height this module measures, minus HeightDrop -- because eye level exactly
+// felt too high off the ground, and a first-person camera reads better slightly
+// below the eyes than dead level with them.
 
 // --- stabilisation ------------------------------------------------------------
 // Split the raw anchor into a slow mean and the oscillation around it, then
@@ -518,7 +282,9 @@ void ReadConfig() {
     g_cfg.forwardOffset = config::GetFloat("FirstPerson", "ForwardOffset", 0.0f);
     g_cfg.heightOverride = config::GetFloat("FirstPerson", "EyeHeightOverride", 0.0f);
     g_cfg.probe = config::GetBool("FirstPerson", "Probe", false);
-    g_cfg.lockDirection = config::GetBool("FirstPerson", "LockDirection", false);
+    g_cfg.heightDrop = config::GetFloat("FirstPerson", "HeightDrop", 0.10f);
+    if (g_cfg.heightDrop < 0.0f) g_cfg.heightDrop = 0.0f;
+    if (g_cfg.heightDrop > 0.6f) g_cfg.heightDrop = 0.6f;
 
     if (g_cfg.anchor < kAnchorEyes || g_cfg.anchor > kAnchorStatic) g_cfg.anchor = kAnchorEyes;
     if (g_cfg.bobScale < 0.0f) g_cfg.bobScale = 0.0f;
@@ -537,7 +303,8 @@ void ReadConfig() {
                 static_cast<int>(g_cfg.maxJump * 1000.0f),
                 static_cast<int>(g_cfg.forwardOffset * 1000.0f),
                 static_cast<int>(g_cfg.heightOverride * 1000.0f), g_cfg.probe ? 1 : 0);
-    log::Writef("fpcam: lock direction %d", g_cfg.lockDirection ? 1 : 0);
+    log::Writef("fpcam: height drop %d mm below the measured eyes",
+                static_cast<int>(g_cfg.heightDrop * 1000.0f));
 }
 
 }  // namespace
@@ -547,37 +314,17 @@ bool Install() {
     if (!config::Present()) return false;
     ReadConfig();
     if (!g_cfg.enabled) return false;
-    // Two slots, because which one carries the position is decided at runtime
-    // from the magnitude of what arrives. Both must be hooked to find out.
-    const bool a = SwapSlot(kSlotVecA, reinterpret_cast<void*>(&HookVecA), &g_origVecA);
-    const bool b = SwapSlot(kSlotVecB, reinterpret_cast<void*>(&HookVecB), &g_origVecB);
-    g_cameraHooked = a && b;
-    if (!g_cameraHooked) {
-        // Half a hook is worse than none: restore and fall back to the style
-        // height, which is what previous builds did.
-        if (a) RestoreSlot(kSlotVecA, g_origVecA);
-        if (b) RestoreSlot(kSlotVecB, g_origVecB);
-        g_origVecA = g_origVecB = nullptr;
-        log::Write("fpcam: camera vtable not hooked -- first person stays a chase camera");
-    }
-
     g_st.installed = true;
-    log::Writef("fpcam: installed; %d appearance rows measured, camera hook %s",
-                eyetable::kCount, g_cameraHooked ? "on" : "OFF");
+    log::Writef("fpcam: installed; %d appearance rows measured", eyetable::kCount);
     return true;
 }
 
 void Remove() {
     if (!g_st.installed) return;
-    if (g_cameraHooked) {
-        RestoreSlot(kSlotVecA, g_origVecA);
-        RestoreSlot(kSlotVecB, g_origVecB);
-        g_cameraHooked = false;
-    }
-    log::Writef("fpcam: removed after %u first-person frames, %u camera overrides, "
-                "%u anchor jumps refused, live anchor %s (position slot %d, node offset %d)",
-                g_st.frames, g_overrides, g_st.jumpsRejected, g_st.haveLive ? "yes" : "no",
-                g_positionSlot, g_st.nodePosOffset);
+    log::Writef("fpcam: removed after %u first-person frames, %u anchor jumps refused, "
+                "live anchor %s (node offset %d)",
+                g_st.frames, g_st.jumpsRejected, g_st.haveLive ? "yes" : "no",
+                g_st.nodePosOffset);
     g_st.installed = false;
 }
 
@@ -598,14 +345,11 @@ void OnGameplayFrame(const player::Refs& refs, float dt) {
 
     if (camera::GetView() != camera::kViewFirstPerson) {
         // Outside first person the anchor is not used; drop the smoothing state
-        // so re-entering does not lerp in from a stale position, and clear the
-        // world eye point so a stale one can never reach the camera hook.
+        // so re-entering does not lerp in from a stale position.
         g_st.smoothValid = false;
-        g_worldEyeValid = false;
         return;
     }
     ++g_st.frames;
-    if (g_st.frames > 120 && g_positionSlot == -1 && g_cameraHooked) ReportBlind();
 
     Probe(refs.appearance);
 
@@ -615,25 +359,34 @@ void OnGameplayFrame(const player::Refs& refs, float dt) {
     if (!g_st.haveRest && g_st.hookHeight > 0.0f) raw[2] = g_st.hookHeight;
     if (g_cfg.heightOverride > 0.0f) raw[2] = g_cfg.heightOverride;
 
-    if (g_cfg.anchor != kAnchorStatic && g_st.nodePosOffset >= 0) {
+    // The live model is asked for camerahook, not for an eye bone. The probe
+    // settled that: on the body model "eyeLA" and "eyeRA" both return null,
+    // because the eye bones live in the HEAD model, which is a separate model
+    // attached at headhook and not reachable through this one's FindNodeByName.
+    // camerahook does resolve, and the measured distance from camerahook to the
+    // eyes is known per appearance row -- so the live hook plus that delta gives
+    // an eye point for the body the player is actually wearing (armour moves
+    // both), without needing the head model at all.
+    if (g_cfg.anchor != kAnchorStatic && g_st.nodePosOffset >= 0 && g_st.hookHeight > 0.0f) {
         void* model = ModelOf(refs.appearance);
         if (model) {
-            const char* name = (g_cfg.anchor == kAnchorCameraHook || !g_st.haveRest)
-                                   ? "camerahook"
-                                   : (g_cfg.anchor == kAnchorHeadHook ? "headhook" : "eyeLA");
+            const char* name = (g_cfg.anchor == kAnchorHeadHook) ? "headhook" : "camerahook";
             void* node = nullptr;
             float live[3] = {0, 0, 0};
             if (SafeCallFindNode(model, name, &node) && player::LooksLikePointer(node) &&
                 NodePosition(node, live) && Finite(live[0]) && Finite(live[1]) &&
                 Finite(live[2]) && live[2] > kMinPlausibleEye && live[2] < kMaxPlausibleEye) {
-                for (int i = 0; i < 3; ++i) raw[i] = live[i];
-                raw[1] += g_cfg.forwardOffset;
+                const float deltaZ = g_st.haveRest ? (g_st.restHeight - g_st.hookHeight) : 0.0f;
+                const float deltaY = g_st.haveRest ? (g_st.restForward - 0.0f) : 0.0f;
+                raw[0] = live[0];
+                raw[1] = live[1] + deltaY + g_cfg.forwardOffset;
+                raw[2] = live[2] + deltaZ;
                 if (!g_st.haveLive) {
                     g_st.haveLive = true;
-                    log::Writef("fpcam: live anchor \"%s\" active at %d %d %d mm", name,
-                                static_cast<int>(live[0] * 1000.0f),
-                                static_cast<int>(live[1] * 1000.0f),
-                                static_cast<int>(live[2] * 1000.0f));
+                    log::Writef("fpcam: live anchor \"%s\" at %d mm + %d mm to the eyes "
+                                "= %d mm", name, static_cast<int>(live[2] * 1000.0f),
+                                static_cast<int>(deltaZ * 1000.0f),
+                                static_cast<int>(raw[2] * 1000.0f));
                 }
             }
         }
@@ -641,11 +394,12 @@ void OnGameplayFrame(const player::Refs& refs, float dt) {
 
     Stabilise(raw, g_st.eye);
 
-    // The hook runs on the render side and cannot go looking for the player, so
-    // the world-space eye point is handed to it here, once a frame.
-    UpdateWorldEye(refs.serverCreature, g_st.eye[1], g_st.eye[2]);
 }
 
+// The camera height handed to the chase-camera style. The measured eye point is
+// the anchor, dropped by HeightDrop: eye level exactly read as too high off the
+// ground, and the exact millimetre matters far less than the camera being in the
+// right place at all.
 bool EyeOffset(float* forward, float* height) {
     if (!g_st.installed || !g_cfg.enabled) return false;
     if (g_cfg.heightOverride > 0.0f) {
@@ -655,24 +409,20 @@ bool EyeOffset(float* forward, float* height) {
     }
     if (g_st.smoothValid) {
         if (forward) *forward = g_st.eye[1];
-        if (height) *height = g_st.eye[2];
+        if (height) *height = g_st.eye[2] - g_cfg.heightDrop;
         return true;
     }
     if (g_st.haveRest) {
         if (forward) *forward = g_st.restForward + g_cfg.forwardOffset;
-        if (height) *height = g_st.restHeight;
+        if (height) *height = g_st.restHeight - g_cfg.heightDrop;
         return true;
     }
     if (g_st.hookHeight > 0.0f) {
         if (forward) *forward = g_cfg.forwardOffset;
-        if (height) *height = g_st.hookHeight;
+        if (height) *height = g_st.hookHeight - g_cfg.heightDrop;
         return true;
     }
     return false;
-}
-
-bool CameraHookActive() {
-    return g_st.installed && g_cfg.enabled && g_cameraHooked;
 }
 
 bool GetEyePosition(float out[3]) {
