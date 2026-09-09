@@ -51,19 +51,25 @@ struct Cfg {
         {"game", 0, 0, 0, 0, 0},
         {"near", 2.2f, 0.6f, 83.0f, 60.0f, 0.0f},
         {"far", 5.5f, 1.4f, 80.0f, 52.0f, 0.0f},
-        // Distance must NOT be zero. The chase camera aims with
+        // Distance must NOT be zero: the chase camera aims with
         // lookAt(normalize(target - cameraPos)), so a camera exactly on its own
-        // target normalises a zero-length vector and the orientation goes
-        // wherever the arithmetic lands -- which put the camera on the ceiling.
-        // 0.05 is the smallest value that stays well defined.
+        // target normalises a zero-length vector.
         //
-        // Height here is NOT the eye height. Vanilla styles use 0.45 and look
-        // right, so the engine treats this as a modest offset and not as an
-        // absolute height above the feet, whatever reone's reimplementation
-        // does. Writing 1.585 into it put the camera two heads too high. This
-        // preset is only the fallback anyway: fpview.cpp owns the real
-        // first-person camera.
-        {"first person", 0.05f, 1.45f, 90.0f, 75.0f, 0.28f},
+        // Height is NEGATIVE, and that is measured rather than reasoned. The
+        // matrix trace of 2026-09-09 caught the engine's own view being built:
+        //
+        //   glTranslatef (305, -53038, -12764) mm  = minus the camera position
+        //
+        // so the camera sat at z 12.764 with the floor at 9.670 -- 3.09 m up,
+        // the roof, with Height set to 1.45. That gives the arithmetic exactly:
+        //
+        //   camera = floor + 1.644 + Height
+        //
+        // The pivot is ALREADY at head height; Height is an offset on top of it,
+        // which is why vanilla's 0.45 looks right and why anything near an eye
+        // height puts the camera through the ceiling. Eye level is 1.581 above
+        // the floor, so sitting a few centimetres below it needs -0.11.
+        {"first person", 0.05f, -0.113f, 90.0f, 75.0f, 0.28f},
     };
 };
 Cfg g_cfg;

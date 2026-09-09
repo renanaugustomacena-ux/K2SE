@@ -195,8 +195,29 @@ void BuildView(float* m) {
 // assumption that has failed three times.
 bool g_anchored = false;          // ApplyProjection has run this frame
 bool g_viewImposed = false;       // ours is already on the stack this frame
+
+// The engine builds its view in three steps, in this order, measured from the
+// 2026-09-09 trace rather than assumed:
+//
+//   stage 1  glLoadIdentity   (MODELVIEW)
+//   stage 2  glMultMatrixf    rotation only, translation (0 0 0)
+//   stage 3  glTranslatef     minus the camera position
+//
+// Substituting our own values into steps 2 and 3 replaces the camera exactly
+// where the engine sets it, instead of fighting the result afterwards.
+enum ViewStage { kIdle = 0, kIdentityLoaded, kRotationSeen, kComplete };
+ViewStage g_stage = kIdle;
 uint32_t g_frames = 0;
 int g_trace = 0;
+
+// The rotation half of our view, with no translation -- the exact shape the
+// engine's own first matrix has.
+void BuildViewRotation(float* m) {
+    BuildView(m);
+    m[12] = 0.0f;
+    m[13] = 0.0f;
+    m[14] = 0.0f;
+}
 
 void ImposeView() {
     if (!g_origLoadIdentity || !g_origMultMatrixf) return;
@@ -228,6 +249,8 @@ void __stdcall HookLoadIdentity() {
         --g_trace;
         log::Writef("fpview trace: glLoadIdentity   (mode 0x%04X)", g_st.matrixMode);
     }
+    if (g_anchored && g_st.matrixMode == GL_MODELVIEW && g_stage == kIdle)
+        g_stage = kIdentityLoaded;
     if (g_origLoadIdentity) g_origLoadIdentity();
 }
 
@@ -238,6 +261,15 @@ void __stdcall HookMultMatrixf(const float* m) {
                     g_st.matrixMode, static_cast<int>(m[12] * 1000.0f),
                     static_cast<int>(m[13] * 1000.0f), static_cast<int>(m[14] * 1000.0f));
     }
+    if (g_stage == kIdentityLoaded && g_st.matrixMode == GL_MODELVIEW) {
+        g_stage = kRotationSeen;
+        if (g_cfg.impose && g_st.active && g_st.eyeValid) {
+            float rotation[16];
+            BuildViewRotation(rotation);
+            if (g_origMultMatrixf) g_origMultMatrixf(rotation);
+            return;
+        }
+    }
     if (g_origMultMatrixf) g_origMultMatrixf(m);
 }
 
@@ -246,11 +278,10 @@ void __stdcall HookPushMatrix() {
         --g_trace;
         log::Writef("fpview trace: glPushMatrix    (mode 0x%04X)", g_st.matrixMode);
     }
-    if (g_cfg.impose && g_st.active && g_st.eyeValid && g_anchored && !g_viewImposed &&
-        g_st.matrixMode == GL_MODELVIEW) {
-        g_viewImposed = true;    // exactly once per frame
-        ImposeView();
-    }
+    // The view is finished by the time anything is pushed; nothing to do here
+    // beyond noting it, which keeps the stage machine honest if the engine ever
+    // pushes before translating.
+    if (g_stage == kRotationSeen && g_st.matrixMode == GL_MODELVIEW) g_stage = kComplete;
     if (g_origPushMatrix) g_origPushMatrix();
 }
 
@@ -260,6 +291,23 @@ void __stdcall HookTranslatef(float x, float y, float z) {
         log::Writef("fpview trace: glTranslatef (mode 0x%04X) (%d %d %d) mm",
                     g_st.matrixMode, static_cast<int>(x * 1000.0f),
                     static_cast<int>(y * 1000.0f), static_cast<int>(z * 1000.0f));
+    }
+    if (g_stage == kRotationSeen && g_st.matrixMode == GL_MODELVIEW) {
+        g_stage = kComplete;
+        if (g_cfg.impose && g_st.active && g_st.eyeValid) {
+            if (g_st.replaced == 0)
+                log::Writef("fpview: view taken over -- engine camera was (%d %d %d), "
+                            "ours is (%d %d %d) mm",
+                            static_cast<int>(-x * 1000.0f), static_cast<int>(-y * 1000.0f),
+                            static_cast<int>(-z * 1000.0f),
+                            static_cast<int>(g_st.eye[0] * 1000.0f),
+                            static_cast<int>(g_st.eye[1] * 1000.0f),
+                            static_cast<int>(g_st.eye[2] * 1000.0f));
+            ++g_st.replaced;
+            if (g_origTranslatef)
+                g_origTranslatef(-g_st.eye[0], -g_st.eye[1], -g_st.eye[2]);
+            return;
+        }
     }
     if (g_origTranslatef) g_origTranslatef(x, y, z);
 }
@@ -434,6 +482,7 @@ void OnCameraApply() {
     if (!g_st.installed) return;
     g_anchored = true;
     g_viewImposed = false;
+    g_stage = kIdle;
     // The trace is a one-shot: enough lines to see how one frame is built,
     // then silent, because this fires every frame.
     if (g_cfg.traceLines > 0 && g_st.active && g_frames == 3) {
