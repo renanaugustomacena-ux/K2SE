@@ -19,14 +19,23 @@ constexpr uint32_t GL_MODELVIEW = 0x1700;
 constexpr uint32_t kIatMatrixMode = 0x009862A8;
 constexpr uint32_t kIatLoadIdentity = 0x009862A4;
 constexpr uint32_t kIatMultMatrixf = 0x009862F4;
+constexpr uint32_t kIatPushMatrix = 0x009862F8;
+constexpr uint32_t kIatTranslatef = 0x0098634C;
+constexpr uint32_t kIatRotatef = 0x00986348;
 
 using MatrixModeFn = void(__stdcall*)(uint32_t mode);
 using LoadIdentityFn = void(__stdcall*)();
 using MultMatrixfFn = void(__stdcall*)(const float* m);
+using PushMatrixFn = void(__stdcall*)();
+using TranslatefFn = void(__stdcall*)(float, float, float);
+using RotatefFn = void(__stdcall*)(float, float, float, float);
 
 MatrixModeFn g_origMatrixMode = nullptr;
 LoadIdentityFn g_origLoadIdentity = nullptr;
 MultMatrixfFn g_origMultMatrixf = nullptr;
+PushMatrixFn g_origPushMatrix = nullptr;
+TranslatefFn g_origTranslatef = nullptr;
+RotatefFn g_origRotatef = nullptr;
 
 struct Cfg {
     bool enabled = false;
@@ -35,6 +44,10 @@ struct Cfg {
     bool invertY = false;
     float pitchLimit = 85.0f;   // degrees from level
     int traceLines = 0;         // >0: dump that many matrix calls, once
+    // Off until the trace has actually shown where the view is finished.
+    // Every previous build shipped a guess about that moment and every one of
+    // them was wrong; this one measures first.
+    bool impose = false;
 };
 Cfg g_cfg;
 
@@ -156,79 +169,49 @@ void BuildView(float* m) {
     m[3] = 0.0f;  m[7] = 0.0f;  m[11] = 0.0f;  m[15] = 1.0f;
 }
 
-// Which matrix is the view is settled by WHEN it arrives, not by what is in it.
+// The engine's view is IMPOSED OVER, not intercepted.
 //
-// The previous build inferred it from the contents: "the camera position this
-// matrix encodes is within ten metres of the player". Under the camera-world
-// reading that is the translation column, which every prop standing near the
-// player also satisfies -- so it replaced 39,488 object transforms in one
-// session and shredded the scene. The count was in the log the whole time.
+// Two earlier attempts tried to spot the view matrix among the modelview
+// multiplications. The trace from 2026-09-09 shows why both failed. Right after
+// Camera::ApplyProjection the frame goes:
 //
-// Camera::ApplyProjection runs once per rendered frame, for the scene camera
-// only, and fov.cpp already hooks it. The first MODELVIEW matrix after that is
-// the view. Object matrices are not in that window, and the replacement is
-// hard-capped at one per frame so the failure mode is one wrong object, never
-// the whole scene.
+//     glLoadIdentity  (MODELVIEW)
+//     glMultMatrixf   t=(0 0 0)                <- rotation only, no position
+//     glMultMatrixf   t=(-62610 59859 9170)    <- object world matrices
+//
+// The first matrix carries the camera's ORIENTATION and nothing else; the
+// position is applied separately, by a glTranslatef this module never hooked.
+// Replacing that rotation with a full view matrix meant the engine then
+// translated our matrix as well, which threw the camera into orbit.
+//
+// So nothing is pattern-matched any more. The engine builds its view however it
+// likes, and immediately before the first object is drawn the modelview is
+// simply overwritten with ours: glLoadIdentity, then glMultMatrixf(ours). The
+// first MODELVIEW glPushMatrix after the anchor is that moment -- the engine
+// pushes before every object, so by then its view is complete and no geometry
+// has been drawn with it yet.
+//
+// This depends on no assumption about HOW the view is constructed, which is the
+// assumption that has failed three times.
 bool g_anchored = false;          // ApplyProjection has run this frame
-bool g_replacedThisFrame = false;
+bool g_viewImposed = false;       // ours is already on the stack this frame
 uint32_t g_frames = 0;
-int g_trace = 0;                  // remaining lines to trace, when enabled
+int g_trace = 0;
 
-// Both readings of the anchored matrix, compared once against the eye. Applied
-// to a single matrix per frame this is a sound discriminator; applied to every
-// matrix, as before, it was not.
-enum Convention { kUnknown = 0, kViewMatrix, kWorldMatrix };
-Convention g_convention = kUnknown;
-
-void CameraFromView(const float* m, float* out) {
-    const float tx = m[12], ty = m[13], tz = m[14];
-    out[0] = -(m[0] * tx + m[1] * ty + m[2] * tz);
-    out[1] = -(m[4] * tx + m[5] * ty + m[6] * tz);
-    out[2] = -(m[8] * tx + m[9] * ty + m[10] * tz);
-}
-
-float DistanceToEye(const float* c) {
-    const float dx = c[0] - g_st.eye[0];
-    const float dy = c[1] - g_st.eye[1];
-    const float dz = c[2] - g_st.eye[2];
-    return dx * dx + dy * dy + dz * dz;
-}
-
-// The camera-to-world matrix: same basis, not inverted, eye in the translation.
-void BuildWorld(float* m) {
-    const float cp = cosf(g_st.pitch);
-    const float sp = sinf(g_st.pitch);
-    const float cy = cosf(g_st.yaw);
-    const float sy = sinf(g_st.yaw);
-    const float f[3] = {sy * cp, cy * cp, sp};
-    const float r[3] = {cy, -sy, 0.0f};
-    const float u[3] = {r[1] * f[2] - r[2] * f[1],
-                        r[2] * f[0] - r[0] * f[2],
-                        r[0] * f[1] - r[1] * f[0]};
-    m[0] = r[0];   m[4] = u[0];   m[8]  = -f[0];  m[12] = g_st.eye[0];
-    m[1] = r[1];   m[5] = u[1];   m[9]  = -f[1];  m[13] = g_st.eye[1];
-    m[2] = r[2];   m[6] = u[2];   m[10] = -f[2];  m[14] = g_st.eye[2];
-    m[3] = 0.0f;   m[7] = 0.0f;   m[11] = 0.0f;   m[15] = 1.0f;
-}
-
-void DecideConvention(const float* m) {
-    if (g_convention != kUnknown) return;
-    float viewCam[3];
-    CameraFromView(m, viewCam);
-    const float asView = DistanceToEye(viewCam);
-    const float world[3] = {m[12], m[13], m[14]};
-    const float asWorld = DistanceToEye(world);
-    g_convention = (asView <= asWorld) ? kViewMatrix : kWorldMatrix;
-    log::Writef("fpview: anchored matrix reads as %s -- camera (%d %d %d) mm vs eye "
-                "(%d %d %d) mm; the other reading was %d mm away",
-                g_convention == kViewMatrix ? "a view matrix" : "a camera world matrix",
-                static_cast<int>((g_convention == kViewMatrix ? viewCam[0] : world[0]) * 1000.0f),
-                static_cast<int>((g_convention == kViewMatrix ? viewCam[1] : world[1]) * 1000.0f),
-                static_cast<int>((g_convention == kViewMatrix ? viewCam[2] : world[2]) * 1000.0f),
-                static_cast<int>(g_st.eye[0] * 1000.0f),
-                static_cast<int>(g_st.eye[1] * 1000.0f),
-                static_cast<int>(g_st.eye[2] * 1000.0f),
-                static_cast<int>(sqrtf(g_convention == kViewMatrix ? asWorld : asView) * 1000.0f));
+void ImposeView() {
+    if (!g_origLoadIdentity || !g_origMultMatrixf) return;
+    BuildView(g_st.view);
+    g_origLoadIdentity();
+    g_origMultMatrixf(g_st.view);
+    ++g_st.replaced;
+    if (g_st.replaced == 1)
+        log::Writef("fpview: view imposed at the first object of the frame -- eye "
+                    "(%d %d %d) mm, yaw %d deg, pitch %d deg",
+                    static_cast<int>(g_st.eye[0] * 1000.0f),
+                    static_cast<int>(g_st.eye[1] * 1000.0f),
+                    static_cast<int>(g_st.eye[2] * 1000.0f),
+                    static_cast<int>(g_st.yaw * 57.2957795f),
+                    static_cast<int>(g_st.pitch * 57.2957795f));
 }
 
 void __stdcall HookMatrixMode(uint32_t mode) {
@@ -251,31 +234,44 @@ void __stdcall HookLoadIdentity() {
 void __stdcall HookMultMatrixf(const float* m) {
     if (g_trace > 0 && m) {
         --g_trace;
-        float c[3];
-        CameraFromView(m, c);
-        log::Writef("fpview trace: glMultMatrixf (mode 0x%04X) t=(%d %d %d) asView=(%d %d %d) mm",
+        log::Writef("fpview trace: glMultMatrixf (mode 0x%04X) t=(%d %d %d) mm",
                     g_st.matrixMode, static_cast<int>(m[12] * 1000.0f),
-                    static_cast<int>(m[13] * 1000.0f), static_cast<int>(m[14] * 1000.0f),
-                    static_cast<int>(c[0] * 1000.0f), static_cast<int>(c[1] * 1000.0f),
-                    static_cast<int>(c[2] * 1000.0f));
-    }
-
-    if (g_st.active && g_st.eyeValid && g_anchored && !g_replacedThisFrame &&
-        g_st.matrixMode == GL_MODELVIEW && m) {
-        g_replacedThisFrame = true;      // once per frame, whatever happens next
-        DecideConvention(m);
-        if (g_convention == kViewMatrix) {
-            BuildView(g_st.view);
-        } else {
-            BuildWorld(g_st.view);
-        }
-        ++g_st.replaced;
-        if (g_st.replaced == 1)
-            log::Write("fpview: the scene view is ours now (one matrix per frame)");
-        if (g_origMultMatrixf) g_origMultMatrixf(g_st.view);
-        return;
+                    static_cast<int>(m[13] * 1000.0f), static_cast<int>(m[14] * 1000.0f));
     }
     if (g_origMultMatrixf) g_origMultMatrixf(m);
+}
+
+void __stdcall HookPushMatrix() {
+    if (g_trace > 0) {
+        --g_trace;
+        log::Writef("fpview trace: glPushMatrix    (mode 0x%04X)", g_st.matrixMode);
+    }
+    if (g_cfg.impose && g_st.active && g_st.eyeValid && g_anchored && !g_viewImposed &&
+        g_st.matrixMode == GL_MODELVIEW) {
+        g_viewImposed = true;    // exactly once per frame
+        ImposeView();
+    }
+    if (g_origPushMatrix) g_origPushMatrix();
+}
+
+void __stdcall HookTranslatef(float x, float y, float z) {
+    if (g_trace > 0) {
+        --g_trace;
+        log::Writef("fpview trace: glTranslatef (mode 0x%04X) (%d %d %d) mm",
+                    g_st.matrixMode, static_cast<int>(x * 1000.0f),
+                    static_cast<int>(y * 1000.0f), static_cast<int>(z * 1000.0f));
+    }
+    if (g_origTranslatef) g_origTranslatef(x, y, z);
+}
+
+void __stdcall HookRotatef(float a, float x, float y, float z) {
+    if (g_trace > 0) {
+        --g_trace;
+        log::Writef("fpview trace: glRotatef (mode 0x%04X) %d deg about (%d %d %d)",
+                    g_st.matrixMode, static_cast<int>(a), static_cast<int>(x),
+                    static_cast<int>(y), static_cast<int>(z));
+    }
+    if (g_origRotatef) g_origRotatef(a, x, y, z);
 }
 
 // --- import patching ----------------------------------------------------------
@@ -312,6 +308,7 @@ void ReadConfig() {
     g_cfg.sensitivity = config::GetFloat("FirstPerson", "MouseSensitivity", 0.15f);
     g_cfg.invertY = config::GetBool("FirstPerson", "InvertY", false);
     g_cfg.pitchLimit = config::GetFloat("FirstPerson", "PitchLimit", 85.0f);
+    g_cfg.impose = config::GetBool("FirstPerson", "ImposeView", false);
     g_cfg.traceLines = config::GetInt("FirstPerson", "TraceMatrices", 0);
     if (g_cfg.traceLines < 0) g_cfg.traceLines = 0;
     if (g_cfg.traceLines > 200) g_cfg.traceLines = 200;
@@ -319,8 +316,9 @@ void ReadConfig() {
     if (g_cfg.sensitivity > 2.0f) g_cfg.sensitivity = 2.0f;
     if (g_cfg.pitchLimit < 10.0f) g_cfg.pitchLimit = 10.0f;
     if (g_cfg.pitchLimit > 89.0f) g_cfg.pitchLimit = 89.0f;
-    log::Writef("fpview: own view %s, mouse look %d, sensitivity %d, invert %d, "
-                "pitch limit %d deg", g_cfg.enabled ? "ON" : "off", g_cfg.mouseLook ? 1 : 0,
+    log::Writef("fpview: impose %d trace %d | own view %s, mouse look %d, sensitivity %d, "
+                "invert %d, pitch limit %d deg", g_cfg.impose ? 1 : 0, g_cfg.traceLines,
+                g_cfg.enabled ? "ON" : "off", g_cfg.mouseLook ? 1 : 0,
                 static_cast<int>(g_cfg.sensitivity * 100.0f), g_cfg.invertY ? 1 : 0,
                 static_cast<int>(g_cfg.pitchLimit));
 }
@@ -343,8 +341,21 @@ bool Install() {
     ok &= PatchSlot("glMultMatrixf", kIatMultMatrixf,
                     reinterpret_cast<void*>(&HookMultMatrixf), &previous);
     g_origMultMatrixf = reinterpret_cast<MultMatrixfFn>(previous);
+    // glPushMatrix is the one that matters now: it marks the moment the
+    // engine's view is finished and the first object is about to be drawn.
+    ok &= PatchSlot("glPushMatrix", kIatPushMatrix,
+                    reinterpret_cast<void*>(&HookPushMatrix), &previous);
+    g_origPushMatrix = reinterpret_cast<PushMatrixFn>(previous);
+    // These two are hooked only so the trace can show how the view is built.
+    ok &= PatchSlot("glTranslatef", kIatTranslatef,
+                    reinterpret_cast<void*>(&HookTranslatef), &previous);
+    g_origTranslatef = reinterpret_cast<TranslatefFn>(previous);
+    ok &= PatchSlot("glRotatef", kIatRotatef,
+                    reinterpret_cast<void*>(&HookRotatef), &previous);
+    g_origRotatef = reinterpret_cast<RotatefFn>(previous);
 
-    if (!ok || !g_origMatrixMode || !g_origLoadIdentity || !g_origMultMatrixf) {
+    if (!ok || !g_origMatrixMode || !g_origLoadIdentity || !g_origMultMatrixf ||
+        !g_origPushMatrix || !g_origTranslatef || !g_origRotatef) {
         log::Write("fpview: REFUSED -- the GL matrix imports did not look right");
         Remove();
         return false;
@@ -361,6 +372,9 @@ void Remove() {
         RestoreSlot(kIatMatrixMode, reinterpret_cast<void*>(g_origMatrixMode));
         RestoreSlot(kIatLoadIdentity, reinterpret_cast<void*>(g_origLoadIdentity));
         RestoreSlot(kIatMultMatrixf, reinterpret_cast<void*>(g_origMultMatrixf));
+        RestoreSlot(kIatPushMatrix, reinterpret_cast<void*>(g_origPushMatrix));
+        RestoreSlot(kIatTranslatef, reinterpret_cast<void*>(g_origTranslatef));
+        RestoreSlot(kIatRotatef, reinterpret_cast<void*>(g_origRotatef));
         g_st.hooked = false;
     }
     if (g_st.installed)
@@ -419,7 +433,7 @@ void OnGameplayFrame(bool active, const float worldEye[3], float facingRadians) 
 void OnCameraApply() {
     if (!g_st.installed) return;
     g_anchored = true;
-    g_replacedThisFrame = false;
+    g_viewImposed = false;
     // The trace is a one-shot: enough lines to see how one frame is built,
     // then silent, because this fires every frame.
     if (g_cfg.traceLines > 0 && g_st.active && g_frames == 3) {
